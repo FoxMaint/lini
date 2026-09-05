@@ -132,7 +132,7 @@ pub fn built_in_defaults() -> VarTable {
     t.set("component-stroke", light_dark(hex("8a1c1c"), hex("d98f8f")));
     t.set("label-ink", light_dark(hex("0e6a6a"), hex("57c4c4")));
     t.set("pin-number", light_dark(hex("00000073"), hex("ffffff80")));
-    t.set("sheet", light_dark(hex("fbf8ee"), hex("22201b")));
+    t.set("sheet", light_dark(hex("faf6ea"), hex("22201b")));
 
     // Layout constants (radius, padding, font-size, clearance, …) are no longer
     // here: desugar materializes every one into the `.lini-*` class defs, the
