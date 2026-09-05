@@ -1272,7 +1272,7 @@ Each colour is a `light-dark(LIGHT, DARK)` value, so one SVG carries both modes:
 --lini-component-stroke  light-dark(#8a1c1c, #d98f8f)   a part's outline
 --lini-label-ink         light-dark(#0e6a6a, #57c4c4)   the net tag
 --lini-pin-number        light-dark(#00000073, #ffffff80)
---lini-sheet             light-dark(#faf5e6, #23221c)   the schematic scene wash
+--lini-sheet             light-dark(#fbf8ee, #22201b)   the schematic scene wash
 ```
 
 `--lini-bg` is the **paper tone** — what a root `fill: --bg`, a `|page|` sheet, and
