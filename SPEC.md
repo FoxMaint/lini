@@ -271,7 +271,7 @@ error.
 
 ### Node declaration
 
-```
+```ebnf
 |type#id| [ "label" ] [ .class… ] [ { style } ] [ [ children ] ]
 ```
 
@@ -407,7 +407,7 @@ space-separated **units**; the space is the descendant combinator. A unit is a t
 drawing subtype the **dimension type `(-)`** ([SPEC 15.6](#156-dimensions)), a class
 `.hot`, or an id `#hero`:
 
-```
+```ebnf
 |box| { … }              // every box (element selector)
 |-| { … }                // every link — a line in the identity capsule ([SPEC 9](#9-links))
 (-) { … }                // every dimension — the |-| subtype ([SPEC 15.6](#156-dimensions))
@@ -1015,7 +1015,7 @@ cardinality glyphs and has no standalone endpoint form. The ops are sugar over t
 
 ### Syntax
 
-```
+```ebnf
 endpoints op endpoints [op endpoints …] [ "label" ] [ .class… ] [ { style } ] [ [ labels ] ]
 ```
 
@@ -1108,7 +1108,7 @@ absolutely).
 
 ### Endpoints & scope
 
-```
+```ebnf
 endpoint = ( ident | ident_bars ) { "." ident } [ ":" side ]
 side     = top | bottom | left | right
 ```
@@ -1239,7 +1239,7 @@ engine** ([10.7](#107-expressions--functions)), the one place operators appear.
 
 Each colour is a `light-dark(LIGHT, DARK)` value, so one SVG carries both modes:
 
-```
+```text
 --lini-bg            light-dark(white, #1b1b1f)      the scene background
 --lini-fg            light-dark(black, #e8e8ea)
 --lini-fill          light-dark(white, #26262b)
@@ -1296,7 +1296,7 @@ Beyond the role variables, Lini ships a **named-hue palette** — pretty by defa
 themeable, and dark/light-aware like everything else. Eleven hues, each a
 `light-dark()` pair:
 
-```
+```text
 red  rose  orange  amber  lime  green  teal  sky  blue  purple  gray
 ```
 
@@ -1406,7 +1406,7 @@ content, so these stand in for `auto`.
 
 The drawing chrome ([SPEC 15](#15-drawing)) — sheet-space, never scaled:
 
-```
+```text
 dim clearance 5 (the drawing scope's link default)
 dim-ext-gap 3    dim-ext-overshoot 3     halo-margin 2
 dim-arrow 12 × 4      datum-triangle 11   note-offset 14   note-landing 8
@@ -1418,7 +1418,7 @@ plane-letter-gap 7   plane-letter 12   title-field width 96 (a title-block field
 
 The schematic chrome ([SPEC 16](#16-schematic)) — sheet-space:
 
-```
+```text
 schematic gap 100 (the coarse lattice — the part pitch, five fine ones; SPEC 16.1)
 pin-pitch 20 (the fine lattice: pins, stub tips and wire tracks — and the
   schematic world's track quantum, ROUTING.md)
@@ -2185,7 +2185,7 @@ danger), repeating if exhausted — deterministic, and **interleaved** around th
 hue wheel (adjacent series read as distinct, the common 2–4-series case getting
 the strongest contrast):
 
-```
+```text
 --rose  --teal  --orange  --sky  --amber  --purple  --green  --blue  --lime  --gray
 ```
 
@@ -2429,7 +2429,7 @@ role on a drawing container and are ignored.
 The endpoint form is the core one ([SPEC 9](#9-links)) with a wider point set, valid
 only in a drawing scope:
 
-```
+```ebnf
 anchor = id { "." id } [ "." index ] [ ":" point ]
 index  = a 1-based pattern-copy number                      (15.4)
 point  = center                                            (the default)
@@ -4377,7 +4377,7 @@ their `along:` fractions (auto-distributed when unset).
 
 ## 20. CLI
 
-```
+```text
 lini [options] <input.lini>
 lini fmt [--check] [--stdout] <input.lini>
 lini desugar <input.lini>
@@ -4809,7 +4809,7 @@ error.
 
 ## 22. Grammar
 
-```
+```ebnf
 file        = [ stylesheet ] { drawn }              # setup block, then drawn statements in source order
 stylesheet  = "{" { setup_item } "}"                # the root's setup block; omit when empty
 setup_item  = decl | vardecl | binding | rule | define | comment | newline
