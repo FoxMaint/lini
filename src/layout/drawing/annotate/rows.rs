@@ -110,10 +110,7 @@ impl Rows {
     /// linework it drew, e.g. a datum's framed box reaching past its letter
     /// [SPEC 15.7] — as painted bounds the rows clear.
     pub(super) fn obstruct_texts(&mut self, nodes: &[PlacedNode]) {
-        for n in nodes
-            .iter()
-            .filter(|n| n.kind == NodeKind::Text || annotation_obstacle(n))
-        {
+        for n in nodes.iter().filter(|n| painted_ink(n)) {
             self.stack
                 .obstruct(Bbox::extent_of(std::slice::from_ref(n), |_| true));
         }

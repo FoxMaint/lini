@@ -12,7 +12,7 @@ use crate::layout::geom::dot;
 use crate::layout::geom::rotate;
 use crate::layout::geom::unit;
 use crate::layout::stack::{Painted, clear_past};
-use crate::ledger::consts::{NOTE_LANDING, NOTE_OFFSET};
+use crate::ledger::consts::{NOTE_LANDING, NOTE_OFFSET, NOTE_TEXT_GAP};
 
 /// A leader's drawn skeleton: tip → elbow → landing, plus where its text
 /// starts (just past the landing, on the `sx` side) and the direction it
@@ -68,6 +68,7 @@ pub(super) fn leader_line(
     );
     let sx = if u.0 < 0.0 { -1.0 } else { 1.0 };
     let landing = (elbow.0 + sx * NOTE_LANDING, elbow.1);
+    let text_at = (landing.0 + sx * NOTE_TEXT_GAP, landing.1);
     let tip = exact
         .or_else(|| circle_tip(circle, elbow))
         .unwrap_or_else(|| {
@@ -82,7 +83,7 @@ pub(super) fn leader_line(
         });
     LeaderLine {
         points: vec![tip, elbow, landing],
-        text_at: (landing.0 + sx * 2.0, landing.1),
+        text_at,
         sx,
         u,
     }
@@ -90,11 +91,18 @@ pub(super) fn leader_line(
 
 /// The extra push along the exit `dir` a **ray-leaving** annotation takes
 /// before it paints — the one law the leaders and the diametral spill share
-/// [SPEC 15.6/15.9]. Two clearings, in order: a carrying statement's whole
-/// block (the text seat plus the carried stack's one measured box, which
-/// hangs below and can reach back onto the part) stands `NOTE_OFFSET` off the
-/// drawn geometry, then the block packs against everything already painted,
-/// in source order. 0 when the deterministic placement already stands clear.
+/// [SPEC 15.6/15.9]. Two clearings, in order: the statement's whole painted
+/// block ([`ink_of`](super::super::annotate::ink_of) — its texts and framed
+/// boxes, plus a carried stack's one measured box, which hangs below and can
+/// reach back onto the part) stands `NOTE_OFFSET` off the drawn geometry,
+/// then the block packs against everything already painted, in source order.
+/// 0 when the deterministic placement already stands clear.
+///
+/// The elbow leaves the geometry by `NOTE_OFFSET` along the exit, but the
+/// block hangs **across** it — a text leaf centres on the landing, a datum's
+/// frame grows around it — so only a sideways exit clears the part by
+/// construction. Standing the ink itself off is what gives a leader the same
+/// air whichever way it leaves.
 pub(in crate::layout::drawing) fn outward_push(
     nodes: &[PlacedNode],
     stack: &CarriedStack,
@@ -103,21 +111,17 @@ pub(in crate::layout::drawing) fn outward_push(
     clearance: f64,
 ) -> f64 {
     let seat = super::super::symbols::seat_of(nodes);
-    // An uncarried seat is already placed clear of the geometry by
-    // construction — the exit ray left it by `NOTE_OFFSET`.
-    let (block, past) = match stack.box_below(seat) {
-        Some(below) => {
-            let block = seat.union(below);
-            let past = clear_past(
-                &Painted::of_box(block),
-                dir,
-                &Painted::of_box(rows.extent()),
-                NOTE_OFFSET,
-            );
-            (block, past)
-        }
-        None => (seat, 0.0),
+    let ink = super::super::annotate::ink_of(nodes, seat);
+    let block = match stack.box_below(seat) {
+        Some(below) => ink.union(below),
+        None => ink,
     };
+    let past = clear_past(
+        &Painted::of_box(block),
+        dir,
+        &Painted::of_box(rows.extent()),
+        NOTE_OFFSET,
+    );
     past + rows.spill(dir, block.shifted(dir.0 * past, dir.1 * past), clearance)
 }
 

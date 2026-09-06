@@ -9,7 +9,7 @@
 // the island, casework and the balcony deck are plain `|rect|`s and the north
 // arrow is a `|sketch|`: SPEC 15.11's parts-library escape.
 {
-  density: 4; clearance: 16;
+  density: 4;
   |slab::rect| { fill: --bg; stroke: --stroke-dark; stroke-width: 1; }
   |room::block| {
     // the name stacks over the area, both lines centred

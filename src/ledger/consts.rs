@@ -6,10 +6,12 @@
 // never scaled by the view.
 /// The drawing scope's `clearance` default for its dimensions [SPEC 15.6] —
 /// pushed into the link base beside the thin stroke, below every user rule.
-/// Row offsets derive from painted bounds + clearance; 5 stands a first
-/// bottom row's value text 5 off the geometry — a quarter more air than the
-/// 4 this started at, which drafted too cramped by eye.
-pub(crate) const DIM_CLEARANCE: f64 = 5.0;
+/// Row offsets derive from painted bounds + clearance, so this is both the
+/// air a first row keeps off the geometry and the pitch between rows: 18
+/// reads as the drafted 8–10 mm stand-off at the default density, a little
+/// under the routing 16 + a text's own lift. The 5 this started at drafted
+/// crammed enough that every drawing sample overrode it.
+pub(crate) const DIM_CLEARANCE: f64 = 18.0;
 pub(crate) const EXT_GAP: f64 = 3.0;
 pub(crate) const EXT_OVERSHOOT: f64 = 3.0;
 /// The drafting-slender arrow, 3 : 1 [SPEC 15.6] — length × half-width, at
@@ -17,8 +19,14 @@ pub(crate) const EXT_OVERSHOOT: f64 = 3.0;
 /// stay 1–2, so the heads read at ISO 129's arrow-≈-text-height weight).
 pub(crate) const ARROW_LEN: f64 = 12.0;
 pub(crate) const ARROW_HALF: f64 = 2.0;
-pub(crate) const NOTE_OFFSET: f64 = 14.0;
-pub(crate) const NOTE_LANDING: f64 = 8.0;
+/// A callout's stand-off past the drawn geometry [SPEC 15.7] — the reach of
+/// its exit ray, and the air its painted block keeps off the part.
+pub(crate) const NOTE_OFFSET: f64 = 20.0;
+/// The horizontal landing the leader elbows into before its text — the
+/// drafting reference line, long enough to read as one.
+pub(crate) const NOTE_LANDING: f64 = 12.0;
+/// The daylight between that landing's end and the text it carries.
+pub(crate) const NOTE_TEXT_GAP: f64 = 5.0;
 /// Stacked deviations draw at this fraction of the dimension font [SPEC 15.6].
 pub(crate) const TOL_STACK: f64 = 0.7;
 /// The GD&T datum triangle's side [SPEC 15.7] — a chunkier symbol than an

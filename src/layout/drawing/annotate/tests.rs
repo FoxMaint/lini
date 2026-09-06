@@ -1,5 +1,5 @@
 use super::super::testutil::{by_id, laid, layout_err, text_at, texts};
-use crate::ledger::consts::DIM_CLEARANCE;
+use crate::ledger::consts::{DIM_CLEARANCE, NOTE_OFFSET};
 use crate::math;
 use crate::resolve::{MarkerKind, NodeKind, ResolvedValue};
 
@@ -1147,6 +1147,34 @@ fn a_datum_letter_seats_in_a_framed_box_the_rows_stand_off() {
     assert!(
         dim_y > bare + 15.0,
         "the box moved the row: {dim_y} vs bare {bare}"
+    );
+}
+
+#[test]
+fn a_leaders_ink_stands_off_the_geometry_whichever_way_it_leaves() {
+    // The stand-off is measured on the ink, not the elbow [SPEC 15.7]: a
+    // sideways exit carries its text clear by construction, but a text
+    // centred on a downward landing — a datum's frame most of all — hangs
+    // back across the exit, so the block itself is what stands
+    // `NOTE_OFFSET` off the part.
+    let geometry = "|rect#block| { width: 60; height: 30 }\n";
+    let sideways = laid(&format!(
+        "{{ layout: drawing; density: 1 }}\n{geometry}block:right <- \"THRU\"\n"
+    ));
+    let ink = crate::layout::ir::Bbox::extent_of(&sideways.nodes, |n| n.kind == NodeKind::Text);
+    assert!(
+        ink.min_x >= 30.0 + NOTE_OFFSET,
+        "sideways text clears the right face: {}",
+        ink.min_x
+    );
+    let downward = laid(&format!(
+        "{{ layout: drawing; density: 1 }}\n{geometry}block:bottom >- \"A\"\n"
+    ));
+    let frame = boxes_classed(&downward.nodes, "datum-frame")[0];
+    assert!(
+        frame.min_y >= 15.0 + NOTE_OFFSET,
+        "the framed letter clears the bottom face: {}",
+        frame.min_y
     );
 }
 

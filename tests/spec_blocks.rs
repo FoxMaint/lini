@@ -212,7 +212,7 @@ const SPEC_LEDGER: &[Row] = &[
     ),
     (
         23,
-        "dim clearance 5 (the drawing scope's link default)",
+        "dim clearance 18 (the drawing scope's link default)",
         Kind::NotLini("the drawing chrome constants [SPEC 10.5]"),
     ),
     (

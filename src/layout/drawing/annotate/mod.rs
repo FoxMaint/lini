@@ -294,6 +294,26 @@ pub(super) fn annotation_obstacle(n: &PlacedNode) -> bool {
     super::symbols::drafting_type(&n.type_chain).is_some()
         || n.type_chain.iter().any(|t| t == "datum-frame")
 }
+
+/// One statement's **annotation ink** [SPEC 15.6/15.7]: the leaves and framed
+/// boxes it paints beside its own linework — its texts and every
+/// [`annotation_obstacle`] riding with them. One set answers both questions a
+/// statement raises: what it must stand clear of the geometry and pack against
+/// ([`super::leaders::outward_push`]), and what later rows must clear of it
+/// ([`Rows::obstruct_texts`]).
+pub(super) fn painted_ink(n: &PlacedNode) -> bool {
+    n.kind == NodeKind::Text || annotation_obstacle(n)
+}
+
+/// The extent of a statement's [`painted_ink`], falling back to `seat` where
+/// it paints none (nothing does today — a leader without text is an error).
+pub(in crate::layout::drawing) fn ink_of(placed: &[PlacedNode], seat: Bbox) -> Bbox {
+    if placed.iter().any(painted_ink) {
+        Bbox::extent_of(placed, painted_ink)
+    } else {
+        seat
+    }
+}
 /// A side / corner name as its outward unit vector — a leader's `side:`
 /// direction, a diametral dim's line [SPEC 15.6/15.7].
 pub(super) fn side_unit(name: &str) -> Option<P> {

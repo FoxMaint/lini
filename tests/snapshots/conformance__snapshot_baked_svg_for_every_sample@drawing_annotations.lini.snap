@@ -3,7 +3,7 @@ source: tests/conformance.rs
 expression: svg
 input_file: samples/drawing_annotations.lini
 ---
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-505.1595 -539.75 1010.319 1098.5" width="1010.319" height="1098.5" class="lini lini-scope-350aed6d">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-511.6595 -573.25 1023.319 1165.5" width="1023.319" height="1165.5" class="lini lini-scope-350aed6d">
   <style>
     .lini-scope-350aed6d { font-family: "Google Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-size: 15px; font-weight: 500; color: black; }
     .lini-scope-350aed6d .lini-canvas { fill: white; }
@@ -116,11 +116,11 @@ input_file: samples/drawing_annotations.lini
     <path id="lini-g1600-341" d="…"/>
     <path id="lini-g1600-1797" d="…"/>
   </defs>
-  <rect class="lini-canvas" x="-505.1595" y="-539.75" width="1010.319" height="1098.5"/>
+  <rect class="lini-canvas" x="-511.6595" y="-573.25" width="1023.319" height="1165.5"/>
   <g class="lini-scene">
-    <g class="lini-node lini-drawing lini-block" data-id="face-view" transform="translate(0,-282.75)">
-      <rect x="-332.688" y="-237" width="665.376" height="474" rx="0" ry="0"/>
-      <g class="lini-node lini-sketch" data-id="flange" transform="translate(-15.952,-23)">
+    <g class="lini-node lini-drawing lini-block" data-id="face-view" transform="translate(0,-289.25)">
+      <rect x="-383.138" y="-264" width="766.276" height="528" rx="0" ry="0"/>
+      <g class="lini-node lini-sketch" data-id="flange" transform="translate(-4.502,-37)">
         <path d="M -220 192 L 188 192 A 32 32 0 0 0 220 160 L 220 -192 L -148 -192 L -220 -96 Z" fill-rule="evenodd"/>
         <g class="lini-node lini-oval" data-id="boss" style="fill: none" transform="translate(0,0)">
           <ellipse cx="0" cy="0" rx="128" ry="128"/>
@@ -177,286 +177,286 @@ input_file: samples/drawing_annotations.lini
           </g>
         </g>
       </g>
-      <g class="lini-node lini-ext-line lini-dim lini-line" transform="translate(-15.952,-23)">
-        <line x1="-220" y1="3" x2="-220" y2="238"/>
+      <g class="lini-node lini-ext-line lini-dim lini-line" transform="translate(-4.502,-37)">
+        <line x1="-220" y1="3" x2="-220" y2="266"/>
       </g>
-      <g class="lini-node lini-ext-line lini-dim lini-line" transform="translate(-15.952,-23)">
-        <mask id="lini-halo-face-view-0" maskUnits="userSpaceOnUse" x="-145.5" y="-118.5" width="3" height="358"><rect class="lini-cut-bg" x="-145.5" y="-118.5" width="3" height="358"/><polyline class="lini-halo" fill="none" stroke-width="3" points="-144,-102 -144,-98"/><polyline class="lini-halo" fill="none" stroke-width="3" points="-144,98 -144,102"/><polyline class="lini-halo" fill="none" stroke-width="3" points="-144,138 -144,142"/><polyline class="lini-halo" fill="none" stroke-width="3" points="-144,189 -144,195"/></mask>
-        <line x1="-144" y1="-117" x2="-144" y2="238" mask="url(#lini-halo-face-view-0)"/>
+      <g class="lini-node lini-ext-line lini-dim lini-line" transform="translate(-4.502,-37)">
+        <mask id="lini-halo-face-view-0" maskUnits="userSpaceOnUse" x="-145.5" y="-118.5" width="3" height="386"><rect class="lini-cut-bg" x="-145.5" y="-118.5" width="3" height="386"/><polyline class="lini-halo" fill="none" stroke-width="3" points="-144,-102 -144,-98"/><polyline class="lini-halo" fill="none" stroke-width="3" points="-144,98 -144,102"/><polyline class="lini-halo" fill="none" stroke-width="3" points="-144,138 -144,142"/><polyline class="lini-halo" fill="none" stroke-width="3" points="-144,189 -144,195"/></mask>
+        <line x1="-144" y1="-117" x2="-144" y2="266" mask="url(#lini-halo-face-view-0)"/>
       </g>
-      <g class="lini-node lini-dim-line lini-dim lini-line" transform="translate(-15.952,-23)">
-        <line x1="-218" y1="235" x2="-146" y2="235"/>
+      <g class="lini-node lini-dim-line lini-dim lini-line" transform="translate(-4.502,-37)">
+        <line x1="-218" y1="263" x2="-146" y2="263"/>
       </g>
-      <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(-15.952,-23)">
-        <polygon points="-220,235 -208,233 -208,237"/>
+      <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(-4.502,-37)">
+        <polygon points="-220,263 -208,261 -208,265"/>
       </g>
-      <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(-15.952,-23)">
-        <polygon points="-144,235 -156,237 -156,233"/>
-      </g>
-      <g class="lini-text lini-dim-text">
-        <use href="#lini-g1400-1653" transform="translate(-203.862 208.296) scale(0.012 -0.012)"/>
-        <use href="#lini-g1400-1661" transform="translate(-198.702 208.296) scale(0.012 -0.012)"/>
-      </g>
-      <g class="lini-node lini-ext-line lini-dim lini-line" transform="translate(-15.952,-23)">
-        <mask id="lini-halo-face-view-1" maskUnits="userSpaceOnUse" x="-145.5" y="-118.5" width="3" height="358"><rect class="lini-cut-bg" x="-145.5" y="-118.5" width="3" height="358"/><polyline class="lini-halo" fill="none" stroke-width="3" points="-144,-102 -144,-98"/><polyline class="lini-halo" fill="none" stroke-width="3" points="-144,98 -144,102"/><polyline class="lini-halo" fill="none" stroke-width="3" points="-144,138 -144,142"/><polyline class="lini-halo" fill="none" stroke-width="3" points="-144,189 -144,195"/></mask>
-        <line x1="-144" y1="-117" x2="-144" y2="238" mask="url(#lini-halo-face-view-1)"/>
-      </g>
-      <g class="lini-node lini-ext-line lini-dim lini-line" transform="translate(-15.952,-23)">
-        <mask id="lini-halo-face-view-2" maskUnits="userSpaceOnUse" x="142.5" y="-118.5" width="3" height="358"><rect class="lini-cut-bg" x="142.5" y="-118.5" width="3" height="358"/><polyline class="lini-halo" fill="none" stroke-width="3" points="144,-102 144,-98"/><polyline class="lini-halo" fill="none" stroke-width="3" points="144,98 144,102"/><polyline class="lini-halo" fill="none" stroke-width="3" points="144,138 144,142"/><polyline class="lini-halo" fill="none" stroke-width="3" points="144,189 144,195"/></mask>
-        <line x1="144" y1="-117" x2="144" y2="238" mask="url(#lini-halo-face-view-2)"/>
-      </g>
-      <g class="lini-node lini-dim-line lini-dim lini-line" transform="translate(-15.952,-23)">
-        <line x1="-142" y1="235" x2="142" y2="235"/>
-      </g>
-      <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(-15.952,-23)">
-        <polygon points="-144,235 -132,233 -132,237"/>
-      </g>
-      <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(-15.952,-23)">
-        <polygon points="144,235 132,237 132,233"/>
+      <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(-4.502,-37)">
+        <polygon points="-144,263 -156,265 -156,261"/>
       </g>
       <g class="lini-text lini-dim-text">
-        <use href="#lini-g1400-1659" transform="translate(-22.258 208.296) scale(0.012 -0.012)"/>
-        <use href="#lini-g1400-1654" transform="translate(-15.934 208.296) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-1653" transform="translate(-192.412 222.296) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-1661" transform="translate(-187.252 222.296) scale(0.012 -0.012)"/>
       </g>
-      <g class="lini-node lini-ext-line lini-dim lini-line" transform="translate(-15.952,-23)">
-        <mask id="lini-halo-face-view-3" maskUnits="userSpaceOnUse" x="142.5" y="-118.5" width="3" height="358"><rect class="lini-cut-bg" x="142.5" y="-118.5" width="3" height="358"/><polyline class="lini-halo" fill="none" stroke-width="3" points="144,-102 144,-98"/><polyline class="lini-halo" fill="none" stroke-width="3" points="144,98 144,102"/><polyline class="lini-halo" fill="none" stroke-width="3" points="144,138 144,142"/><polyline class="lini-halo" fill="none" stroke-width="3" points="144,189 144,195"/></mask>
-        <line x1="144" y1="-117" x2="144" y2="238" mask="url(#lini-halo-face-view-3)"/>
+      <g class="lini-node lini-ext-line lini-dim lini-line" transform="translate(-4.502,-37)">
+        <mask id="lini-halo-face-view-1" maskUnits="userSpaceOnUse" x="-145.5" y="-118.5" width="3" height="386"><rect class="lini-cut-bg" x="-145.5" y="-118.5" width="3" height="386"/><polyline class="lini-halo" fill="none" stroke-width="3" points="-144,-102 -144,-98"/><polyline class="lini-halo" fill="none" stroke-width="3" points="-144,98 -144,102"/><polyline class="lini-halo" fill="none" stroke-width="3" points="-144,138 -144,142"/><polyline class="lini-halo" fill="none" stroke-width="3" points="-144,189 -144,195"/></mask>
+        <line x1="-144" y1="-117" x2="-144" y2="266" mask="url(#lini-halo-face-view-1)"/>
       </g>
-      <g class="lini-node lini-ext-line lini-dim lini-line" transform="translate(-15.952,-23)">
-        <line x1="220" y1="3" x2="220" y2="238"/>
+      <g class="lini-node lini-ext-line lini-dim lini-line" transform="translate(-4.502,-37)">
+        <mask id="lini-halo-face-view-2" maskUnits="userSpaceOnUse" x="142.5" y="-118.5" width="3" height="386"><rect class="lini-cut-bg" x="142.5" y="-118.5" width="3" height="386"/><polyline class="lini-halo" fill="none" stroke-width="3" points="144,-102 144,-98"/><polyline class="lini-halo" fill="none" stroke-width="3" points="144,98 144,102"/><polyline class="lini-halo" fill="none" stroke-width="3" points="144,138 144,142"/><polyline class="lini-halo" fill="none" stroke-width="3" points="144,189 144,195"/></mask>
+        <line x1="144" y1="-117" x2="144" y2="266" mask="url(#lini-halo-face-view-2)"/>
       </g>
-      <g class="lini-node lini-dim-line lini-dim lini-line" transform="translate(-15.952,-23)">
-        <line x1="146" y1="235" x2="218" y2="235"/>
+      <g class="lini-node lini-dim-line lini-dim lini-line" transform="translate(-4.502,-37)">
+        <line x1="-142" y1="263" x2="142" y2="263"/>
       </g>
-      <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(-15.952,-23)">
-        <polygon points="144,235 156,233 156,237"/>
+      <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(-4.502,-37)">
+        <polygon points="-144,263 -132,261 -132,265"/>
       </g>
-      <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(-15.952,-23)">
-        <polygon points="220,235 208,237 208,233"/>
-      </g>
-      <g class="lini-text lini-dim-text">
-        <use href="#lini-g1400-1653" transform="translate(160.138 208.296) scale(0.012 -0.012)"/>
-        <use href="#lini-g1400-1661" transform="translate(165.298 208.296) scale(0.012 -0.012)"/>
-      </g>
-      <g class="lini-node lini-ext-line lini-dim lini-line" transform="translate(-15.952,-23)">
-        <line x1="-220" y1="3" x2="-220" y2="260"/>
-      </g>
-      <g class="lini-node lini-ext-line lini-dim lini-line" transform="translate(-15.952,-23)">
-        <line x1="220" y1="3" x2="220" y2="260"/>
-      </g>
-      <g class="lini-node lini-dim-line lini-dim lini-line" transform="translate(-15.952,-23)">
-        <line x1="-218" y1="257" x2="218" y2="257"/>
-      </g>
-      <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(-15.952,-23)">
-        <polygon points="-220,257 -208,255 -208,259"/>
-      </g>
-      <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(-15.952,-23)">
-        <polygon points="220,257 208,259 208,255"/>
+      <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(-4.502,-37)">
+        <polygon points="144,263 132,265 132,261"/>
       </g>
       <g class="lini-text lini-dim-text">
-        <use href="#lini-g1400-1653" transform="translate(-24.97 230.296) scale(0.012 -0.012)"/>
-        <use href="#lini-g1400-1653" transform="translate(-19.81 230.296) scale(0.012 -0.012)"/>
-        <use href="#lini-g1400-1652" transform="translate(-14.65 230.296) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-1659" transform="translate(-10.808 222.296) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-1654" transform="translate(-4.484 222.296) scale(0.012 -0.012)"/>
       </g>
-      <g class="lini-node lini-ext-line lini-dim lini-line" transform="translate(-15.952,-23)">
-        <mask id="lini-halo-face-view-4" maskUnits="userSpaceOnUse" x="-142.5" y="-121.5" width="470.64" height="3"><rect class="lini-cut-bg" x="-142.5" y="-121.5" width="470.64" height="3"/><polyline class="lini-halo" fill="none" stroke-width="3" points="-53.1632,-120 -35.9211,-120"/><polyline class="lini-halo" fill="none" stroke-width="3" points="35.9211,-120 53.1632,-120"/><polyline class="lini-halo" fill="none" stroke-width="3" points="122,-120 126,-120"/><polyline class="lini-halo" fill="none" stroke-width="3" points="217,-120 223,-120"/></mask>
-        <line x1="-141" y1="-120" x2="326.64" y2="-120" mask="url(#lini-halo-face-view-4)"/>
+      <g class="lini-node lini-ext-line lini-dim lini-line" transform="translate(-4.502,-37)">
+        <mask id="lini-halo-face-view-3" maskUnits="userSpaceOnUse" x="142.5" y="-118.5" width="3" height="386"><rect class="lini-cut-bg" x="142.5" y="-118.5" width="3" height="386"/><polyline class="lini-halo" fill="none" stroke-width="3" points="144,-102 144,-98"/><polyline class="lini-halo" fill="none" stroke-width="3" points="144,98 144,102"/><polyline class="lini-halo" fill="none" stroke-width="3" points="144,138 144,142"/><polyline class="lini-halo" fill="none" stroke-width="3" points="144,189 144,195"/></mask>
+        <line x1="144" y1="-117" x2="144" y2="266" mask="url(#lini-halo-face-view-3)"/>
       </g>
-      <g class="lini-node lini-ext-line lini-dim lini-line" transform="translate(-15.952,-23)">
-        <mask id="lini-halo-face-view-5" maskUnits="userSpaceOnUse" x="-142.5" y="118.5" width="470.64" height="3"><rect class="lini-cut-bg" x="-142.5" y="118.5" width="470.64" height="3"/><polyline class="lini-halo" fill="none" stroke-width="3" points="-126,120 -122,120"/><polyline class="lini-halo" fill="none" stroke-width="3" points="-53.1632,120 -35.9211,120"/><polyline class="lini-halo" fill="none" stroke-width="3" points="35.9211,120 53.1632,120"/><polyline class="lini-halo" fill="none" stroke-width="3" points="122,120 126,120"/><polyline class="lini-halo" fill="none" stroke-width="3" points="162,120 166,120"/><polyline class="lini-halo" fill="none" stroke-width="3" points="217,120 223,120"/></mask>
-        <line x1="-141" y1="120" x2="326.64" y2="120" mask="url(#lini-halo-face-view-5)"/>
+      <g class="lini-node lini-ext-line lini-dim lini-line" transform="translate(-4.502,-37)">
+        <line x1="220" y1="3" x2="220" y2="266"/>
       </g>
-      <g class="lini-node lini-dim-line lini-dim lini-line" transform="translate(-15.952,-23)">
-        <line x1="323.64" y1="-118" x2="323.64" y2="118"/>
+      <g class="lini-node lini-dim-line lini-dim lini-line" transform="translate(-4.502,-37)">
+        <line x1="146" y1="263" x2="218" y2="263"/>
       </g>
-      <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(-15.952,-23)">
-        <polygon points="323.64,-120 325.64,-108 321.64,-108"/>
+      <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(-4.502,-37)">
+        <polygon points="144,263 156,261 156,265"/>
       </g>
-      <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(-15.952,-23)">
-        <polygon points="323.64,120 321.64,108 325.64,108"/>
-      </g>
-      <g class="lini-text lini-dim-text" transform="rotate(-90 299.688 -23)">
-        <use href="#lini-g1400-1658" transform="translate(292.5 -18.704) scale(0.012 -0.012)"/>
-        <use href="#lini-g1400-1652" transform="translate(299.16 -18.704) scale(0.012 -0.012)"/>
-      </g>
-      <g class="lini-node lini-ext-line lini-dim lini-line" transform="translate(-15.952,-23)">
-        <line x1="3" y1="-192" x2="348.64" y2="-192"/>
-      </g>
-      <g class="lini-node lini-ext-line lini-dim lini-line" transform="translate(-15.952,-23)">
-        <line x1="3" y1="192" x2="348.64" y2="192"/>
-      </g>
-      <g class="lini-node lini-dim-line lini-dim lini-line" transform="translate(-15.952,-23)">
-        <line x1="345.64" y1="-190" x2="345.64" y2="190"/>
-      </g>
-      <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(-15.952,-23)">
-        <polygon points="345.64,-192 347.64,-180 343.64,-180"/>
-      </g>
-      <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(-15.952,-23)">
-        <polygon points="345.64,192 343.64,180 347.64,180"/>
-      </g>
-      <g class="lini-text lini-dim-text" transform="rotate(-90 321.688 -11.416)">
-        <use href="#lini-g1400-1661" transform="translate(315.028 -7.12) scale(0.012 -0.012)"/>
-        <use href="#lini-g1400-1658" transform="translate(321.688 -7.12) scale(0.012 -0.012)"/>
-      </g>
-      <g class="lini-text lini-dim-text" style="font-size: 8.4px" transform="rotate(-90 317.068 -30.66)">
-        <use href="#lini-g1400-1912" transform="translate(308.8402 -27.6528) scale(0.0084 -0.0084)"/>
-        <use href="#lini-g1400-1652" transform="translate(313.5106 -27.6528) scale(0.0084 -0.0084)"/>
-        <use href="#lini-g1400-1779" transform="translate(318.9118 -27.6528) scale(0.0084 -0.0084)"/>
-        <use href="#lini-g1400-1654" transform="translate(320.8942 -27.6528) scale(0.0084 -0.0084)"/>
-      </g>
-      <g class="lini-text lini-dim-text" style="font-size: 8.4px" transform="rotate(-90 326.308 -30.66)">
-        <use href="#lini-g1400-1828" transform="translate(315.724 -27.6528) scale(0.0084 -0.0084)"/>
-        <use href="#lini-g1400-1652" transform="translate(319.4116 -27.6528) scale(0.0084 -0.0084)"/>
-        <use href="#lini-g1400-1779" transform="translate(324.8128 -27.6528) scale(0.0084 -0.0084)"/>
-        <use href="#lini-g1400-1652" transform="translate(326.7952 -27.6528) scale(0.0084 -0.0084)"/>
-        <use href="#lini-g1400-1657" transform="translate(332.1964 -27.6528) scale(0.0084 -0.0084)"/>
-      </g>
-      <g class="lini-node lini-ext-line lini-dim lini-line" transform="translate(-15.952,-23)">
-        <mask id="lini-halo-face-view-6" maskUnits="userSpaceOnUse" x="-1.5" y="-204.5" width="3" height="203"><rect class="lini-cut-bg" x="-1.5" y="-204.5" width="3" height="203"/><polyline class="lini-halo" fill="none" stroke-width="3" points="0,-45 0,-51"/><polyline class="lini-halo" fill="none" stroke-width="3" points="0,-61 0,-67"/><polyline class="lini-halo" fill="none" stroke-width="3" points="0,-125 0,-131"/><polyline class="lini-halo" fill="none" stroke-width="3" points="0,-189 0,-195"/></mask>
-        <line x1="0" y1="-3" x2="0" y2="-203" mask="url(#lini-halo-face-view-6)"/>
-      </g>
-      <g class="lini-node lini-ext-line lini-dim lini-line" transform="translate(-15.952,-23)">
-        <mask id="lini-halo-face-view-7" maskUnits="userSpaceOnUse" x="-145.5" y="-204.5" width="3" height="83"><rect class="lini-cut-bg" x="-145.5" y="-204.5" width="3" height="83"/><polyline class="lini-halo" fill="none" stroke-width="3" points="-144,-138 -144,-142"/><polyline class="lini-halo" fill="none" stroke-width="3" points="-144,-189 -144,-195"/></mask>
-        <line x1="-144" y1="-123" x2="-144" y2="-203" mask="url(#lini-halo-face-view-7)"/>
-      </g>
-      <g class="lini-node lini-dim-line lini-dim lini-line" transform="translate(-15.952,-23)">
-        <line x1="-142" y1="-200" x2="-2" y2="-200"/>
-      </g>
-      <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(-15.952,-23)">
-        <polygon points="-144,-200 -132,-202 -132,-198"/>
-      </g>
-      <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(-15.952,-23)">
-        <polygon points="0,-200 -12,-198 -12,-202"/>
+      <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(-4.502,-37)">
+        <polygon points="220,263 208,265 208,261"/>
       </g>
       <g class="lini-text lini-dim-text">
-        <use href="#lini-g1400-1655" transform="translate(-94.48 -226.704) scale(0.012 -0.012)"/>
-        <use href="#lini-g1400-1658" transform="translate(-88.084 -226.704) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-1653" transform="translate(171.588 222.296) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-1661" transform="translate(176.748 222.296) scale(0.012 -0.012)"/>
       </g>
-      <g class="lini-node lini-ext-line lini-dim lini-line" transform="translate(-15.952,-23)">
-        <line x1="-150.4" y1="-193.8" x2="-156" y2="-198"/>
+      <g class="lini-node lini-ext-line lini-dim lini-line" transform="translate(-4.502,-37)">
+        <line x1="-220" y1="3" x2="-220" y2="301"/>
       </g>
-      <g class="lini-node lini-ext-line lini-dim lini-line" transform="translate(-15.952,-23)">
-        <line x1="-222.4" y1="-97.8" x2="-228" y2="-102"/>
+      <g class="lini-node lini-ext-line lini-dim lini-line" transform="translate(-4.502,-37)">
+        <line x1="220" y1="3" x2="220" y2="301"/>
       </g>
-      <g class="lini-node lini-dim-line lini-dim lini-line" transform="translate(-15.952,-23)">
-        <line x1="-224.4" y1="-101.8" x2="-154.8" y2="-194.6"/>
+      <g class="lini-node lini-dim-line lini-dim lini-line" transform="translate(-4.502,-37)">
+        <line x1="-218" y1="298" x2="218" y2="298"/>
       </g>
-      <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(-15.952,-23)">
-        <polygon points="-225.6,-100.2 -220,-111 -216.8,-108.6"/>
+      <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(-4.502,-37)">
+        <polygon points="-220,298 -208,296 -208,300"/>
       </g>
-      <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(-15.952,-23)">
-        <polygon points="-153.6,-196.2 -159.2,-185.4 -162.4,-187.8"/>
+      <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(-4.502,-37)">
+        <polygon points="220,298 208,300 208,296"/>
       </g>
-      <g class="lini-text lini-dim-text" transform="rotate(-53.1301 -211.952 -176)">
-        <use href="#lini-g1400-1655" transform="translate(-219.008 -171.704) scale(0.012 -0.012)"/>
-        <use href="#lini-g1400-1652" transform="translate(-212.612 -171.704) scale(0.012 -0.012)"/>
+      <g class="lini-text lini-dim-text">
+        <use href="#lini-g1400-1653" transform="translate(-13.52 257.296) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-1653" transform="translate(-8.36 257.296) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-1652" transform="translate(-3.2 257.296) scale(0.012 -0.012)"/>
       </g>
-      <g class="lini-node lini-dim-line lini-dim lini-path" transform="translate(-15.952,-23)">
+      <g class="lini-node lini-ext-line lini-dim lini-line" transform="translate(-4.502,-37)">
+        <mask id="lini-halo-face-view-4" maskUnits="userSpaceOnUse" x="-142.5" y="-121.5" width="496.64" height="3"><rect class="lini-cut-bg" x="-142.5" y="-121.5" width="496.64" height="3"/><polyline class="lini-halo" fill="none" stroke-width="3" points="-53.1632,-120 -35.9211,-120"/><polyline class="lini-halo" fill="none" stroke-width="3" points="35.9211,-120 53.1632,-120"/><polyline class="lini-halo" fill="none" stroke-width="3" points="122,-120 126,-120"/><polyline class="lini-halo" fill="none" stroke-width="3" points="217,-120 223,-120"/></mask>
+        <line x1="-141" y1="-120" x2="352.64" y2="-120" mask="url(#lini-halo-face-view-4)"/>
+      </g>
+      <g class="lini-node lini-ext-line lini-dim lini-line" transform="translate(-4.502,-37)">
+        <mask id="lini-halo-face-view-5" maskUnits="userSpaceOnUse" x="-142.5" y="118.5" width="496.64" height="3"><rect class="lini-cut-bg" x="-142.5" y="118.5" width="496.64" height="3"/><polyline class="lini-halo" fill="none" stroke-width="3" points="-126,120 -122,120"/><polyline class="lini-halo" fill="none" stroke-width="3" points="-53.1632,120 -35.9211,120"/><polyline class="lini-halo" fill="none" stroke-width="3" points="35.9211,120 53.1632,120"/><polyline class="lini-halo" fill="none" stroke-width="3" points="122,120 126,120"/><polyline class="lini-halo" fill="none" stroke-width="3" points="162,120 166,120"/><polyline class="lini-halo" fill="none" stroke-width="3" points="217,120 223,120"/></mask>
+        <line x1="-141" y1="120" x2="352.64" y2="120" mask="url(#lini-halo-face-view-5)"/>
+      </g>
+      <g class="lini-node lini-dim-line lini-dim lini-line" transform="translate(-4.502,-37)">
+        <line x1="349.64" y1="-118" x2="349.64" y2="118"/>
+      </g>
+      <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(-4.502,-37)">
+        <polygon points="349.64,-120 351.64,-108 347.64,-108"/>
+      </g>
+      <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(-4.502,-37)">
+        <polygon points="349.64,120 347.64,108 351.64,108"/>
+      </g>
+      <g class="lini-text lini-dim-text" transform="rotate(-90 337.138 -37)">
+        <use href="#lini-g1400-1658" transform="translate(329.95 -32.704) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-1652" transform="translate(336.61 -32.704) scale(0.012 -0.012)"/>
+      </g>
+      <g class="lini-node lini-ext-line lini-dim lini-line" transform="translate(-4.502,-37)">
+        <line x1="3" y1="-192" x2="387.64" y2="-192"/>
+      </g>
+      <g class="lini-node lini-ext-line lini-dim lini-line" transform="translate(-4.502,-37)">
+        <line x1="3" y1="192" x2="387.64" y2="192"/>
+      </g>
+      <g class="lini-node lini-dim-line lini-dim lini-line" transform="translate(-4.502,-37)">
+        <line x1="384.64" y1="-190" x2="384.64" y2="190"/>
+      </g>
+      <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(-4.502,-37)">
+        <polygon points="384.64,-192 386.64,-180 382.64,-180"/>
+      </g>
+      <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(-4.502,-37)">
+        <polygon points="384.64,192 382.64,180 386.64,180"/>
+      </g>
+      <g class="lini-text lini-dim-text" transform="rotate(-90 372.138 -25.416)">
+        <use href="#lini-g1400-1661" transform="translate(365.478 -21.12) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-1658" transform="translate(372.138 -21.12) scale(0.012 -0.012)"/>
+      </g>
+      <g class="lini-text lini-dim-text" style="font-size: 8.4px" transform="rotate(-90 367.518 -44.66)">
+        <use href="#lini-g1400-1912" transform="translate(359.2902 -41.6528) scale(0.0084 -0.0084)"/>
+        <use href="#lini-g1400-1652" transform="translate(363.9606 -41.6528) scale(0.0084 -0.0084)"/>
+        <use href="#lini-g1400-1779" transform="translate(369.3618 -41.6528) scale(0.0084 -0.0084)"/>
+        <use href="#lini-g1400-1654" transform="translate(371.3442 -41.6528) scale(0.0084 -0.0084)"/>
+      </g>
+      <g class="lini-text lini-dim-text" style="font-size: 8.4px" transform="rotate(-90 376.758 -44.66)">
+        <use href="#lini-g1400-1828" transform="translate(366.174 -41.6528) scale(0.0084 -0.0084)"/>
+        <use href="#lini-g1400-1652" transform="translate(369.8616 -41.6528) scale(0.0084 -0.0084)"/>
+        <use href="#lini-g1400-1779" transform="translate(375.2628 -41.6528) scale(0.0084 -0.0084)"/>
+        <use href="#lini-g1400-1652" transform="translate(377.2452 -41.6528) scale(0.0084 -0.0084)"/>
+        <use href="#lini-g1400-1657" transform="translate(382.6464 -41.6528) scale(0.0084 -0.0084)"/>
+      </g>
+      <g class="lini-node lini-ext-line lini-dim lini-line" transform="translate(-4.502,-37)">
+        <mask id="lini-halo-face-view-6" maskUnits="userSpaceOnUse" x="-1.5" y="-217.5" width="3" height="216"><rect class="lini-cut-bg" x="-1.5" y="-217.5" width="3" height="216"/><polyline class="lini-halo" fill="none" stroke-width="3" points="0,-45 0,-51"/><polyline class="lini-halo" fill="none" stroke-width="3" points="0,-61 0,-67"/><polyline class="lini-halo" fill="none" stroke-width="3" points="0,-125 0,-131"/><polyline class="lini-halo" fill="none" stroke-width="3" points="0,-189 0,-195"/></mask>
+        <line x1="0" y1="-3" x2="0" y2="-216" mask="url(#lini-halo-face-view-6)"/>
+      </g>
+      <g class="lini-node lini-ext-line lini-dim lini-line" transform="translate(-4.502,-37)">
+        <mask id="lini-halo-face-view-7" maskUnits="userSpaceOnUse" x="-145.5" y="-217.5" width="3" height="96"><rect class="lini-cut-bg" x="-145.5" y="-217.5" width="3" height="96"/><polyline class="lini-halo" fill="none" stroke-width="3" points="-144,-138 -144,-142"/><polyline class="lini-halo" fill="none" stroke-width="3" points="-144,-189 -144,-195"/></mask>
+        <line x1="-144" y1="-123" x2="-144" y2="-216" mask="url(#lini-halo-face-view-7)"/>
+      </g>
+      <g class="lini-node lini-dim-line lini-dim lini-line" transform="translate(-4.502,-37)">
+        <line x1="-142" y1="-213" x2="-2" y2="-213"/>
+      </g>
+      <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(-4.502,-37)">
+        <polygon points="-144,-213 -132,-215 -132,-211"/>
+      </g>
+      <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(-4.502,-37)">
+        <polygon points="0,-213 -12,-211 -12,-215"/>
+      </g>
+      <g class="lini-text lini-dim-text">
+        <use href="#lini-g1400-1655" transform="translate(-83.03 -253.704) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-1658" transform="translate(-76.634 -253.704) scale(0.012 -0.012)"/>
+      </g>
+      <g class="lini-node lini-ext-line lini-dim lini-line" transform="translate(-4.502,-37)">
+        <line x1="-150.4" y1="-193.8" x2="-166.4" y2="-205.8"/>
+      </g>
+      <g class="lini-node lini-ext-line lini-dim lini-line" transform="translate(-4.502,-37)">
+        <line x1="-222.4" y1="-97.8" x2="-238.4" y2="-109.8"/>
+      </g>
+      <g class="lini-node lini-dim-line lini-dim lini-line" transform="translate(-4.502,-37)">
+        <line x1="-234.8" y1="-109.6" x2="-165.2" y2="-202.4"/>
+      </g>
+      <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(-4.502,-37)">
+        <polygon points="-236,-108 -230.4,-118.8 -227.2,-116.4"/>
+      </g>
+      <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(-4.502,-37)">
+        <polygon points="-164,-204 -169.6,-193.2 -172.8,-195.6"/>
+      </g>
+      <g class="lini-text lini-dim-text" transform="rotate(-53.1301 -210.902 -197.8)">
+        <use href="#lini-g1400-1655" transform="translate(-217.958 -193.504) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-1652" transform="translate(-211.562 -193.504) scale(0.012 -0.012)"/>
+      </g>
+      <g class="lini-node lini-dim-line lini-dim lini-path" transform="translate(-4.502,-37)">
         <path d="M -172 -160 A 40 40 0 0 0 -108 -192"/>
       </g>
       <g class="lini-text lini-dim-text">
-        <use href="#lini-g1400-1653" transform="translate(-156.4289 -164.1938) scale(0.012 -0.012)"/>
-        <use href="#lini-g1400-1654" transform="translate(-151.2689 -164.1938) scale(0.012 -0.012)"/>
-        <use href="#lini-g1400-1658" transform="translate(-144.9809 -164.1938) scale(0.012 -0.012)"/>
-        <use href="#lini-g1400-1779" transform="translate(-138.3209 -164.1938) scale(0.012 -0.012)"/>
-        <use href="#lini-g1400-1661" transform="translate(-135.4889 -164.1938) scale(0.012 -0.012)"/>
-        <use href="#lini-g1400-1991" transform="translate(-128.8289 -164.1938) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-1653" transform="translate(-144.9789 -178.1938) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-1654" transform="translate(-139.8189 -178.1938) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-1658" transform="translate(-133.5309 -178.1938) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-1779" transform="translate(-126.8709 -178.1938) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-1661" transform="translate(-124.0389 -178.1938) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-1991" transform="translate(-117.3789 -178.1938) scale(0.012 -0.012)"/>
       </g>
-      <g class="lini-node lini-dim-line lini-dim lini-line" transform="translate(-15.952,-23)">
-        <polyline points="212.1385,183.9376 231.5776,200.7925 239.5776,200.7925"/>
+      <g class="lini-node lini-dim-line lini-dim lini-line" transform="translate(-4.502,-37)">
+        <polyline points="212.1385,183.9376 236.1108,204.7231 248.1108,204.7231"/>
       </g>
-      <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(-15.952,-23)">
+      <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(-4.502,-37)">
         <polygon points="210.6274,182.6274 221.0041,188.9776 218.3837,191.9997"/>
       </g>
       <g class="lini-text lini-dim-text">
-        <use href="#lini-g1400-122" transform="translate(225.6256 182.0885) scale(0.012 -0.012)"/>
-        <use href="#lini-g1400-1660" transform="translate(232.7176 182.0885) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-122" transform="translate(248.6088 172.0191) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-1660" transform="translate(255.7008 172.0191) scale(0.012 -0.012)"/>
       </g>
-      <g class="lini-node lini-dim-line lini-dim lini-line" transform="translate(-15.952,-23)">
+      <g class="lini-node lini-dim-line lini-dim lini-line" transform="translate(-4.502,-37)">
         <line x1="-43.8406" y1="43.8406" x2="43.8406" y2="-43.8406"/>
       </g>
-      <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(-15.952,-23)">
+      <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(-4.502,-37)">
         <polygon points="45.2548,-45.2548 38.1838,-35.3553 35.3553,-38.1838"/>
       </g>
-      <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(-15.952,-23)">
+      <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(-4.502,-37)">
         <polygon points="-45.2548,45.2548 -38.1838,35.3553 -35.3553,38.1838"/>
       </g>
-      <g class="lini-text lini-dim-text" transform="rotate(-45 -21.6089 -28.6569)">
-        <use href="#lini-g1400-115" transform="translate(-41.6129 -24.3609) scale(0.012 -0.012)"/>
-        <use href="#lini-g1400-1655" transform="translate(-31.7489 -24.3609) scale(0.012 -0.012)"/>
-        <use href="#lini-g1400-1654" transform="translate(-25.3529 -24.3609) scale(0.012 -0.012)"/>
-        <use href="#lini-g1400-62" transform="translate(-16.2809 -24.3609) scale(0.012 -0.012)"/>
-        <use href="#lini-g1400-1659" transform="translate(-7.9289 -24.3609) scale(0.012 -0.012)"/>
+      <g class="lini-text lini-dim-text" transform="rotate(-45 -10.1589 -42.6569)">
+        <use href="#lini-g1400-115" transform="translate(-30.1629 -38.3609) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-1655" transform="translate(-20.2989 -38.3609) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-1654" transform="translate(-13.9029 -38.3609) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-62" transform="translate(-4.8309 -38.3609) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-1659" transform="translate(3.5211 -38.3609) scale(0.012 -0.012)"/>
       </g>
-      <g class="lini-node lini-dim-line lini-dim lini-line" transform="translate(-15.952,-23)">
-        <mask id="lini-halo-face-view-8" maskUnits="userSpaceOnUse" x="-244.5" y="-121.5" width="136" height="3"><rect class="lini-cut-bg" x="-244.5" y="-121.5" width="136" height="3"/><polyline class="lini-halo" fill="none" stroke-width="3" points="-198.25,-120 -205.75,-120"/></mask>
-        <polyline points="-110,-120 -235,-120 -243,-120" mask="url(#lini-halo-face-view-8)"/>
+      <g class="lini-node lini-dim-line lini-dim lini-line" transform="translate(-4.502,-37)">
+        <mask id="lini-halo-face-view-8" maskUnits="userSpaceOnUse" x="-303.4" y="-121.5" width="194.9" height="3"><rect class="lini-cut-bg" x="-303.4" y="-121.5" width="194.9" height="3"/><polyline class="lini-halo" fill="none" stroke-width="3" points="-198.25,-120 -205.75,-120"/></mask>
+        <polyline points="-110,-120 -289.9,-120 -301.9,-120" mask="url(#lini-halo-face-view-8)"/>
       </g>
-      <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(-15.952,-23)">
+      <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(-4.502,-37)">
         <polygon points="-164,-120 -176,-118 -176,-122"/>
       </g>
-      <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(-15.952,-23)">
+      <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(-4.502,-37)">
         <polygon points="-124,-120 -112,-122 -112,-118"/>
       </g>
       <g class="lini-text lini-dim-text">
-        <use href="#lini-g1400-1656" transform="translate(-332.688 -138.704) scale(0.012 -0.012)"/>
-        <use href="#lini-g1400-1914" transform="translate(-325.596 -138.704) scale(0.012 -0.012)"/>
-        <use href="#lini-g1400-115" transform="translate(-316.284 -138.704) scale(0.012 -0.012)"/>
-        <use href="#lini-g1400-1653" transform="translate(-306.42 -138.704) scale(0.012 -0.012)"/>
-        <use href="#lini-g1400-1652" transform="translate(-301.26 -138.704) scale(0.012 -0.012)"/>
-        <use href="#lini-g1400-132" transform="translate(-290.76 -138.704) scale(0.012 -0.012)"/>
-        <use href="#lini-g1400-62" transform="translate(-284.4 -138.704) scale(0.012 -0.012)"/>
-        <use href="#lini-g1400-122" transform="translate(-276.048 -138.704) scale(0.012 -0.012)"/>
-        <use href="#lini-g1400-137" transform="translate(-268.956 -138.704) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-1656" transform="translate(-383.138 -152.704) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-1914" transform="translate(-376.046 -152.704) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-115" transform="translate(-366.734 -152.704) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-1653" transform="translate(-356.87 -152.704) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-1652" transform="translate(-351.71 -152.704) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-132" transform="translate(-341.21 -152.704) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-62" transform="translate(-334.85 -152.704) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-122" transform="translate(-326.498 -152.704) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-137" transform="translate(-319.406 -152.704) scale(0.012 -0.012)"/>
       </g>
-      <g class="lini-node lini-dim-line lini-line" transform="translate(-15.952,-23)">
-        <mask id="lini-halo-face-view-9" maskUnits="userSpaceOnUse" x="164.5" y="-121.5" width="80" height="3"><rect class="lini-cut-bg" x="164.5" y="-121.5" width="80" height="3"/><polyline class="lini-halo" fill="none" stroke-width="3" points="217,-120 223,-120"/></mask>
-        <polyline points="166,-120 235,-120 243,-120" mask="url(#lini-halo-face-view-9)"/>
+      <g class="lini-node lini-dim-line lini-line" transform="translate(-4.502,-37)">
+        <mask id="lini-halo-face-view-9" maskUnits="userSpaceOnUse" x="164.5" y="-121.5" width="90" height="3"><rect class="lini-cut-bg" x="164.5" y="-121.5" width="90" height="3"/><polyline class="lini-halo" fill="none" stroke-width="3" points="217,-120 223,-120"/></mask>
+        <polyline points="166,-120 241,-120 253,-120" mask="url(#lini-halo-face-view-9)"/>
       </g>
-      <g class="lini-node lini-marker lini-marker-dim lini-poly" transform="translate(-15.952,-23)">
+      <g class="lini-node lini-marker lini-marker-dim lini-poly" transform="translate(-4.502,-37)">
         <polygon points="164,-120 176,-122 176,-118"/>
       </g>
-      <g class="lini-node lini-dim-line lini-line" transform="translate(-15.952,-23)">
-        <mask id="lini-halo-face-view-10" maskUnits="userSpaceOnUse" x="150.2998" y="-121.5" width="86.2002" height="222.4291"><rect class="lini-cut-bg" x="150.2998" y="-121.5" width="86.2002" height="222.4291"/><polyline class="lini-halo" fill="none" stroke-width="3" points="217,-72.5275 223,-88.3516"/></mask>
-        <line x1="151.7998" y1="99.4291" x2="235" y2="-120" mask="url(#lini-halo-face-view-10)"/>
+      <g class="lini-node lini-dim-line lini-line" transform="translate(-4.502,-37)">
+        <mask id="lini-halo-face-view-10" maskUnits="userSpaceOnUse" x="150.7438" y="-121.5" width="91.7562" height="222.603"><rect class="lini-cut-bg" x="150.7438" y="-121.5" width="91.7562" height="222.603"/><polyline class="lini-halo" fill="none" stroke-width="3" points="217,-60.6186 223,-75.4639"/></mask>
+        <line x1="152.2438" y1="99.603" x2="241" y2="-120" mask="url(#lini-halo-face-view-10)"/>
       </g>
-      <g class="lini-node lini-marker lini-marker-dim lini-poly" transform="translate(-15.952,-23)">
-        <polygon points="151.0907,101.2992 153.4751,89.3696 157.2153,90.7877"/>
+      <g class="lini-node lini-marker lini-marker-dim lini-poly" transform="translate(-4.502,-37)">
+        <polygon points="151.4944,101.4572 154.1367,89.5821 157.8453,91.081"/>
       </g>
       <g class="lini-text lini-dim-text">
-        <use href="#lini-g1400-1654" transform="translate(229.048 -138.704) scale(0.012 -0.012)"/>
-        <use href="#lini-g1400-1914" transform="translate(235.336 -138.704) scale(0.012 -0.012)"/>
-        <use href="#lini-g1400-28" transform="translate(244.648 -138.704) scale(0.012 -0.012)"/>
-        <use href="#lini-g1400-126" transform="translate(253.48 -138.704) scale(0.012 -0.012)"/>
-        <use href="#lini-g1400-79" transform="translate(260.14 -138.704) scale(0.012 -0.012)"/>
-        <use href="#lini-g1400-1661" transform="translate(270.448 -138.704) scale(0.012 -0.012)"/>
-        <use href="#lini-g1400-1652" transform="translate(277.108 -138.704) scale(0.012 -0.012)"/>
-        <use href="#lini-g1400-1991" transform="translate(284.824 -138.704) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-1654" transform="translate(253.498 -152.704) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-1914" transform="translate(259.786 -152.704) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-28" transform="translate(269.098 -152.704) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-126" transform="translate(277.93 -152.704) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-79" transform="translate(284.59 -152.704) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-1661" transform="translate(294.898 -152.704) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-1652" transform="translate(301.558 -152.704) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-1991" transform="translate(309.274 -152.704) scale(0.012 -0.012)"/>
       </g>
-      <g class="lini-node lini-dim-line lini-line" transform="translate(-15.952,-23)">
-        <polyline points="0,203 0,207 8,207"/>
+      <g class="lini-node lini-dim-line lini-line" transform="translate(-4.502,-37)">
+        <polyline points="0,203 0,222 12,222"/>
       </g>
-      <g class="lini-node lini-marker lini-marker-datum lini-poly" transform="translate(-15.952,-23)">
+      <g class="lini-node lini-marker lini-marker-datum lini-poly" transform="translate(-4.502,-37)">
         <polygon points="-5.5,192 5.5,192 0,203"/>
       </g>
       <g class="lini-text lini-dim-text">
-        <use href="#lini-g1400-1" transform="translate(-2.972 188.296) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-1" transform="translate(12.478 189.296) scale(0.012 -0.012)"/>
       </g>
-      <g class="lini-node lini-dim-line lini-datum-frame lini-line" transform="translate(-15.952,-23)">
-        <polyline points="8,198 26,198 26,216 8,216 8,198"/>
+      <g class="lini-node lini-dim-line lini-datum-frame lini-line" transform="translate(-4.502,-37)">
+        <polyline points="12,213 30,213 30,231 12,231 12,213"/>
       </g>
-      <g class="lini-node lini-dim-line lini-line" transform="translate(-15.952,-23)">
-        <polyline points="-186,-144 -235,-144 -243,-144"/>
+      <g class="lini-node lini-dim-line lini-line" transform="translate(-4.502,-37)">
+        <polyline points="-186,-144 -241,-144 -253,-144"/>
         <circle class="lini-marker lini-marker-dot" cx="-186.625" cy="-144" r="2.625"/>
       </g>
       <g class="lini-text lini-dim-text">
-        <use href="#lini-g1400-122" transform="translate(-291.852 -162.704) scale(0.012 -0.012)"/>
-        <use href="#lini-g1400-177" transform="translate(-284.76 -162.704) scale(0.012 -0.012)"/>
-        <use href="#lini-g1400-1653" transform="translate(-275.604 -162.704) scale(0.012 -0.012)"/>
-        <use href="#lini-g1400-1779" transform="translate(-270.444 -162.704) scale(0.012 -0.012)"/>
-        <use href="#lini-g1400-1658" transform="translate(-267.612 -162.704) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-122" transform="translate(-293.402 -176.704) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-177" transform="translate(-286.31 -176.704) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-1653" transform="translate(-277.154 -176.704) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-1779" transform="translate(-271.994 -176.704) scale(0.012 -0.012)"/>
+        <use href="#lini-g1400-1658" transform="translate(-269.162 -176.704) scale(0.012 -0.012)"/>
       </g>
-      <g class="lini-node lini-footnote lini-caption lini-block" transform="translate(0,250)">
+      <g class="lini-node lini-footnote lini-caption lini-block" transform="translate(0,277)">
         <rect x="-46.128" y="-6" width="92.256" height="12" rx="0" ry="0"/>
         <g class="lini-text">
           <use href="#lini-g1400-57" transform="translate(-46.128 4.296) scale(0.012 -0.012)"/>
@@ -474,11 +474,11 @@ input_file: samples/drawing_annotations.lini
         </g>
       </g>
     </g>
-    <g class="lini-node lini-row lini-block" transform="translate(0,259)">
-      <rect x="-485.1595" y="-260.75" width="970.319" height="521.5" rx="0" ry="0"/>
+    <g class="lini-node lini-row lini-block" transform="translate(0,286)">
+      <rect x="-491.6595" y="-267.25" width="983.319" height="534.5" rx="0" ry="0"/>
       <g class="lini-node lini-drawing lini-block" data-id="unit-view" transform="translate(-81.781,0)">
-        <rect x="-403.3785" y="-260.75" width="806.757" height="521.5" rx="0" ry="0"/>
-        <g class="lini-node lini-steel lini-sketch" data-id="housing" transform="translate(78.7865,45.75)">
+        <rect x="-409.8785" y="-267.25" width="819.757" height="534.5" rx="0" ry="0"/>
+        <g class="lini-node lini-steel lini-sketch" data-id="housing" transform="translate(72.2865,39.25)">
           <path d="M -240 -192 L -176 -192 L -176 -128 L 0 -128 L 0 -64 L -80 -64 L -80 -48 L -240 -48 Z M -240 192 L -176 192 L -176 128 L 0 128 L 0 64 L -80 64 L -80 48 L -240 48 Z" fill-rule="evenodd"/>
           <g class="lini-node lini-centerline lini-line" transform="translate(0,0)">
             <line x1="-244" y1="0" x2="4" y2="0"/>
@@ -496,7 +496,7 @@ input_file: samples/drawing_annotations.lini
             <line x1="0" y1="-128" x2="0" y2="128"/>
           </g>
         </g>
-        <g class="lini-node lini-bronze lini-sketch" data-id="bush" transform="translate(46.7865,45.75)">
+        <g class="lini-node lini-bronze lini-sketch" data-id="bush" transform="translate(40.2865,39.25)">
           <path d="M -48 -64 L 48 -64 L 48 -40 L -48 -40 Z M -48 64 L 48 64 L 48 40 L -48 40 Z" fill-rule="evenodd"/>
           <g class="lini-node lini-centerline lini-line" transform="translate(0,0)">
             <line x1="-52" y1="0" x2="52" y2="0"/>
@@ -508,7 +508,7 @@ input_file: samples/drawing_annotations.lini
             <line x1="48" y1="-64" x2="48" y2="64"/>
           </g>
         </g>
-        <g class="lini-node lini-drawing lini-block" data-id="spindle" transform="translate(86.7865,45.75)">
+        <g class="lini-node lini-drawing lini-block" data-id="spindle" transform="translate(80.2865,39.25)">
           <rect x="-209" y="-81" width="418" height="162" rx="0" ry="0"/>
           <g class="lini-node lini-sketch" data-id="shaft" transform="translate(32,0)">
             <path d="M -240 -40 L 16 -40 L 120 -40 L 120 40 L 16 40 L -240 40 Z" fill-rule="evenodd"/>
@@ -517,34 +517,34 @@ input_file: samples/drawing_annotations.lini
             <path d="M -28 -80 L 28 -80 L 28 80 L -28 80 Z" fill-rule="evenodd"/>
           </g>
         </g>
-        <g class="lini-node lini-centerline lini-line" transform="translate(78.7865,45.75)">
+        <g class="lini-node lini-centerline lini-line" transform="translate(72.2865,39.25)">
           <line x1="-280" y1="0" x2="248" y2="0"/>
         </g>
-        <g class="lini-node lini-balloon lini-oval" data-id="b1" transform="translate(-81.2135,-234.25)">
+        <g class="lini-node lini-balloon lini-oval" data-id="b1" transform="translate(-87.7135,-240.75)">
           <ellipse cx="0" cy="0" rx="22.4475" ry="25.5"/>
           <g class="lini-text">
             <use href="#lini-g1500-1653" transform="translate(-2.4475 3.938) scale(0.011 -0.011)"/>
           </g>
         </g>
-        <g class="lini-node lini-balloon lini-oval" data-id="b2" transform="translate(86.7865,-234.25)">
+        <g class="lini-node lini-balloon lini-oval" data-id="b2" transform="translate(80.2865,-240.75)">
           <ellipse cx="0" cy="0" rx="22.9645" ry="25.5"/>
           <g class="lini-text">
             <use href="#lini-g1500-1654" transform="translate(-2.9645 3.938) scale(0.011 -0.011)"/>
           </g>
         </g>
-        <g class="lini-node lini-balloon lini-oval" data-id="b3" transform="translate(198.7865,-234.25)">
+        <g class="lini-node lini-balloon lini-oval" data-id="b3" transform="translate(192.2865,-240.75)">
           <ellipse cx="0" cy="0" rx="23.0525" ry="25.5"/>
           <g class="lini-text">
             <use href="#lini-g1500-1655" transform="translate(-3.0525 3.938) scale(0.011 -0.011)"/>
           </g>
         </g>
-        <g class="lini-node lini-balloon lini-oval" data-id="b4" transform="translate(334.7865,-234.25)">
+        <g class="lini-node lini-balloon lini-oval" data-id="b4" transform="translate(328.2865,-240.75)">
           <ellipse cx="0" cy="0" rx="23.3385" ry="25.5"/>
           <g class="lini-text">
             <use href="#lini-g1500-1656" transform="translate(-3.3385 3.938) scale(0.011 -0.011)"/>
           </g>
         </g>
-        <g class="lini-node lini-note lini-path" data-id="hint" style="stroke-width: 2" transform="translate(-305.2135,-74.25)">
+        <g class="lini-node lini-note lini-path" data-id="hint" style="stroke-width: 2" transform="translate(-311.7135,-80.75)">
           <path d="M -98.165 -13.5 L 88.985 -13.5 L 98.165 -4.3199999999999985 L 98.165 13.5 L -98.165 13.5 Z"/>
           <g class="lini-node lini-path" style="fill: #444; stroke: none; stroke-width: 0" transform="translate(0,0)">
             <path d="M 88.985 -13.5 L 98.165 -4.3199999999999985 L 88.985 -4.3199999999999985 Z"/>
@@ -572,65 +572,65 @@ input_file: samples/drawing_annotations.lini
             <use href="#lini-g1500-163" transform="translate(79.248 4.654) scale(0.013 -0.013)"/>
           </g>
         </g>
-        <g class="lini-node lini-ext-line lini-dim lini-line" transform="translate(78.7865,45.75)">
-          <line x1="-240" y1="3" x2="-240" y2="215"/>
+        <g class="lini-node lini-ext-line lini-dim lini-line" transform="translate(72.2865,39.25)">
+          <line x1="-240" y1="3" x2="-240" y2="228"/>
         </g>
-        <g class="lini-node lini-ext-line lini-dim lini-line" transform="translate(78.7865,45.75)">
-          <mask id="lini-halo-unit-view-0" maskUnits="userSpaceOnUse" x="214.5" y="1.5" width="3" height="215"><rect class="lini-cut-bg" x="214.5" y="1.5" width="3" height="215"/><polyline class="lini-halo" fill="none" stroke-width="3" points="216,77 216,83"/></mask>
-          <line x1="216" y1="3" x2="216" y2="215" mask="url(#lini-halo-unit-view-0)"/>
+        <g class="lini-node lini-ext-line lini-dim lini-line" transform="translate(72.2865,39.25)">
+          <mask id="lini-halo-unit-view-0" maskUnits="userSpaceOnUse" x="214.5" y="1.5" width="3" height="228"><rect class="lini-cut-bg" x="214.5" y="1.5" width="3" height="228"/><polyline class="lini-halo" fill="none" stroke-width="3" points="216,77 216,83"/></mask>
+          <line x1="216" y1="3" x2="216" y2="228" mask="url(#lini-halo-unit-view-0)"/>
         </g>
-        <g class="lini-node lini-dim-line lini-dim lini-line" transform="translate(78.7865,45.75)">
-          <line x1="-238" y1="212" x2="214" y2="212"/>
+        <g class="lini-node lini-dim-line lini-dim lini-line" transform="translate(72.2865,39.25)">
+          <line x1="-238" y1="225" x2="214" y2="225"/>
         </g>
-        <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(78.7865,45.75)">
-          <polygon points="-240,212 -228,210 -228,214"/>
+        <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(72.2865,39.25)">
+          <polygon points="-240,225 -228,223 -228,227"/>
         </g>
-        <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(78.7865,45.75)">
-          <polygon points="216,212 204,214 204,210"/>
+        <g class="lini-node lini-marker lini-marker-dim lini-dim lini-poly" transform="translate(72.2865,39.25)">
+          <polygon points="216,225 204,227 204,223"/>
         </g>
         <g class="lini-text lini-dim-text">
-          <use href="#lini-g1400-1653" transform="translate(58.0805 254.046) scale(0.012 -0.012)"/>
-          <use href="#lini-g1400-1653" transform="translate(63.2405 254.046) scale(0.012 -0.012)"/>
-          <use href="#lini-g1400-1656" transform="translate(68.4005 254.046) scale(0.012 -0.012)"/>
+          <use href="#lini-g1400-1653" transform="translate(51.5805 260.546) scale(0.012 -0.012)"/>
+          <use href="#lini-g1400-1653" transform="translate(56.7405 260.546) scale(0.012 -0.012)"/>
+          <use href="#lini-g1400-1656" transform="translate(61.9005 260.546) scale(0.012 -0.012)"/>
         </g>
-        <g class="lini-node lini-dim-line lini-line" transform="translate(78.7865,45.75)">
+        <g class="lini-node lini-dim-line lini-line" transform="translate(72.2865,39.25)">
           <line x1="-149.3632" y1="-257.5446" x2="-88.8562" y2="-129.8075"/>
           <circle class="lini-marker lini-marker-dot" cx="-89.1237" cy="-130.3723" r="2.625"/>
         </g>
-        <g class="lini-node lini-dim-line lini-line" transform="translate(78.7865,45.75)">
+        <g class="lini-node lini-dim-line lini-line" transform="translate(72.2865,39.25)">
           <mask id="lini-halo-unit-view-1" maskUnits="userSpaceOnUse" x="7.3941" y="-256.0193" width="10.1059" height="205.5193"><rect class="lini-cut-bg" x="7.3941" y="-256.0193" width="10.1059" height="205.5193"/><polyline class="lini-halo" fill="none" stroke-width="3" points="14.9123,-83 15.1228,-77"/><polyline class="lini-halo" fill="none" stroke-width="3" points="15.4737,-67 15.6842,-61"/></mask>
           <line x1="8.8941" y1="-254.5193" x2="15.9299" y2="-53.9988" mask="url(#lini-halo-unit-view-1)"/>
           <circle class="lini-marker lini-marker-dot" cx="15.908" cy="-54.6234" r="2.625"/>
         </g>
-        <g class="lini-node lini-dim-line lini-line" transform="translate(78.7865,45.75)">
+        <g class="lini-node lini-dim-line lini-line" transform="translate(72.2865,39.25)">
           <mask id="lini-halo-unit-view-2" maskUnits="userSpaceOnUse" x="106.5" y="-256.0389" width="13.7269" height="217.5389"><rect class="lini-cut-bg" x="106.5" y="-256.0389" width="13.7269" height="217.5389"/><polyline class="lini-halo" fill="none" stroke-width="3" points="110.15,-83 109.85,-77"/></mask>
           <line x1="118.7269" y1="-254.5389" x2="108.0999" y2="-41.9975" mask="url(#lini-halo-unit-view-2)"/>
           <circle class="lini-marker lini-marker-dot" cx="108.1311" cy="-42.6217" r="2.625"/>
         </g>
-        <g class="lini-node lini-dim-line lini-line" transform="translate(78.7865,45.75)">
+        <g class="lini-node lini-dim-line lini-line" transform="translate(72.2865,39.25)">
           <line x1="247.8727" y1="-256.0961" x2="188.6438" y2="-81.8935"/>
           <circle class="lini-marker lini-marker-dot" cx="188.845" cy="-82.4853" r="2.625"/>
         </g>
-        <g class="lini-node lini-dim-line lini-line" transform="translate(78.7865,45.75)">
-          <polyline points="218,-80 262.5,-80 270.5,-80"/>
+        <g class="lini-node lini-dim-line lini-line" transform="translate(72.2865,39.25)">
+          <polyline points="218,-80 268.5,-80 280.5,-80"/>
         </g>
-        <g class="lini-node lini-marker lini-marker-dim lini-poly" transform="translate(78.7865,45.75)">
+        <g class="lini-node lini-marker lini-marker-dim lini-poly" transform="translate(72.2865,39.25)">
           <polygon points="216,-80 228,-82 228,-78"/>
         </g>
         <g class="lini-text lini-dim-text">
-          <use href="#lini-g1400-79" transform="translate(351.2865 -29.954) scale(0.012 -0.012)"/>
-          <use href="#lini-g1400-88" transform="translate(358.8105 -29.954) scale(0.012 -0.012)"/>
-          <use href="#lini-g1400-137" transform="translate(367.2825 -29.954) scale(0.012 -0.012)"/>
-          <use href="#lini-g1400-122" transform="translate(375.2865 -29.954) scale(0.012 -0.012)"/>
-          <use href="#lini-g1400-81" transform="translate(382.3785 -29.954) scale(0.012 -0.012)"/>
-          <use href="#lini-g1400-38" transform="translate(388.4385 -29.954) scale(0.012 -0.012)"/>
-          <use href="#lini-g1400-34" transform="translate(394.9665 -29.954) scale(0.012 -0.012)"/>
+          <use href="#lini-g1400-79" transform="translate(357.7865 -36.454) scale(0.012 -0.012)"/>
+          <use href="#lini-g1400-88" transform="translate(365.3105 -36.454) scale(0.012 -0.012)"/>
+          <use href="#lini-g1400-137" transform="translate(373.7825 -36.454) scale(0.012 -0.012)"/>
+          <use href="#lini-g1400-122" transform="translate(381.7865 -36.454) scale(0.012 -0.012)"/>
+          <use href="#lini-g1400-81" transform="translate(388.8785 -36.454) scale(0.012 -0.012)"/>
+          <use href="#lini-g1400-38" transform="translate(394.9385 -36.454) scale(0.012 -0.012)"/>
+          <use href="#lini-g1400-34" transform="translate(401.4665 -36.454) scale(0.012 -0.012)"/>
         </g>
-        <g class="lini-node lini-dim-line lini-line" transform="translate(78.7865,45.75)">
+        <g class="lini-node lini-dim-line lini-line" transform="translate(72.2865,39.25)">
           <line x1="-286.835" y1="-120" x2="-242" y2="-120"/>
           <polygon class="lini-marker lini-marker-arrow" points="-240,-120 -246,-117 -246,-123"/>
         </g>
-        <g class="lini-node lini-footnote lini-caption lini-block" transform="translate(0,273.75)">
+        <g class="lini-node lini-footnote lini-caption lini-block" transform="translate(0,280.25)">
           <rect x="-65.034" y="-6" width="130.068" height="12" rx="0" ry="0"/>
           <g class="lini-text">
             <use href="#lini-g1400-57" transform="translate(-65.034 4.296) scale(0.012 -0.012)"/>
@@ -653,7 +653,7 @@ input_file: samples/drawing_annotations.lini
           </g>
         </g>
       </g>
-      <g class="lini-node lini-table lini-group lini-block" data-id="bom" transform="translate(423.3785,0)">
+      <g class="lini-node lini-table lini-group lini-block" data-id="bom" transform="translate(429.8785,0)">
         <rect x="-60.781" y="-57" width="121.562" height="114" rx="8" ry="8"/>
         <rect class="lini-gutter" x="-38.781" y="-57" width="1" height="114" fill="#444"/>
         <rect class="lini-gutter" x="29.781" y="-57" width="1" height="114" fill="#444"/>

@@ -1407,9 +1407,10 @@ content, so these stand in for `auto`.
 The drawing chrome ([SPEC 15](#15-drawing)) — sheet-space, never scaled:
 
 ```
-dim clearance 5 (the drawing scope's link default)
+dim clearance 18 (the drawing scope's link default)
 dim-ext-gap 3    dim-ext-overshoot 3     halo-margin 2
-dim-arrow 12 × 4      datum-triangle 11   note-offset 14   note-landing 8
+dim-arrow 12 × 4    datum-triangle 11
+note-offset 20   note-landing 12   note-text-gap 5
 hatch-pitch 6    hatch line-width 0.75   break-gap 12     tol-stack 0.7
 center-mark-overhang 4    drawing link stroke-width 1   drawing link font-size 12
 plane-overhang 6 (then the 10 thick end, standing in it)   plane-arrow-shaft 13
@@ -2953,11 +2954,16 @@ bolt <- [ "R3 TYP" { translate: 30 -24 } ]  // a styled / nudged text — the co
 - **Text placement.** The text auto-places **outward**: a **directed** feature's
   leader leaves straight off its face — along the surface normal — while a point
   feature's runs along the ray from the drawing's datum through it; either way just
-  past the geometry union (`note-offset`), horizontal — and the leader ends in a
-  short horizontal **landing** (`note-landing`) before it, the drafting elbow.
-  `side:` picks the direction instead (a side or a corner); a styled label's
-  `translate` nudges from there; the text packs along its exit
-  ([15.6](#156-dimensions)). The tip ray-casts onto the drawn outline
+  past the geometry union, horizontal — and the leader ends in a
+  short horizontal **landing** (`note-landing`) before its text (`note-text-gap`),
+  the drafting elbow. The stand-off is measured on the **ink, not the elbow**:
+  what stands `note-offset` clear of the geometry is the statement's whole painted
+  block — its text, a datum's frame, a carried annotation node
+  ([15.9](#159-drafting-symbols--annotation-composition)) — so a leader leaving
+  downward keeps the same air as one leaving sideways, whose text the exit ray
+  already carried clear. `side:` picks the direction instead (a side or a
+  corner); a styled label's `translate` nudges from there; the block then packs
+  along its exit ([15.6](#156-dimensions)). The tip ray-casts onto the drawn outline
   ([15.2](#152-anchors)).
 - **The leader makes the note.** A callout's text lowers to a bare leaf — drafting
   callouts are unboxed. A **boxed** note is the `|note|` template

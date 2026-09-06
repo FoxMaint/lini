@@ -220,7 +220,7 @@ one crow exactly-one zero-or-one one-or-many zero-or-many datum none`.
   `a -> b { along: 0.3, 0.7; } [ "near a" "near b" ]`. Labels slide to dodge;
   they never move the wire.
 - **Scene config, not link paint**: `clearance: N` (min gap wire↔node; 16 in
-  flow, 10 in a schematic, 5 for dimensions) and `routing: orthogonal | natural |
+  flow, 10 in a schematic, 18 for dimensions) and `routing: orthogonal | natural |
   straight` sit on a container's `{ }` and cascade. `orthogonal` (default) =
   right-angle runs, rounded corners; `natural` = smooth direct curves (the
   mindmap look — free crossings); `straight` = one trimmed segment. Per-link
