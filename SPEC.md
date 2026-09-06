@@ -41,7 +41,7 @@ reference. **Link routing** has its own contract — [ROUTING.md](ROUTING.md).
 
 ---
 
-## Quickstart
+## At a glance
 
 ```
 cat -> dog -> bird
@@ -77,7 +77,7 @@ top — setup that draws nothing. After it come the instances and links, in sour
   .hot { stroke-width: 2; }                     // a class
 }
 
-|box#server| "Server"                           // the canvas, two instances
+|box#server| "Server" .hot                      // the canvas, two instances
 |box#client| "Client"
 server -> client "requests"                     // a link, with a label
 ```
@@ -110,8 +110,8 @@ link, [SPEC 9](#9-links)), a `"` text, a bare name a link, and inside the
 stylesheet a `.`/`#`/`|…|` opens a rule. The capsule is self-delimiting, so
 one token after it still decides; no prescan, no ambiguity.
 
-**Two brackets, one capsule, three sigils — one meaning each** (the Quickstart
-table, [SPEC 2](#2-lexical-syntax)): `|…|` is **identity**, the *only* place a
+**Two brackets, one capsule, three sigils — one meaning each** (the table in
+[At a glance](#at-a-glance), [SPEC 2](#2-lexical-syntax)): `|…|` is **identity**, the *only* place a
 type lives; `{ … }` is **style**, the only place declarations live; `[ … ]` is
 **content**, in source order. A drawn node is
 `|type#id| "label" .class { style } [ children ]`, only the bars required; a link
@@ -5293,23 +5293,33 @@ db      --> api     "record"
 |wall#outer| {
   draw: move(0, 0) right(7.2):north down(4.8):east left(7.2):south close():west;
 } [
-  |door#entry| { on: south; at: 3.0; swing: right }      // width: the 900 mm default
-  |window#w1|  { on: north; at: 0.9; width: 1.8 }
-  |window#w2|  { on: north; at: 4.5; width: 1.8 }
+  |window#w1| { on: north; at: 2.7; width: 1.6 }
+  |door#entry| { on: south; at: 1.05; width: 0.95; swing: right }
+  // 'south' was drawn leftward, so 'at' counts from its east end and the pen's
+  // left is the outside — 'right' opens the door into the flat
 ]
 |partition#bathwall| {
-  draw: move(4.9, 0) down(2.2) right(2.3):side;          // the bathroom corner
+  draw: move(4.9, 0) down(2.3):face right(2.3):side;   // the bathroom corner
 } [
-  |door| { on: side; at: 0.6; hinge: end }
+  |door| { on: side; at: 0.15; width: 0.8 }            // 900 mm and 'hinge: start' by default
 ]
 
-|bed|  { translate: 1.2 1.2; rotate: 90 }
-|sofa| { symbol: corner; translate: 2.0 3.3 }
-|bath| { symbol: toilet; translate: 5.5 0.5 }
-|bath| { symbol: shower; translate: 6.6 1.6 }
-|appliance| { symbol: fridge; translate: 4.2 0.5 }
-"STUDIO 27 m²" { translate: 4.0 3.4 }
+|bed|    { rotate: 90; translate: 1.15 1.05 }
+|sofa|   { symbol: two; rotate: 90; translate: 0.6 3.4 }
+|dining| { symbol: round; translate: 3.3 3.3 }
+|rect#counter| { width: 0.6; height: 1.4; translate: 6.8 3.2;
+                 fill: --bg; stroke: --stroke-dark; stroke-width: 1 }
+|appliance| "F" { symbol: fridge; translate: 6.8 2.8 }
+|bath| { symbol: shower; translate: 6.6 0.6 }
+|bath| { symbol: toilet; rotate: 90; translate: 5.35 0.5 }
+|bath| { symbol: sink;   rotate: 90; translate: 6.85 1.6 }
 
-outer:west (-) outer:east { side: top }                       // → 7.2 — centreline to centreline
-outer:west (-) outer.entry (-) outer:east { side: bottom }    // the door's location chain
+"STUDIO 27 m²" { translate: 2.2 2.2 }
+
+// Every dimension reads a clear span, face to face — what a listing plan
+// publishes. 'face' runs south, so its 'out' face is the living side's.
+outer:west-in (-) bathwall:face-out { side: top }     // → 4.75 — the living space
+bathwall:face-in (-) outer:east-in { side: top }      // → 2.15 — the bathroom
+outer:west-in (-) outer:east-in { side: top }         // → 7 — the shell, clear
+outer:north-in (-) outer:south-in { side: right }     // → 4.6
 ```
