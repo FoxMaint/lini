@@ -1,7 +1,7 @@
 {
   "name": "lini",
   "displayName": "Lini",
-  "description": "Syntax highlighting for Lini — a text-to-diagram language for diagrams, charts, and technical drawings that compiles to SVG",
+  "description": "Syntax highlighting for Lini — from mindmap to blueprint: diagrams, charts, sequences, drawings, floor plans and schematics from plain text, compiled to SVG",
   "version": "0.2.0",
   "publisher": "monfa-red",
   "icon": "icon.png",
@@ -11,7 +11,7 @@
     "url": "https://github.com/monfa-red/lini",
     "directory": "editors/vscode"
   },
-  "homepage": "https://github.com/monfa-red/lini",
+  "homepage": "https://lini.rs",
   "bugs": {
     "url": "https://github.com/monfa-red/lini/issues"
   },

@@ -1,6 +1,6 @@
 id = "lini"
 name = "Lini"
-description = "Syntax highlighting for the Lini diagram language"
+description = "Syntax highlighting for Lini — from mindmap to blueprint, figures from plain text (lini.rs)"
 version = "0.2.0"
 schema_version = 1
 authors = ["Abbas Monfared"]

@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/monfa-red/lini/main/assets/logo/lini.svg" alt="Lini" width="256">
+  <a href="https://lini.rs"><img src="https://raw.githubusercontent.com/monfa-red/lini/main/assets/logo/lini.svg" alt="Lini" width="256"></a>
 </p>
 
 <p align="center"><strong>From mindmap to blueprint.</strong></p>
