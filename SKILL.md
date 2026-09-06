@@ -528,24 +528,34 @@ every *built-in* size is true physical mm converted through `unit:`.
   draw: move(0, 0) right(7.2):north down(4.8):east
         left(7.2):south close():west;
 } [                                             // openings ride the wall's [ ]
-  |door#entry| "D1" { on: south; at: 3; swing: right }   // width: 900 mm default; label = schedule tag
-  |window|     { on: north; at: 0.9; width: 1.8 }
-  |door|       { on: west; at: 1.2; width: 2.4; symbol: sliding }
+  |window|     { on: north; at: 2.7; width: 1.6 }
+  |door#entry| "D1" { on: south; at: 1.05; width: 0.95; swing: right }
+  // 'south' runs leftward: 'at' counts from its EAST end, and the pen's left
+  // is the outside — 'right' is what opens the door into the flat
 ]
-|partition#bathwall| { draw: move(4.9, 0) down(2.2) right(2.3):side } [
-  |door| { on: side; at: 0.6; hinge: end }
+|partition#bathwall| {                          // ends ON the shell, never across an opening
+  draw: move(4.9, 0) down(2.3):face right(2.3):side
+} [
+  |door| { on: side; at: 0.15; width: 0.8 }     // opens into the bathroom
 ]
 
-|rect#counter| { width: 2.1; height: 0.6; translate: 6.05 0.4;
+|rect#counter| { width: 0.6; height: 1.4; translate: 6.8 3.2;
                  fill: --bg; stroke: --stroke-dark; stroke-width: 1 }
-|bed|  { translate: 1.2 1.2; rotate: 90 }
-|sofa| { symbol: corner; translate: 2 3.3 }
-|appliance| "F" { symbol: fridge; translate: 0.5 4.3 }
-"KITCHEN" { translate: 6 1.4 }                  // room names are plain sheet text
+|bed|    { rotate: 90; translate: 1.15 1.05 }   // head to the west wall
+|sofa|   { symbol: two; rotate: 90; translate: 0.6 3.4 }
+|dining| { symbol: round; translate: 3.3 3.3 }
+|appliance| "F" { symbol: fridge; translate: 6.8 2.8 }
+|bath| { symbol: shower; translate: 6.6 0.6 }
+|bath| { symbol: toilet; rotate: 90; translate: 5.35 0.5 }   // 0° backs WEST
+"STUDIO 27 m²" { translate: 2.2 2.2 }           // room names are plain sheet text
 
-outer:north-in (-) outer:south-in { side: left }      // → 4.6 — the clear interior
-outer:north-in (-) bathwall:side-in { side: right }   // → 2.05 — the kitchen's depth
-outer:west (-) outer.entry (-) outer:east { side: bottom }  // locate the door
+// Clear spans, face to face. 'face' runs south, so its 'out' face is the
+// living side's and its 'in' face the bathroom's — read them the other way
+// round and each dimension eats the partition.
+outer:west-in (-) bathwall:face-out { side: top }   // → 4.75 — the living space
+bathwall:face-in (-) outer:east-in { side: top }    // → 2.15 — the bathroom
+outer:west-in (-) outer:east-in { side: top }       // → 7 — the shell, clear
+outer:north-in (-) outer:south-in { side: right }   // → 4.6
 ```
 
 - **Walls.** `|wall|` is a `|sketch|` whose `draw:` traces the centreline;
@@ -562,7 +572,12 @@ outer:west (-) outer.entry (-) outer:east { side: bottom }  // locate the door
   east end). They clip the wall and generate their chrome: `hinge: start|end` ×
   `swing: left|right` (left of the pen's travel), `symbol: single | double |
   sliding` (a slider takes no `hinge:`/`swing:`). `translate:` on one is an error.
-- **Fixtures.** `|bed|` (queen·king·double·single) · `|sofa|`
+- **Fixtures.** Place them against something and leave every door its swing: a
+  fixture floating mid-room, a leaf sweeping a tub, or a body crossing a
+  partition is what makes a plan read as noise. `rotate:` turns a piece to its
+  wall — a `toilet` and a `sink` back **west** unturned, a `sofa` backs
+  **north**, a `corner` sofa seats a **north-west** corner; add 90° per
+  quarter-turn clockwise. The families: `|bed|` (queen·king·double·single) · `|sofa|`
   (three·two·one·corner·stool — `one` is the armchair, `stool` the ⌀350 bar
   seat) · `|dining|` (six·four·round — sized by its **tabletop**, ⌀1000 for
   `round`; the pull-back chairs extend the bbox) · `|bath|`
@@ -584,14 +599,20 @@ outer:west (-) outer.entry (-) outer:east { side: bottom }  // locate the door
   every named run derives its two **face anchors** — `-in` (the enclosed side
   on a closed run, the left of the pen's travel on an open one) and `-out` —
   and the bare `:segment` is the **centreline**, where a structural drawing
-  measures. **Dimension inside faces by default**: a room reads its **clear**
-  span (`outer:north-in (-) bathwall:side-in`) and the overall the shell's
-  clear interior — what a listing plan publishes. A name of your own ending
-  `-in`/`-out` on a wall errors. A named **edge**'s extension line springs
+  measures. **Dimension inside faces, always**: a room reads its **clear**
+  span and the overall the shell's clear interior — what a listing plan
+  publishes. Never a centreline, and never a span that runs *through* a wall:
+  take the face on the room's own side, so the room clears plus the partitions
+  sum to the overall (`2.65 + 0.1 + 4.05 = 6.8`). Which face that is follows
+  the run's draw direction, so check it — a partition drawn southward has its
+  `-out` face to the west. A name of your own ending `-in`/`-out` on a wall
+  errors. A named **edge**'s extension line springs
   from the end nearest the dimension line, so it leaves a corner and runs away
   from the plan. Mind the axis — an edge dimensions **across** itself, so a
-  horizontal span names the two vertical runs; and an id'd opening anchors at
-  its centre, so a chain locates a door along its wall.
+  horizontal span names the two vertical runs. An id'd opening anchors at its
+  **centre**, which makes a location chain (`outer:west-in (-) outer.entry (-)
+  outer:east-in`) — a setting-out drawing's dimension, not a room's, so reach
+  for it only when that is what the sheet is.
 - **The print look is a theme, never authoring**: render with `--theme
   blueprint` for white-on-cyanotype; a plan's default stays black-on-white.
 
