@@ -321,7 +321,7 @@ pub fn stray_segment(a: Rect, b: Rect) -> Option<((f64, f64), (f64, f64))> {
 #[cfg(test)]
 mod tests {
     use super::super::World;
-    use super::super::entry::entries;
+    use super::super::entry::{Landing, entries};
     use super::super::ledger::Ledger;
     use super::super::place::place;
     use super::super::search::cheapest;
@@ -361,8 +361,8 @@ mod tests {
         keepouts.extend_from_slice(extra);
         let graph = ChannelGraph::build(BOUNDS, &keepouts, false);
         let ledger = Ledger::new(C);
-        let starts = entries(&graph, a, C, C, None, None, extra, false);
-        let goals = entries(&graph, b, C, C, None, None, extra, false);
+        let starts = entries(&graph, Landing::own(0, a), C, C, None, None, extra, false);
+        let goals = entries(&graph, Landing::own(0, b), C, C, None, None, extra, false);
         let r = cheapest(&graph, 0, &starts, &goals, &ledger.read(&[]), &[], 1, C).expect("route");
         let (se, ge) = (&starts[r.start], &goals[r.goal]);
         let ends = [end_of(se, a), end_of(ge, b)];
@@ -461,6 +461,7 @@ mod tests {
             axis: Axis::V,
             dir: 3,
             cell: low,
+            landing: Landing::own(0, Rect::new(20.0, 100.0, 60.0, 120.0)),
         };
         let goal = Entry {
             side: Side::Top,
@@ -470,6 +471,7 @@ mod tests {
             axis: Axis::V,
             dir: 3,
             cell: low,
+            landing: Landing::own(1, Rect::new(40.0, 100.0, 80.0, 120.0)),
         };
         let ends = [
             end_of(&start, Rect::new(20.0, 100.0, 60.0, 120.0)),

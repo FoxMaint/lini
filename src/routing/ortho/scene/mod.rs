@@ -141,7 +141,7 @@ impl SceneIndex {
             }
             let pokes: Vec<Rect> = std::iter::once(self.nodes[ci].rect)
                 .chain(self.nodes[ci].overflow.iter().copied())
-                .filter(|&r| !inside(rect, r))
+                .filter(|&r| !rect.holds(r))
                 .collect();
             self.nodes[i].overflow.extend(pokes);
         }
@@ -279,6 +279,40 @@ impl SceneIndex {
         None
     }
 
+    /// The bodies a link end may land on inside `world`, innermost first: the
+    /// endpoint, then every ancestor of it the world encloses (ROUTING.md
+    /// Vocabulary — the landing body). A tight interior never walls an
+    /// endpoint in, exactly as it never walls in a link its ancestors would
+    /// let out; the ladder stops at the world's own container, which is the
+    /// outermost body still inside the graph it must reach.
+    pub(crate) fn landing_ladder(&self, path: &str, world: WorldKey) -> Vec<(usize, Rect)> {
+        let mut out = Vec::new();
+        let mut cur = self.node_of(path);
+        while let Some(i) = cur {
+            out.push((i, self.nodes[i].rect));
+            let up = self.nodes[i].parent;
+            if Some(i) == world || up == world || up.is_none() {
+                break;
+            }
+            cur = up;
+        }
+        out
+    }
+
+    /// The same ladder read off the drawn output: the endpoint's rect, then
+    /// its ancestors' — the law checker walks it outward to find the body a
+    /// port actually landed on, so a climbed contact is judged on geometry
+    /// alone.
+    pub(crate) fn ancestor_rects(&self, path: &str) -> Vec<Rect> {
+        let mut out = Vec::new();
+        let mut cur = self.node_of(path);
+        while let Some(i) = cur {
+            out.push(self.nodes[i].rect);
+            cur = self.nodes[i].parent;
+        }
+        out
+    }
+
     /// Every visually solid rect — labels, and bodies without body
     /// children. A container's rect covers its open interior, where links
     /// (and their labels) legitimately live, so containers are excluded
@@ -390,9 +424,4 @@ pub(super) fn abs_rect(n: &PlacedNode, cx: f64, cy: f64) -> Rect {
         n.bbox.max_x + cx,
         n.bbox.max_y + cy,
     )
-}
-
-/// Whether `r` sits wholly within `outer`.
-pub(super) fn inside(outer: Rect, r: Rect) -> bool {
-    r.x0 >= outer.x0 && r.y0 >= outer.y0 && r.x1 <= outer.x1 && r.y1 <= outer.y1
 }

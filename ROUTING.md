@@ -180,6 +180,15 @@ The rest of this document is the `orthogonal` contract.
   grid by construction and no scope moves to make them agree. It rounds an
   interior run's *preference*, never its lawful range: no law reads it, and a
   world without one is unchanged.
+- **Landing body** — the body a link end lands on: its **endpoint**, or, where
+  the endpoint has no side to call its own — a neighbour's keep-out already
+  covers it, or no side of it reaches the world's free space — the innermost
+  enclosing container that has. A climbed contact **carries** the endpoint's
+  own span onto that body's side, clamped into the side's port window, so a
+  wire off a table cell leaves the card at that cell's row and never crosses
+  the card's own cells. A body's **contents ride inside it**: they lie in the
+  keep-out its end segment already surrenders, so they neither block its leave
+  nor charge it clearance. A fixed port never climbs (§Fixed ports).
 - **Port** — the point where a link meets a side: the ordinate of its end
   run. Ports are not chosen ahead of routing; they fall out of placement.
 - **Bundle** — the links sharing one unordered endpoint pair and the same
@@ -198,17 +207,19 @@ Checkable on the output with no knowledge of the router:
    ≥ pitch from every other link. Sub-`clearance` pitch is excused only by a
    channel or side that cannot hold its wires at full clearance, is uniform
    within that group, and never falls below `clearance / 2`. Exactly three
-   surrenders: a link's own end segments (each entering only its own
-   endpoint's keep-out, perpendicular), crossings (square-on, point contact),
-   and a fan's shared trunk (drawn as one line until the split).
+   surrenders: a link's own end segments (each entering only its own **landing
+   body**'s keep-out, perpendicular, and answering to nothing that body
+   contains), crossings (square-on, point contact), and a fan's shared trunk
+   (drawn as one line until the split).
 
-2. **Contact.** Every link end lands **on a side**, **perpendicular**,
-   ≥ `clearance` from that side's corners — never on a corner, never inside a
-   body. Ports sharing a side sit ≥ pitch apart, in the same order as their
-   wires (no braiding at the mouth), each as close to where its wire runs
-   straightest as its neighbours allow — a lone aligned pair connects dead
-   straight; a crowded side ladders around the contested spot. (A **fixed
-   port** amends this law — §Fixed ports.)
+2. **Contact.** Every link end lands **on a side** of its **landing body**,
+   **perpendicular**, ≥ `clearance` from that side's corners — never on a
+   corner, never inside a body — and a climbed contact lands inside the window
+   its endpoint carried there. Ports sharing a side sit ≥ pitch apart, in the
+   same order as their wires (no braiding at the mouth), each as close to
+   where its wire runs straightest as its neighbours allow — a lone aligned
+   pair connects dead straight; a crowded side ladders around the contested
+   spot. (A **fixed port** amends this law — §Fixed ports.)
 
 3. **Economy.** Each link takes the cheapest legal route, where
    **cost = length + 2·clearance per turn + 4·clearance per crossing**, given
@@ -257,8 +268,9 @@ Six steps. Each decides once; none revisits an earlier step's answer.
    order — the order routing consumes them in.
 
 4. **Search.** Per bundle, in order: enter the graph by a perpendicular
-   **punch** from each permitted side (a forced side prunes to one; the punch
-   crosses transparent ancestor walls, never a solid keep-out); run weighted
+   **punch** from each permitted side of the end's **landing body** (a forced
+   side prunes to one; the punch crosses transparent ancestor walls, never a
+   solid keep-out, and never its own landing body's contents); run weighted
    Dijkstra over cells with the Law-3 cost. A fan's shared side is settled
    once, at the first of its siblings to route, by pricing each permitted side
    over the whole group (§Special nodes) — one search per sibling per
@@ -345,6 +357,7 @@ them:
 | Wire along the canvas edge | hugs the nodes' keep-outs, not the margin |
 | Two buses landing on one side | two nested ladders, no braid, straighter bus nearer its target |
 | Crossing vs. orbit | crosses — a crossing costs `4·clearance` of detour, never the diagram's circumference |
+| Wire off a tiled cell (a table's field) | leaves the **card** at that cell's row, never through the card's own cells |
 
 ---
 
@@ -404,7 +417,8 @@ A caller may **fix** a link end's port: a scope that owns its connection
 geometry — a schematic pin's stub tip, a label's connection point
 ([SPEC 16](SPEC.md#16-schematic)) — supplies the exact landing ordinate on a
 **forced side**, and the wire lands there, not near there. A fixed port
-always rides a forced side, and the endpoint's **body rect stays the
+always rides a forced side, never **climbs** (the caller named a body as well
+as an ordinate, §Vocabulary), and the endpoint's **body rect stays the
 obstacle** (a pin folds into its component's rect; the port sits on that
 rect's side). Everything else in this contract — worlds, channels, search,
 placement, geometry — is unchanged: a fixed port only collapses the end's
@@ -478,8 +492,9 @@ src/routing/
   straight.rs   the straight strategy (sequence messages)
   ortho/        the six-step model — scene index (scene, rect), worlds (world),
                 channel graph (graph), requests/bundles (request), admission
-                (admit, cost, entry, ledger), search, placement (place, cluster,
-                ladder, order, pairwise), geometry, labels
+                (admit, cost, entry — landing bodies, punches — ledger),
+                search, placement (place, cluster, ladder, order, pairwise),
+                geometry, labels
   natural/      the natural strategy — sides & ports (port), the direct
                 spline fit and via dodges (curve, dodge)
   validate.rs   the independent law checker (+ validate/excuse.rs) — a test

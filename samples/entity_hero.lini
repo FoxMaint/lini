@@ -25,16 +25,28 @@
 |entity#item| "LineItem" {
   pin: center; translate: 19 304; columns: auto, auto, auto; stroke: --amber-ink; fill: --amber-wash;
 } [
-  "PK" "id"         "int"
-  "FK" "order_id"   "int"
-  "FK" "product_id" "int"
+  "PK"
+  "id"
+  "int"
+  "FK"
+  "order_id"
+  "int"
+  "FK"
+  |cell#product_fk| "product_id"
+  "int"
 ]
 |entity#product| "Product" {
   pin: center; translate: -204 185; columns: auto, auto, auto; stroke: --green-ink; fill: --green-wash;
 } [
-  "PK" "id"    "int"
-  ""   "name"  "varchar"
-  ""   "price" "decimal"
+  "PK"
+  |cell#pk| "id"
+  "int"
+  ""
+  "name"
+  "varchar"
+  ""
+  "price"
+  "decimal"
 ]
 |entity#cart| "Cart" {
   pin: center; translate: 176 -171; stroke: --rose-ink; fill: --rose-wash;
@@ -53,7 +65,8 @@ user -o+ cart
 // a user owns zero-or-one cart
 order -+< item:right
 // an order contains one-or-many line items
-product -o< item
-// a product appears in zero-or-many line items
+product.pk -o< item.product_fk
+// a product's key appears in zero-or-many line items — a wire anchored to one
+// field leaves each card at that field's row [SPEC 8]
 category -o< product
 // a category groups zero-or-many products

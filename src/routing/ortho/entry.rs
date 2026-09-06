@@ -4,16 +4,47 @@
 //! the first world cell, blocked by any solid keep-out — carrying the
 //! side's lawful port window, clipped by whatever the punch stretch
 //! crosses. The search ([`super::search`]) prices routes between entries.
+//!
+//! Which body those sides belong to is [`leave`]'s answer: the endpoint
+//! where its own sides can be left, the container it climbs to where they
+//! cannot (ROUTING.md Vocabulary — the landing body).
 
 use super::graph::{Axis, ChannelGraph};
-use super::rect::{Rect, port_window};
+use super::rect::{Rect, box_dist, carried_window, rect_box};
+use super::scene::{SceneIndex, WorldKey};
 use super::search::{DIRS, opposite};
 use crate::ast::Side;
 
-/// One way into the graph: a side's provisional port (its centre — placement
-/// re-pins), the lawful port **window** on that side (corner margins
-/// applied), the punch tip where the link reaches the world's free space,
-/// and the punch direction (the wire leaves the port along it).
+const EPS: f64 = 1e-9;
+
+/// The body a link end lands on: its scene node, its rect, and the
+/// **endpoint's own** rect — the span the contact carries outward when it
+/// has climbed, so a wire off a table cell leaves the card at that cell's
+/// row. The two rects are the same body until the contact climbs.
+#[derive(Clone, Copy, Debug)]
+pub(crate) struct Landing {
+    pub node: usize,
+    pub body: Rect,
+    pub carry: Rect,
+}
+
+#[cfg(test)]
+impl Landing {
+    /// A landing on the endpoint itself — the unclimbed contact, for the
+    /// suites that drive [`entries`] straight off a rect.
+    pub fn own(node: usize, body: Rect) -> Landing {
+        Landing {
+            node,
+            body,
+            carry: body,
+        }
+    }
+}
+
+/// One way into the graph: a side's provisional port (its window's centre —
+/// placement re-pins), the lawful port **window** on that side, the punch
+/// tip where the link reaches the world's free space, the punch direction
+/// (the wire leaves the port along it), and the landing body it all sits on.
 #[derive(Clone, Copy, Debug)]
 pub(crate) struct Entry {
     pub side: Side,
@@ -23,19 +54,83 @@ pub(crate) struct Entry {
     pub axis: Axis,
     pub dir: usize,
     pub cell: usize,
+    pub landing: Landing,
 }
 
-/// The graph entries of a node — one per side whose punch reaches a world
-/// cell without crossing a blocker. `forced` prunes to that side; `fixed`
-/// pins the port to an exact ordinate on it and collapses the window to
-/// that point (ROUTING.md Fixed ports — a fixed port rides a forced side);
-/// `inward` flips the punch into the body (containment ends). `clearance`
-/// sets the window's corner margins; a side too short for margins still
-/// offers its centre point.
+/// A link end's way into the world (ROUTING.md model step 4): its **landing
+/// body** and that body's entries. An end lands on the innermost body it can
+/// call its own — one no other solid intrudes on, and one the world's free
+/// space can be reached from. Where its endpoint is neither (a table's cells
+/// share one keep-out, so no cell has a side of its own) the contact
+/// **climbs** to the container that is, carrying the endpoint's own span
+/// outward as the port window: the wire leaves the card at the field's row.
+/// A fixed port never climbs — its caller owns the landing, and
+/// infeasibility there is loud (ROUTING.md Fixed ports).
+///
+/// `solids` are the link's obstacles **uninflated**; each rung drops those
+/// its own landing body holds — they lie inside the keep-out that body's
+/// end segment already surrenders, so a body's contents can never wall in
+/// its own leave.
+#[allow(clippy::too_many_arguments)]
+pub(crate) fn leave(
+    index: &SceneIndex,
+    graph: &ChannelGraph,
+    world: WorldKey,
+    path: &str,
+    stub: f64,
+    clearance: f64,
+    forced: Option<Side>,
+    fixed: Option<f64>,
+    solids: &[Rect],
+    inward: bool,
+) -> (Option<Landing>, Vec<Entry>) {
+    let ladder = index.landing_ladder(path, world);
+    let Some(&(_, endpoint)) = ladder.first() else {
+        return (None, Vec::new());
+    };
+    let mut out = (None, Vec::new());
+    for (rung, &(node, body)) in ladder.iter().enumerate() {
+        let landing = Landing {
+            node,
+            body,
+            carry: endpoint,
+        };
+        let outside: Vec<&Rect> = solids.iter().filter(|r| !body.holds(**r)).collect();
+        let last = rung + 1 == ladder.len();
+        // A body a neighbour's keep-out already covers has no side of its
+        // own to land on — every wire touching it would run inside that
+        // neighbour's clearance from the first millimetre. It climbs before
+        // its sides are even asked.
+        let crowded = outside
+            .iter()
+            .any(|r| box_dist(rect_box(body), rect_box(**r)) < clearance - EPS);
+        if crowded && !last && fixed.is_none() {
+            continue;
+        }
+        let blockers: Vec<Rect> = outside.iter().map(|r| r.inflate(clearance)).collect();
+        let offered = entries(
+            graph, landing, stub, clearance, forced, fixed, &blockers, inward,
+        );
+        let left = !offered.is_empty() || fixed.is_some();
+        out = (Some(landing), offered);
+        if left || last {
+            break;
+        }
+    }
+    out
+}
+
+/// The graph entries of a landing body — one per side whose punch reaches a
+/// world cell without crossing a blocker. `forced` prunes to that side;
+/// `fixed` pins the port to an exact ordinate on it and collapses the window
+/// to that point (ROUTING.md Fixed ports — a fixed port rides a forced
+/// side); `inward` flips the punch into the body (containment ends).
+/// `clearance` sets the window's corner margins; a side too short for
+/// margins still offers its centre point.
 #[allow(clippy::too_many_arguments)]
 pub(crate) fn entries(
     graph: &ChannelGraph,
-    body: Rect,
+    landing: Landing,
     stub: f64,
     clearance: f64,
     forced: Option<Side>,
@@ -47,7 +142,7 @@ pub(crate) fn entries(
         fixed.is_none() || forced.is_some(),
         "a fixed port rides a forced side (ROUTING.md Fixed ports)"
     );
-    let (cx, cy) = body.centre();
+    let body = landing.body;
     // The candidate sides in tie-break order (ROUTING.md Law 4) — and the
     // graph's direction id **is** that rank: `DIRS[r]` is the outward normal
     // of `Side::RANK[r]`.
@@ -55,29 +150,33 @@ pub(crate) fn entries(
         .into_iter()
         .filter(|s| forced.is_none_or(|f| f == *s))
         .filter_map(|side| {
-            let (port, axis) = match side {
-                Side::Right => ((body.x1, cy), Axis::H),
-                Side::Bottom => ((cx, body.y1), Axis::V),
-                Side::Left => ((body.x0, cy), Axis::H),
-                Side::Top => ((cx, body.y0), Axis::V),
+            let axis = match side {
+                Side::Right | Side::Left => Axis::H,
+                Side::Top | Side::Bottom => Axis::V,
+            };
+            let line = match side {
+                Side::Right => body.x1,
+                Side::Left => body.x0,
+                Side::Bottom => body.y1,
+                Side::Top => body.y0,
             };
             let dir = side.rank() as usize;
             let dir = if inward { opposite(dir) } else { dir };
             let (lo, hi) = body.side_span(side);
-            let (port, win) = match fixed {
-                Some(f) => {
-                    // A port off its own side has no lawful landing — no
-                    // entry, and the route loop strays it, named.
-                    if f < lo || f > hi {
-                        return None;
-                    }
-                    let port = match axis {
-                        Axis::H => (port.0, f),
-                        Axis::V => (f, port.1),
-                    };
-                    (port, (f, f))
-                }
-                None => (port, port_window(body, side, clearance)),
+            let win = match fixed {
+                // A port off its own side has no lawful landing — no entry,
+                // and the route loop strays it, named.
+                Some(f) if f < lo || f > hi => return None,
+                Some(f) => (f, f),
+                // The window is the end's own span carried onto this side and
+                // clamped into the side's lawful one — the two coincide until
+                // the contact climbs, so an unclimbed end is untouched.
+                None => carried_window(landing.body, landing.carry, side, clearance),
+            };
+            let at = (win.0 + win.1) / 2.0;
+            let port = match axis {
+                Axis::H => (line, at),
+                Axis::V => (at, line),
             };
             punch(graph, port, DIRS[dir], stub, blockers).map(|(tip, cell)| Entry {
                 side,
@@ -87,6 +186,7 @@ pub(crate) fn entries(
                 axis,
                 dir,
                 cell,
+                landing,
             })
         })
         .filter(|e| e.window.0 <= e.window.1)
@@ -215,7 +315,7 @@ mod tests {
     #[test]
     fn entries_offer_each_clear_side_in_rank_order() {
         let (g, a, _) = facing();
-        let es = entries(&g, a, C, C, None, None, &[], false);
+        let es = entries(&g, Landing::own(0, a), C, C, None, None, &[], false);
         let sides: Vec<Side> = es.iter().map(|e| e.side).collect();
         assert_eq!(sides, [Side::Right, Side::Bottom, Side::Left, Side::Top]);
         // Right-side port sits mid-side, tip one stub out, window inside the
@@ -238,7 +338,16 @@ mod tests {
     fn a_short_side_offers_its_centre_point_window() {
         let (g, ..) = facing();
         let tiny = body(90.0, 40.0, 102.0, 60.0); // width 12 < 2·clearance
-        let es = entries(&g, tiny, C, C, Some(Side::Top), None, &[], false);
+        let es = entries(
+            &g,
+            Landing::own(0, tiny),
+            C,
+            C,
+            Some(Side::Top),
+            None,
+            &[],
+            false,
+        );
         assert_eq!(es.len(), 1);
         assert_eq!(es[0].window, (96.0, 96.0));
     }
@@ -248,7 +357,7 @@ mod tests {
         let a = body(20.0, 40.0, 40.0, 60.0);
         let wall = Rect::new(0.0, 0.0, 12.0, 100.0); // flush against a's left keep-out
         let g = ChannelGraph::build(BOUNDS, &[a.inflate(C), wall], false);
-        let es = entries(&g, a, C, C, None, None, &[wall], false);
+        let es = entries(&g, Landing::own(0, a), C, C, None, None, &[wall], false);
         assert!(es.iter().all(|e| e.side != Side::Left));
         assert_eq!(es.len(), 3);
     }
@@ -256,7 +365,16 @@ mod tests {
     #[test]
     fn forced_side_prunes_to_one_entry() {
         let (g, a, _) = facing();
-        let es = entries(&g, a, C, C, Some(Side::Top), None, &[], false);
+        let es = entries(
+            &g,
+            Landing::own(0, a),
+            C,
+            C,
+            Some(Side::Top),
+            None,
+            &[],
+            false,
+        );
         assert_eq!(es.len(), 1);
         assert_eq!(es[0].side, Side::Top);
     }
@@ -268,25 +386,64 @@ mod tests {
         let group = Rect::new(60.0, 20.0, 120.0, 80.0);
         let g = ChannelGraph::build(BOUNDS, &[group.inflate(C)], false);
         let inner = body(70.0, 40.0, 90.0, 60.0);
-        let es = entries(&g, inner, C, C, Some(Side::Right), None, &[], false);
+        let es = entries(
+            &g,
+            Landing::own(0, inner),
+            C,
+            C,
+            Some(Side::Right),
+            None,
+            &[],
+            false,
+        );
         assert_eq!(es.len(), 1);
         assert_eq!(es[0].port, (90.0, 50.0));
         assert_eq!(es[0].tip, (128.0, 50.0));
         let sibling = Rect::new(95.0, 30.0, 115.0, 70.0);
-        let blocked = entries(&g, inner, C, C, Some(Side::Right), None, &[sibling], false);
+        let blocked = entries(
+            &g,
+            Landing::own(0, inner),
+            C,
+            C,
+            Some(Side::Right),
+            None,
+            &[sibling],
+            false,
+        );
         assert!(blocked.is_empty());
     }
 
     #[test]
     fn a_fixed_port_collapses_the_window_to_its_point() {
         let (g, a, _) = facing();
-        let es = entries(&g, a, C, C, Some(Side::Right), Some(44.0), &[], false);
+        let es = entries(
+            &g,
+            Landing::own(0, a),
+            C,
+            C,
+            Some(Side::Right),
+            Some(44.0),
+            &[],
+            false,
+        );
         assert_eq!(es.len(), 1);
         assert_eq!(es[0].port, (40.0, 44.0));
         assert_eq!(es[0].window, (44.0, 44.0));
         assert_eq!(es[0].tip, (48.0, 44.0));
         // An ordinate off the side has no lawful landing: no entry.
-        assert!(entries(&g, a, C, C, Some(Side::Right), Some(70.0), &[], false).is_empty());
+        assert!(
+            entries(
+                &g,
+                Landing::own(0, a),
+                C,
+                C,
+                Some(Side::Right),
+                Some(70.0),
+                &[],
+                false
+            )
+            .is_empty()
+        );
     }
 
     #[test]
@@ -295,11 +452,20 @@ mod tests {
         // clear, so only the pinned landing dies.
         let (g, a, _) = facing();
         let sibling = Rect::new(42.0, 42.0, 46.0, 46.0);
-        let free = entries(&g, a, C, C, Some(Side::Right), None, &[sibling], false);
+        let free = entries(
+            &g,
+            Landing::own(0, a),
+            C,
+            C,
+            Some(Side::Right),
+            None,
+            &[sibling],
+            false,
+        );
         assert_eq!(free.len(), 1, "the centre punch clears the sibling");
         let pinned = entries(
             &g,
-            a,
+            Landing::own(0, a),
             C,
             C,
             Some(Side::Right),
@@ -314,7 +480,7 @@ mod tests {
     fn inner_entries_point_into_the_body() {
         let parent = body(40.0, 20.0, 160.0, 80.0);
         let g = ChannelGraph::build(parent, &[Rect::new(90.0, 45.0, 110.0, 55.0)], false);
-        let es = entries(&g, parent, C, C, None, None, &[], true);
+        let es = entries(&g, Landing::own(0, parent), C, C, None, None, &[], true);
         let right = es.iter().find(|e| e.side == Side::Right).expect("right");
         assert_eq!(right.port, (160.0, 50.0));
         assert_eq!(right.tip, (152.0, 50.0));

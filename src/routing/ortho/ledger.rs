@@ -42,8 +42,11 @@ pub(crate) struct Ledger {
     clearance: f64,
     /// Committed runs per `(world, axis, channel)`.
     runs: BTreeMap<(usize, u8, usize), Vec<Committed>>,
-    /// Landed port slots per `(node path, side)` — a fan group counts once.
-    ports: BTreeMap<(String, u8), usize>,
+    /// Landed port slots per `(landing body, side)` — a fan group counts
+    /// once. The key is the **landing body**'s scene node (ROUTING.md
+    /// Vocabulary), so ports that climbed onto one card are counted on that
+    /// card's side, not on each field's.
+    ports: BTreeMap<(usize, u8), usize>,
 }
 
 /// The ledger read on behalf of one bundle: the trunks of the fan groups it
@@ -101,11 +104,8 @@ impl Ledger {
     }
 
     /// Land `n` port slots on a side.
-    pub fn commit_port(&mut self, path: &str, side: Side, n: usize) {
-        *self
-            .ports
-            .entry((path.to_owned(), side.index()))
-            .or_insert(0) += n;
+    pub fn commit_port(&mut self, body: usize, side: Side, n: usize) {
+        *self.ports.entry((body, side.index())).or_insert(0) += n;
     }
 
     /// Committed runs of the axis perpendicular to `axis` in `world`.
@@ -123,7 +123,7 @@ impl Ledger {
     /// `clearance` corner margin each end holds `floor(window / min_pitch) + 1`
     /// ports (one always fits — a short side still takes its centre port),
     /// minus what already landed.
-    pub fn side_free(&self, path: &str, side: Side, rect: Rect) -> usize {
+    pub fn side_free(&self, body: usize, side: Side, rect: Rect) -> usize {
         let len = match side {
             Side::Left | Side::Right => rect.h(),
             Side::Top | Side::Bottom => rect.w(),
@@ -134,11 +134,7 @@ impl Ledger {
         } else {
             (window / min_pitch(self.clearance)).floor() as usize + 1
         };
-        let landed = self
-            .ports
-            .get(&(path.to_owned(), side.index()))
-            .copied()
-            .unwrap_or(0);
+        let landed = self.ports.get(&(body, side.index())).copied().unwrap_or(0);
         capacity.saturating_sub(landed)
     }
 }
@@ -478,20 +474,20 @@ mod tests {
         let mut ledger = Ledger::new(8.0);
         let body = Rect::new(0.0, 0.0, 60.0, 40.0);
         // Right side: length 40 − 2·8 margins = 24 window → floor(24/4)+1 = 7.
-        assert_eq!(ledger.side_free("a", Side::Right, body), 7);
-        ledger.commit_port("a", Side::Right, 5);
-        assert_eq!(ledger.side_free("a", Side::Right, body), 2);
-        ledger.commit_port("a", Side::Right, 5);
-        assert_eq!(ledger.side_free("a", Side::Right, body), 0);
+        assert_eq!(ledger.side_free(0, Side::Right, body), 7);
+        ledger.commit_port(0, Side::Right, 5);
+        assert_eq!(ledger.side_free(0, Side::Right, body), 2);
+        ledger.commit_port(0, Side::Right, 5);
+        assert_eq!(ledger.side_free(0, Side::Right, body), 0);
         // Other sides and other nodes are untouched.
-        assert_eq!(ledger.side_free("a", Side::Top, body), 12);
-        assert_eq!(ledger.side_free("b", Side::Right, body), 7);
+        assert_eq!(ledger.side_free(0, Side::Top, body), 12);
+        assert_eq!(ledger.side_free(1, Side::Right, body), 7);
     }
 
     #[test]
     fn a_short_side_still_holds_one_port() {
         let ledger = Ledger::new(16.0);
         let tiny = Rect::new(0.0, 0.0, 20.0, 20.0);
-        assert_eq!(ledger.side_free("a", Side::Right, tiny), 1);
+        assert_eq!(ledger.side_free(0, Side::Right, tiny), 1);
     }
 }

@@ -18,7 +18,7 @@
 //! it in CI, never to repair the routing.
 
 use super::ortho::cost::min_pitch;
-use super::ortho::rect::{Rect, box_dist, port_margin, rect_box, seg_box};
+use super::ortho::rect::{Rect, box_dist, carried_window, port_margin, rect_box, seg_box};
 use super::ortho::request::link_clearance;
 use super::ortho::scene::SceneIndex;
 use super::report::{Rule, Severity, Violation, cross, cross_oblique};
@@ -127,19 +127,10 @@ fn landing(
     fixed: Option<(Side, f64)>,
 ) -> Result<Side, String> {
     let (x, y) = port;
-    let on_x = x > rect.x0 + EPS && x < rect.x1 - EPS;
-    let on_y = y > rect.y0 + EPS && y < rect.y1 - EPS;
-    let on = [
-        (Side::Top, (y - rect.y0).abs() <= EPS && on_x),
-        (Side::Right, (x - rect.x1).abs() <= EPS && on_y),
-        (Side::Bottom, (y - rect.y1).abs() <= EPS && on_x),
-        (Side::Left, (x - rect.x0).abs() <= EPS && on_y),
-    ];
-    let matches = || on.iter().filter(|(_, hit)| *hit).map(|(s, _)| *s);
     let Some(side) = fixed
         .map(|(f, _)| f)
-        .filter(|f| matches().any(|s| s == *f))
-        .or_else(|| matches().next())
+        .filter(|f| sides_at(rect, port).any(|s| s == *f))
+        .or_else(|| sides_at(rect, port).next())
     else {
         return Err("end is not on a side".to_owned());
     };
@@ -172,6 +163,44 @@ fn landing(
         return Err("oblique attachment".to_owned());
     }
     Ok(side)
+}
+
+/// The sides of `rect` a point lies on — Law 2's first question, and the
+/// test that finds a climbed end's **landing body** ([`landing_rects`]). A
+/// body may be a **line** (a net label's connection frame [SPEC 16.4]) and
+/// then its two opposite sides coincide, so both answer.
+fn sides_at(rect: Rect, port: (f64, f64)) -> impl Iterator<Item = Side> {
+    let (x, y) = port;
+    let on_x = x > rect.x0 + EPS && x < rect.x1 - EPS;
+    let on_y = y > rect.y0 + EPS && y < rect.y1 - EPS;
+    [
+        (Side::Top, (y - rect.y0).abs() <= EPS && on_x),
+        (Side::Right, (x - rect.x1).abs() <= EPS && on_y),
+        (Side::Bottom, (y - rect.y1).abs() <= EPS && on_x),
+        (Side::Left, (x - rect.x0).abs() <= EPS && on_y),
+    ]
+    .into_iter()
+    .filter(|(_, hit)| *hit)
+    .map(|(s, _)| s)
+}
+
+/// Each drawn end's **landing body** (ROUTING.md Vocabulary), read off the
+/// output alone: the innermost body from the endpoint outward whose side
+/// carries the port, paired with the endpoint's own rect. An end that left
+/// from its own side answers at once — the two rects are then one body — and
+/// an end with no landing at all falls back to its endpoint, where Law 2
+/// reports it.
+fn landing_rects(index: &SceneIndex, w: &RoutedLink) -> [Option<(Rect, Rect)>; 2] {
+    ends(w).map(|(path, port, _)| {
+        let ladder = index.ancestor_rects(path);
+        let endpoint = *ladder.first()?;
+        let body = ladder
+            .iter()
+            .find(|r| sides_at(**r, port).next().is_some())
+            .copied()
+            .unwrap_or(endpoint);
+        Some((body, endpoint))
+    })
 }
 
 /// One drawn end: its endpoint path, the port, and the inward point.
@@ -209,8 +238,13 @@ fn contact(index: &SceneIndex, links: &[&RoutedLink], c: f64, out: &mut Vec<Viol
 /// The two landings of one drawn wire — the contact judgment both arms
 /// share (the natural arm skips only the orthogonal-polyline scan above).
 fn contact_ends(index: &SceneIndex, w: &RoutedLink, c: f64, out: &mut Vec<Violation>) {
-    for ((path, port, inward), fixed) in ends(w).into_iter().zip([w.port_from, w.port_to]) {
-        let Some(rect) = index.rect(path) else {
+    let landings = landing_rects(index, w);
+    for (((path, port, inward), fixed), landed) in ends(w)
+        .into_iter()
+        .zip([w.port_from, w.port_to])
+        .zip(landings)
+    {
+        let Some((body, endpoint)) = landed else {
             out.push(breach(
                 Rule::Contact,
                 w,
@@ -218,28 +252,76 @@ fn contact_ends(index: &SceneIndex, w: &RoutedLink, c: f64, out: &mut Vec<Violat
             ));
             continue;
         };
-        if let Err(why) = landing(rect, port, inward, c, fixed) {
-            out.push(breach(
-                Rule::Contact,
-                w,
-                format!("{why} at {port:?} on '{path}'"),
-            ));
+        let side = match landing(body, port, inward, c, fixed) {
+            Ok(side) => side,
+            Err(why) => {
+                out.push(breach(
+                    Rule::Contact,
+                    w,
+                    format!("{why} at {port:?} on '{path}'"),
+                ));
+                continue;
+            }
+        };
+        // A contact that climbed to a container still answers to its
+        // endpoint: it lands within the endpoint's own span carried onto
+        // that side, so the wire leaves the card at the field's row.
+        if body != endpoint {
+            let (lo, hi) = carried_window(body, endpoint, side, c);
+            let at = match side {
+                Side::Top | Side::Bottom => port.0,
+                _ => port.1,
+            };
+            if at < lo - EPS || at > hi + EPS {
+                out.push(breach(
+                    Rule::Contact,
+                    w,
+                    format!("climbed end at {port:?} misses '{path}' ({lo}..{hi})"),
+                ));
+            }
         }
     }
 }
 
 /// Law 1 — Clearance from bodies: ≥ clearance from every solid rect, and
-/// from the link's own endpoints on every segment but the adjoining end
-/// segment. A containment link runs inside its outer endpoint by design
-/// (ROUTING.md Special nodes), so that body is skipped.
+/// from the link's own **landing bodies** on every segment but the adjoining
+/// end segment. A body's contents ride inside it — every solid the landing
+/// body holds lies within the keep-out that end segment already surrenders,
+/// and the body's own rect answers for it on every other segment — so those
+/// are dropped from the solid sweep. A containment link runs inside its
+/// outer endpoint by design (ROUTING.md Special nodes), so that body is
+/// skipped, and its contents stay solid.
 fn clearance(index: &SceneIndex, links: &[&RoutedLink], c: f64, out: &mut Vec<Violation>) {
     for w in links {
         if w.path.len() < 2 {
             continue;
         }
         let segs = w.path.len() - 1;
+        let mut bodies = vec![w.seg_from.as_str()];
+        if w.seg_to != w.seg_from {
+            bodies.push(w.seg_to.as_str());
+        }
+        let partner_of = |body: &str| {
+            if body == w.seg_from {
+                w.seg_to.clone()
+            } else {
+                w.seg_from.clone()
+            }
+        };
+        let landings = landing_rects(index, w);
+        // The landing rects that answer for their own contents: a
+        // containment container does not (its children are the very
+        // obstacles the inner wire must dodge).
+        let own: Vec<Rect> = bodies
+            .iter()
+            .filter(|b| !index.geo_contains(b, &partner_of(b)))
+            .filter_map(|b| {
+                let end = if **b == w.seg_from { 0 } else { 1 };
+                landings[end].map(|(body, _)| body)
+            })
+            .collect();
         let solids = index.solid_rects_for([&w.seg_from, &w.seg_to]);
-        'solids: for r in &solids {
+        'solids: for r in solids.iter().filter(|r| !own.iter().any(|o| o.holds(**r))) {
             for s in w.path.windows(2) {
                 let d = box_dist(seg_box(s), rect_box(*r));
                 if d < c - EPS {
@@ -252,34 +334,25 @@ fn clearance(index: &SceneIndex, links: &[&RoutedLink], c: f64, out: &mut Vec<Vi
                 }
             }
         }
-        let mut bodies = vec![w.seg_from.as_str()];
-        if w.seg_to != w.seg_from {
-            bodies.push(w.seg_to.as_str());
-        }
         for body in bodies {
-            let partner: &str = if body == w.seg_from {
-                &w.seg_to
-            } else {
-                &w.seg_from
-            };
+            let partner = partner_of(body);
             // A geometric containment link runs inside its outer endpoint by
             // design (ROUTING.md Special nodes); a tree branch merely nested by
             // path is an ordinary wire and keeps clearance from its endpoints.
-            if index.geo_contains(body, partner) {
+            if index.geo_contains(body, &partner) {
                 continue;
             }
-            let Some(rect) = index.rect(body) else {
+            let end = usize::from(body != w.seg_from);
+            let Some((rect, _)) = landings[end] else {
                 continue;
             };
             // Two endpoints sharing one body rect — two pins of one part
             // (ROUTING.md Fixed ports) — leave both end segments excused
             // against that shared body: each is *an* end segment of the rect
             // it enters, whichever pin's path names it.
-            let shared = index.rect(partner) == index.rect(body);
+            let shared = landings[1 - end].map(|(r, _)| r) == Some(rect);
             for (k, s) in w.path.windows(2).enumerate() {
-                if (k == 0 && (body == w.seg_from || shared))
-                    || (k == segs - 1 && (body == w.seg_to || shared))
-                {
+                if (k == 0 && (end == 0 || shared)) || (k == segs - 1 && (end == 1 || shared)) {
                     continue;
                 }
                 let d = box_dist(seg_box(s), rect_box(rect));

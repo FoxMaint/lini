@@ -940,7 +940,9 @@ table) a `|header|` / `|footer|` cell spans the full width.
 Relationships are ordinary links with the ER cardinality operators ([SPEC 9](#9-links)):
 `users -< orders` is one-to-many, `a >-< b` many-to-many, landing on the entity
 edge. To anchor a wire to one **field**, give that cell an id
-(`|block#user_id| "user_id"`) and link the path (`orders.user_id -< users.id`).
+(`|cell#user_id| "user_id"`) and link the path (`orders.user_id -< users.id`):
+the card's cells tile, so the wire leaves the **card** at that field's row
+rather than crossing the cells ([ROUTING](ROUTING.md#vocabulary)).
 Keys are plain content (`"id" { font-weight: bold }`); an entity adds no grammar.
 
 Extend any template: `|panel::group| { stroke: --accent }`. Common nodes need no

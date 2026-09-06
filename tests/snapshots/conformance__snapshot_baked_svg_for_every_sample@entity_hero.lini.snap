@@ -321,7 +321,7 @@ input_file: samples/entity_hero.lini
           <use href="#lini-g1400-79" transform="translate(-1.001 5.012) scale(0.014 -0.014)"/>
         </g>
       </g>
-      <g class="lini-node lini-cell lini-align-start lini-block" transform="translate(0.483,34.5)">
+      <g class="lini-node lini-cell lini-align-start lini-block" data-id="product_fk" transform="translate(0.483,34.5)">
         <rect x="-42.384" y="-11" width="84.768" height="22" rx="0" ry="0"/>
         <g class="lini-text">
           <use href="#lini-g1400-296" transform="translate(-34.384 5.012) scale(0.014 -0.014)"/>
@@ -371,7 +371,7 @@ input_file: samples/entity_hero.lini
           <use href="#lini-g1400-79" transform="translate(-0.371 5.012) scale(0.014 -0.014)"/>
         </g>
       </g>
-      <g class="lini-node lini-cell lini-align-start lini-block" transform="translate(-16.254,-11.5)">
+      <g class="lini-node lini-cell lini-align-start lini-block" data-id="pk" transform="translate(-16.254,-11.5)">
         <rect x="-25.668" y="-11" width="51.336" height="22" rx="0" ry="0"/>
         <g class="lini-text">
           <use href="#lini-g1400-241" transform="translate(-17.668 5.012) scale(0.014 -0.014)"/>
@@ -575,11 +575,11 @@ input_file: samples/entity_hero.lini
       <path class="lini-marker lini-marker-open" d="M 95.215 299.05 L 104.215 304 L 95.215 308.95 M 95.215 304 L 104.215 304"/>
       <path class="lini-marker lini-marker-open" d="M 108.715 299.5 L 108.715 308.5"/>
     </g>
-    <g class="lini-link" data-from="product" data-to="item">
-      <path d="M -204 231.5 L -204 288 A 16 16 0 0 0 -188 304 L -76.115 304"/>
-      <path class="lini-marker lini-marker-open" d="M -57.215 308.95 L -66.215 304 L -57.215 299.05 M -57.215 304 L -66.215 304"/>
-      <circle class="lini-marker lini-marker-open" cx="-72.515" cy="304" r="3.6"/>
-      <path class="lini-marker lini-marker-open" d="M -68.915 304 L -66.215 304"/>
+    <g class="lini-link" data-from="product.pk" data-to="item.product_fk">
+      <path d="M -220.254 231.5 L -220.254 315 A 16 16 0 0 0 -204.254 331 L -76.115 331"/>
+      <path class="lini-marker lini-marker-open" d="M -57.215 335.95 L -66.215 331 L -57.215 326.05 M -57.215 331 L -66.215 331"/>
+      <circle class="lini-marker lini-marker-open" cx="-72.515" cy="331" r="3.6"/>
+      <path class="lini-marker lini-marker-open" d="M -68.915 331 L -66.215 331"/>
     </g>
     <g class="lini-link" data-from="category" data-to="product">
       <path d="M -199.5 -108 L -199.5 120.1"/>

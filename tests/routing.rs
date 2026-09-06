@@ -328,6 +328,70 @@ fn a_containment_link_lands_on_the_parents_inner_side() {
     }
 }
 
+/// ROUTING.md Vocabulary — the landing body. A table tiles its interior, so
+/// every cell sits inside a neighbour's keep-out and has no side to call its
+/// own: the contact climbs to the card and carries the cell's row onto the
+/// card's edge. The wire leaves at the field's row and never crosses a cell.
+#[test]
+fn a_tiled_cell_leaves_its_card_at_that_cells_row() {
+    let src = "{ gap: 140; clearance: 16 }\n\
+               |entity#users| \"Users\" { columns: auto, auto } [\n\
+               |cell#uid| \"id\"; \"int\"\n\
+               \"email\" \"varchar\"\n\
+               ]\n\
+               |entity#orders| \"Orders\" { columns: auto, auto } [\n\
+               \"id\" \"int\"\n\
+               |cell#uref| \"user_id\"; \"int\"\n\
+               ]\n\
+               users.uid -< orders.uref\n";
+    let r = routes(src);
+    let p = path(&r, "users.uid", "orders.uref");
+    orthogonal(p);
+    assert!(laws(&route_sample(src, 16.0)).is_empty());
+    let laid = route_sample(src, 16.0);
+    for (end, card, field) in [
+        (p[0], "users", "users.uid"),
+        (p[p.len() - 1], "orders", "orders.uref"),
+    ] {
+        let c = node_rect(&laid, card).expect("card placed");
+        let f = node_rect(&laid, field).expect("field placed");
+        assert!(
+            end.0 == c.0 || end.0 == c.2,
+            "{field} lands on {card}'s own edge: {end:?} vs {c:?}"
+        );
+        assert!(
+            end.1 >= f.1 && end.1 <= f.3,
+            "{field} lands within its own row: {end:?} vs {f:?}"
+        );
+    }
+    for &(x, y) in p {
+        for card in ["users", "orders"] {
+            let c = node_rect(&laid, card).expect("card placed");
+            assert!(
+                x <= c.0 || x >= c.2 || y <= c.1 || y >= c.3,
+                "the wire never enters {card}: {p:?}"
+            );
+        }
+    }
+}
+
+/// The climb is a last resort: a child with room around it keeps its own
+/// contact, wherever its container's walls are.
+#[test]
+fn a_roomy_group_child_keeps_its_own_contact() {
+    let src = "{ direction: row; gap: 60; clearance: 10 }\n\
+               |group#g| [ |box#a| { width: 50; height: 50 } ]\n\
+               |box#b| { width: 50; height: 50 }\n\
+               g.a -> b\n";
+    let r = routes(src);
+    let p = path(&r, "g.a", "b");
+    let laid = route_sample(src, 10.0);
+    let a = node_rect(&laid, "g.a").expect("a placed");
+    let g = node_rect(&laid, "g").expect("g placed");
+    assert!(a.2 < g.2, "the group has room around its child");
+    assert_eq!(p[0].0, a.2, "the wire leaves a's own side: {p:?} vs {a:?}");
+}
+
 // ── The straight strategy (ROUTING.md §Strategies) ──
 
 #[test]

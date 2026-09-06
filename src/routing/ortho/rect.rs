@@ -42,6 +42,12 @@ impl Rect {
         Rect::new(self.x0 - d, self.y0 - d, self.x1 + d, self.y1 + d)
     }
 
+    /// Whether `r` sits wholly within this rect — the containment test
+    /// "a body's contents ride inside it" reads (ROUTING.md Vocabulary).
+    pub fn holds(&self, r: Rect) -> bool {
+        r.x0 >= self.x0 && r.y0 >= self.y0 && r.x1 <= self.x1 && r.y1 <= self.y1
+    }
+
     /// The overlap with positive area, if any — touching edges don't count.
     pub fn intersect(&self, other: &Rect) -> Option<Rect> {
         let r = Rect::new(
@@ -69,6 +75,17 @@ pub(crate) fn port_window(rect: Rect, side: Side, c: f64) -> (f64, f64) {
     let (lo, hi) = rect.side_span(side);
     let m = port_margin(hi - lo, c);
     (lo + m, hi - m)
+}
+
+/// The port window an end carries onto a side of its **landing body**
+/// (ROUTING.md Vocabulary): the endpoint's own span there, clamped into that
+/// side's lawful window — the field's row on the card's edge, never nearer a
+/// corner than the law allows. Landing on itself an end carries its whole
+/// side, so an unclimbed contact is exactly [`port_window`].
+pub(crate) fn carried_window(body: Rect, carry: Rect, side: Side, c: f64) -> (f64, f64) {
+    let (lo, hi) = port_window(body, side, c);
+    let (s0, s1) = carry.side_span(side);
+    (s0.clamp(lo, hi), s1.clamp(lo, hi))
 }
 
 /// Distance between two axis-aligned boxes (as `(x0, y0, x1, y1)`);
@@ -118,6 +135,33 @@ mod tests {
         let a = Rect::new(0.0, 0.0, 10.0, 10.0);
         let b = Rect::new(5.0, -5.0, 20.0, 5.0);
         assert_eq!(a.intersect(&b), Some(Rect::new(5.0, 0.0, 10.0, 5.0)));
+    }
+
+    #[test]
+    fn a_body_holds_only_what_lies_wholly_within_it() {
+        let card = Rect::new(0.0, 0.0, 100.0, 60.0);
+        assert!(card.holds(Rect::new(1.0, 1.0, 40.0, 20.0)));
+        assert!(card.holds(card));
+        assert!(!card.holds(Rect::new(-1.0, 1.0, 40.0, 20.0)));
+    }
+
+    #[test]
+    fn a_carried_window_is_the_endpoints_row_clamped_into_the_side() {
+        let card = Rect::new(0.0, 0.0, 100.0, 60.0);
+        // Landing on itself, a body carries its whole side: the port window.
+        assert_eq!(
+            carried_window(card, card, Side::Right, 16.0),
+            port_window(card, Side::Right, 16.0)
+        );
+        // A middle row lands within its own span.
+        let row = Rect::new(1.0, 20.0, 99.0, 40.0);
+        assert_eq!(carried_window(card, row, Side::Right, 16.0), (20.0, 40.0));
+        // A row past the corner margin clamps onto it — never nearer a
+        // corner than Law 2 allows.
+        let top = Rect::new(1.0, 1.0, 99.0, 10.0);
+        assert_eq!(carried_window(card, top, Side::Right, 16.0), (16.0, 16.0));
+        // A horizontal side carries the endpoint's column instead.
+        assert_eq!(carried_window(card, row, Side::Bottom, 16.0), (16.0, 84.0));
     }
 
     #[test]

@@ -209,7 +209,6 @@ fn solve(
     let a_contains_b = index.geo_contains(&rep.a_path, &rep.b_path);
     let b_contains_a = index.geo_contains(&rep.b_path, &rep.a_path);
     let solids = index.solid_rects_for([&rep.a_path, &rep.b_path]);
-    let base: Vec<Rect> = solids.iter().map(|r| r.inflate(c)).collect();
 
     let mut fixed_blocked = false;
     // Innermost world first; a transparent ancestor lets the link route one
@@ -228,13 +227,13 @@ fn solve(
                            fan: Option<usize>,
                            forced: Option<Side>,
                            fixed: Option<f64>| {
-            let mut blockers = base.clone();
+            let mut obstacles = solids.clone();
             // The partner's body walls this end in — unless it IS this end's
             // own body: two distinct fixed ports on one rect (two pins of one
             // part) are a lawful pair, and an end is never blocked by itself
             // (ROUTING.md Fixed ports).
             if !partner.1 && !self_loop && partner.0 != rect {
-                blockers.push(partner.0.inflate(c));
+                obstacles.push(partner.0);
             }
             let forced = fan.and_then(|g| fan_pick[g]).map_or(forced, Some);
             // A side must hold the whole landing: k ports, one for a fan
@@ -244,11 +243,16 @@ fn solve(
                 Some(g) => usize::from(!fan_landed[g]),
                 None => k,
             };
-            let offered = entry::entries(graph, rect, stub, c, forced, fixed, &blockers, inward);
+            let (landing, offered) = entry::leave(
+                index, graph, wkey, path, stub, c, forced, fixed, &obstacles, inward,
+            );
             let any = !offered.is_empty();
             let kept = offered
                 .into_iter()
-                .filter(|e| need == 0 || ledger.side_free(path, e.side, rect) >= need)
+                .filter(|e| {
+                    need == 0
+                        || landing.is_none_or(|l| ledger.side_free(l.node, e.side, l.body) >= need)
+                })
                 .collect::<Vec<Entry>>();
             (kept, any)
         };
@@ -312,13 +316,12 @@ fn solve(
                 last = Some(route);
                 continue;
             }
-            let ends =
-                [(se, &rep.a_rect, fan[0]), (ge, &rep.b_rect, fan[1])].map(|(e, r, fan)| EndInfo {
-                    side: e.side,
-                    rect: *r,
-                    window: e.window,
-                    fan,
-                });
+            let ends = [(se, fan[0]), (ge, fan[1])].map(|(e, fan)| EndInfo {
+                side: e.side,
+                rect: e.landing.body,
+                window: e.window,
+                fan,
+            });
             let probe =
                 geometry::chain(graph, w, &held, &route.cells, se, ge, ends, link, k_eff, c);
             let blocked = probe
@@ -412,15 +415,15 @@ fn commit_bundle(
     let trunks: Vec<usize> = fan.into_iter().flatten().collect();
     let (se, ge) = (&starts[route.start], &goals[route.goal]);
 
-    for (entry, fan, path) in [(se, fan[0], &rep.a_path), (ge, fan[1], &rep.b_path)] {
+    for (entry, fan) in [(se, fan[0]), (ge, fan[1])] {
         match fan {
             Some(g) if fan_landed[g] => {}
             Some(g) => {
                 fan_pick[g] = Some(entry.side);
                 fan_landed[g] = true;
-                ledger.commit_port(path, entry.side, 1);
+                ledger.commit_port(entry.landing.node, entry.side, 1);
             }
-            None => ledger.commit_port(path, entry.side, k),
+            None => ledger.commit_port(entry.landing.node, entry.side, k),
         }
     }
 
@@ -437,10 +440,7 @@ fn commit_bundle(
         };
         let ends = [(End::A, es), (End::B, eg)].map(|(end, e)| EndInfo {
             side: e.side,
-            rect: match end {
-                End::A => mreq.a_rect,
-                End::B => mreq.b_rect,
-            },
+            rect: e.landing.body,
             window: e.window,
             fan: if self_loop {
                 None

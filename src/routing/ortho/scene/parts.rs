@@ -31,7 +31,7 @@
 //! **outside** it: a root wire to `s.u1.a` finds the pin here and lands on it,
 //! because a pin is a pin whoever wires it.
 
-use super::{SceneIndex, abs_rect, inside};
+use super::{SceneIndex, abs_rect};
 use crate::ast::Side;
 use crate::layout::ir::PlacedNode;
 use crate::layout::schematic::PartPorts;
@@ -106,7 +106,7 @@ impl SceneIndex {
                 .type_chain
                 .iter()
                 .any(|t| t == "pin-stub" || t == "pin-number");
-            if !pin_anatomy && !named && !inside(frame, rect) && !inside(own, rect) {
+            if !pin_anatomy && !named && !frame.holds(rect) && !own.holds(rect) {
                 self.nodes[i].overflow.push(rect);
             }
             self.fold(c, &cpath, i, cx, cy);
