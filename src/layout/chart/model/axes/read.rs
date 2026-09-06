@@ -1,60 +1,79 @@
 //! The axis attribute readers [SPEC 14.4/16/20]: `range:`, `ticks:`, `step:`,
 //! `side:`, `gridlines:`, `unit:`, `scale:`, and `format:`, plus the shared
 //! domain-from-`range` resolution. `axes.rs` binds series to axes and builds the
-//! scales; the parsing of each attribute lives here. The numeric and time
-//! `range:` / `ticks:` readers share one envelope each, differing only in the
-//! per-value reader.
+//! scales; the parsing of each attribute lives here. [`Domain`] is what makes a
+//! reader time-aware — one kind per axis, consulted wherever a value is placed
+//! on one.
 
 use super::super::*;
 
-/// The shared `range:` envelope [SPEC 14.4] — a two-item tuple, each end read by
-/// `end_of`; the arity message lives here once for the numeric and time axes.
-fn read_range_with(
-    inst: &ResolvedInst,
-    end_of: impl Fn(&ResolvedValue) -> Result<End, Error>,
-) -> Result<Option<(End, End)>, Error> {
+/// What an axis's values are written as [SPEC 14.3/14.4]: plain numbers, or
+/// quoted ISO-8601 dates on a time axis. **One domain, one kind** — so every
+/// reader that places a value on an axis consults it: the axis's own `range:`
+/// and `ticks:`, a `|band|`'s span, a `|mark|`'s `at:`.
+#[derive(Clone, Copy, PartialEq)]
+pub(crate) enum Domain {
+    Number,
+    Date,
+}
+
+/// The one mixed-domain reading [SPEC 21]: an axis is dated or numeric, and
+/// everything measured on it follows — a series' x values, the axis's own
+/// `range:` / `ticks:`, a `|band|`'s span, a `|mark|`'s `at:`.
+pub(super) const MIXED_DOMAIN: &str =
+    "an axis reads dates or numbers, never both — one domain, one kind";
+
+impl Domain {
+    /// One authored value on an axis of this kind, folded to the scale's own
+    /// units (epoch seconds for a date). A value of the **other** kind is
+    /// [`MIXED_DOMAIN`]; one that is neither falls to `otherwise` — the
+    /// caller's own property wording, reachable on a numeric axis alone.
+    pub(crate) fn value(
+        self,
+        v: &ResolvedValue,
+        otherwise: &str,
+        span: Span,
+    ) -> Result<f64, Error> {
+        match (self, v) {
+            (Domain::Date, ResolvedValue::String(text)) => date_secs(text, span),
+            (Domain::Number, v) if !matches!(v, ResolvedValue::String(_)) => {
+                v.as_number().ok_or_else(|| Error::at(span, otherwise))
+            }
+            _ => Err(Error::at(span, MIXED_DOMAIN)),
+        }
+    }
+}
+
+/// An axis's `range:` [SPEC 14.4] — a two-item tuple, each end `auto` or a value
+/// in the axis's `domain`.
+pub(super) fn read_range(inst: &ResolvedInst, domain: Domain) -> Result<Option<(End, End)>, Error> {
+    const ENDS: &str = "'range' takes two ends: 'a b', 'a auto', or 'auto b'";
     let Some(v) = inst.attrs.get("range") else {
         return Ok(None);
     };
     let ResolvedValue::Tuple(items) = v else {
-        return Err(Error::at(
-            inst.span,
-            "'range' takes two ends: 'a b', 'a auto', or 'auto b'",
-        ));
+        return Err(Error::at(inst.span, ENDS));
     };
     if items.len() != 2 {
-        return Err(Error::at(
-            inst.span,
-            "'range' takes two ends: 'a b', 'a auto', or 'auto b'",
-        ));
+        return Err(Error::at(inst.span, ENDS));
     }
-    Ok(Some((end_of(&items[0])?, end_of(&items[1])?)))
-}
-
-/// A value / numeric axis's `range:` — two number / `auto` ends [SPEC 14.4].
-pub(super) fn read_range(inst: &ResolvedInst) -> Result<Option<(End, End)>, Error> {
-    read_range_with(inst, |v| read_end(v, inst.span))
-}
-
-/// A time axis's `range:` — two ends, each a quoted date or `auto`; a plain
-/// number is the mixed-domain error [SPEC 14.4/20].
-pub(super) fn read_time_range(inst: &ResolvedInst) -> Result<Option<(End, End)>, Error> {
-    read_range_with(inst, |v| match v {
-        ResolvedValue::String(text) => date_secs(text, inst.span).map(End::Num),
+    let end = |v: &ResolvedValue| match v {
         ResolvedValue::Ident(s) if s == "auto" => Ok(End::Auto),
-        _ => Err(Error::at(
-            inst.span,
-            "the x axis mixes dates and numbers — one domain, one kind",
-        )),
-    })
+        v => domain
+            .value(v, "a 'range' end is a number or 'auto'", inst.span)
+            .map(End::Num),
+    };
+    Ok(Some((end(&items[0])?, end(&items[1])?)))
 }
 
-/// The shared explicit-`ticks:` envelope [SPEC 2/14.4]: a comma-list (or a lone
-/// value), each item read by `value_of`.
-fn read_ticks_with(
+/// An axis's explicit `ticks:` [SPEC 2/14.4] — a comma-list (or a lone value),
+/// each item a value in the axis's `domain`.
+pub(super) fn read_ticks(
     attrs: &AttrMap,
-    value_of: impl Fn(&ResolvedValue) -> Result<f64, Error>,
+    domain: Domain,
+    span: Span,
 ) -> Result<Option<Vec<f64>>, Error> {
+    const TICKS: &str = "'ticks' takes comma-separated numbers — 'ticks: 0, 50, 100'";
     let Some(v) = attrs.get("ticks") else {
         return Ok(None);
     };
@@ -64,32 +83,9 @@ fn read_ticks_with(
     };
     items
         .iter()
-        .map(value_of)
+        .map(|it| domain.value(it, TICKS, span))
         .collect::<Result<Vec<f64>, Error>>()
         .map(Some)
-}
-
-/// An explicit numeric `ticks:` list — comma-separated numbers [SPEC 2/14.4].
-pub(super) fn read_ticks(attrs: &AttrMap, span: Span) -> Result<Option<Vec<f64>>, Error> {
-    read_ticks_with(attrs, |it| {
-        it.as_number().ok_or_else(|| {
-            Error::at(
-                span,
-                "'ticks' takes comma-separated numbers — 'ticks: 0, 50, 100'",
-            )
-        })
-    })
-}
-
-/// A time axis's explicit `ticks:` — comma-separated quoted dates.
-pub(super) fn read_time_ticks(inst: &ResolvedInst) -> Result<Option<Vec<f64>>, Error> {
-    read_ticks_with(&inst.attrs, |it| match it {
-        ResolvedValue::String(text) => date_secs(text, inst.span),
-        _ => Err(Error::at(
-            inst.span,
-            "the x axis mixes dates and numbers — one domain, one kind",
-        )),
-    })
 }
 
 /// A calendar `step:` [SPEC 14.4] — a unit ident with an optional count
@@ -221,14 +217,6 @@ pub(super) fn read_grid(inst: &ResolvedInst) -> Result<Grid, Error> {
         None => Ok(Grid::Default),
         Some(ResolvedValue::Ident(s)) if s == "none" => Ok(Grid::Off),
         Some(v) => Ok(Grid::Color(v.clone())),
-    }
-}
-
-fn read_end(v: &ResolvedValue, span: Span) -> Result<End, Error> {
-    match v {
-        ResolvedValue::Number(n) => Ok(End::Num(*n)),
-        ResolvedValue::Ident(s) if s == "auto" => Ok(End::Auto),
-        _ => Err(Error::at(span, "a 'range' end is a number or 'auto'")),
     }
 }
 

@@ -1,4 +1,4 @@
-//! Colour / outline resolution [SPEC 14.6] and the small numeric readers.
+//! Colour / outline resolution [SPEC 14.6].
 
 use super::*;
 
@@ -80,15 +80,6 @@ pub(super) fn clone_grid(g: &Grid) -> Grid {
         Grid::Off => Grid::Off,
         Grid::Color(c) => Grid::Color(c.clone()),
     }
-}
-
-pub(super) fn numbers(items: &[ResolvedValue], span: Span) -> Result<Vec<f64>, Error> {
-    items.iter().map(|it| number(it, span)).collect()
-}
-
-pub(super) fn number(v: &ResolvedValue, span: Span) -> Result<f64, Error> {
-    v.as_number()
-        .ok_or_else(|| Error::at(span, "'data' values must be numbers"))
 }
 
 /// Per-datum paint lists [SPEC 14.6] on a repeated-mark series: comma-listed

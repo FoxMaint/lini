@@ -7,7 +7,7 @@ use crate::math;
 
 mod read;
 use read::*;
-pub(crate) use read::{numeric_fmt, read_side};
+pub(crate) use read::{Domain, numeric_fmt, read_side};
 
 /// Bind a series to a value axis by its `axis:` id, defaulting to the first value
 /// axis. An unknown id reports the chart's own axis ids [SPEC 21].
@@ -62,8 +62,35 @@ pub(super) fn lookup_axis(
     Err(no_axis(id, &known, span))
 }
 
+/// The x (domain) axis's two givens — what configures it and what it is
+/// written in — the domain-side twin of a value axis's [`AxisSpec`]. Read
+/// **once**, as soon as the series are, because everything that places a value
+/// on the domain needs it: the axis's own `range:` / `ticks:`, a `|band|`'s
+/// span, a `|mark|`'s `at:`.
+#[derive(Clone, Copy)]
+pub(super) struct XSpec<'a> {
+    /// The declared `|axis|` on the domain edge, if the chart wrote one.
+    inst: Option<&'a ResolvedInst>,
+    /// Dated when any series carries date x-values, or the axis declares
+    /// `scale: time` [SPEC 14.3/14.4] — so a dated chart annotates in dates and
+    /// a numeric one in numbers, with no second rule.
+    pub domain: Domain,
+}
+
+impl<'a> XSpec<'a> {
+    pub(super) fn read(
+        inst: Option<&'a ResolvedInst>,
+        series: &[Series],
+    ) -> Result<XSpec<'a>, Error> {
+        let dated = series.iter().any(|s| s.time_x)
+            || inst.map(read_scale_kind).transpose()? == Some(ScaleKind::Time);
+        let domain = if dated { Domain::Date } else { Domain::Number };
+        Ok(XSpec { inst, domain })
+    }
+}
+
 pub(super) fn build_x_axis(
-    x_inst: Option<&ResolvedInst>,
+    x: XSpec,
     categories: &Option<Vec<String>>,
     series: &[Series],
     segments: &[(f64, f64)],
@@ -71,12 +98,15 @@ pub(super) fn build_x_axis(
     chart_fmt: Format,
     span: Span,
 ) -> Result<XAxis, Error> {
+    let XSpec {
+        inst: x_inst,
+        domain,
+    } = x;
     let (title, unit, grid) = match x_inst {
         Some(a) => (label_of(a), read_unit(a)?, read_grid(a)?),
         None => (None, None, Grid::Default),
     };
-    let time = series.iter().any(|s| s.time_x)
-        || x_inst.map(read_scale_kind).transpose()? == Some(ScaleKind::Time);
+    let time = domain == Domain::Date;
     // On a time axis a date preset is at home; numeric axes keep the gate.
     let fmt = match (x_inst, time) {
         (Some(a), true) => format::read_or(&a.attrs, chart_fmt, a.span)?,
@@ -89,10 +119,7 @@ pub(super) fn build_x_axis(
             .iter()
             .any(|s| !s.time_x && matches!(s.data, Data::Points(_)));
         if numeric_pts || !bubbles.is_empty() {
-            return Err(Error::at(
-                span,
-                "the x axis mixes dates and numbers — one domain, one kind",
-            ));
+            return Err(Error::at(span, MIXED_DOMAIN));
         }
         let xs: Vec<f64> = series
             .iter()
@@ -168,7 +195,7 @@ pub(super) fn build_x_axis(
             xs.push(b);
         }
     }
-    let range = x_inst.map(read_range).transpose()?.flatten();
+    let range = x_inst.map(|a| read_range(a, domain)).transpose()?.flatten();
     // Bubbles have a drawn radius, so pad the auto domain to keep edge bubbles inside.
     if range.is_none() && !bubbles.is_empty() {
         let lo = xs.iter().copied().fold(f64::INFINITY, f64::min);
@@ -290,6 +317,7 @@ fn value_scale(vals: &[f64], has_bars: bool, spec: &AxisSpec) -> Result<Scale, E
 
 /// A numeric x scale (a scatter's x, a formula's domain, or a `range:`-fixed bottom
 /// axis). Empty data (a formula-only chart with no range) defaults to `[0, 1]`.
+/// Reached only on a [`Domain::Number`] axis, so its `ticks:` read numbers.
 fn numeric_scale(
     xs: &[f64],
     range: Option<(End, End)>,
@@ -311,7 +339,7 @@ fn numeric_scale(
     let (min, max, rev) = resolve_domain(xs, range.as_ref(), (0.0, 1.0));
     let step = spec_src.and_then(|a| a.attrs.number("step"));
     let explicit_ticks = match spec_src {
-        Some(a) => read_ticks(&a.attrs, a.span)?,
+        Some(a) => read_ticks(&a.attrs, Domain::Number, a.span)?,
         None => None,
     };
     let ticks = if let Some(t) = explicit_ticks {
@@ -326,16 +354,20 @@ fn numeric_scale(
 
 /// The time x scale [SPEC 14.4]: domain from date x-values and/or a date
 /// `range:`, calendar ticks (auto ladder, or a calendar `step:`, or explicit
-/// date `ticks:`), reversal when the range runs high→low.
+/// date `ticks:`), reversal when the range runs high→low. Reached only on a
+/// [`Domain::Date`] axis, so its `range:` and `ticks:` read date literals.
 fn time_scale(xs: &[f64], x_inst: Option<&ResolvedInst>) -> Result<Scale, Error> {
-    let range = x_inst.map(read_time_range).transpose()?.flatten();
+    let range = x_inst
+        .map(|a| read_range(a, Domain::Date))
+        .transpose()?
+        .flatten();
     let (min, max, rev) = resolve_domain(xs, range.as_ref(), (0.0, 86_400.0));
     let step = match x_inst {
         Some(a) => read_cal_step(a)?,
         None => None,
     };
     let explicit = match x_inst {
-        Some(a) => read_time_ticks(a)?,
+        Some(a) => read_ticks(&a.attrs, Domain::Date, a.span)?,
         None => None,
     };
     Ok(match explicit {
@@ -397,15 +429,17 @@ pub(super) fn axis_spec(
             "the x (domain) axis is the time axis — a value axis is numeric",
         ));
     }
+    // A value axis is numeric by construction — the gate above rejects
+    // `scale: time`, so everything it reads is a number.
     Ok(AxisSpec {
         id: inst.id.as_deref(),
         side,
         title: label_of(inst),
         unit: read_unit(inst)?,
         grid: read_grid(inst)?,
-        range: read_range(inst)?,
+        range: read_range(inst, Domain::Number)?,
         step: inst.attrs.number("step"),
-        ticks: read_ticks(&inst.attrs, inst.span)?,
+        ticks: read_ticks(&inst.attrs, Domain::Number, inst.span)?,
         log: read_log(inst)?,
         fmt: numeric_fmt(inst, chart_fmt)?,
     })

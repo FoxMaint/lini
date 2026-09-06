@@ -12,7 +12,10 @@ pub(super) fn read_bubble(
     chart_tip: Tooltip,
 ) -> Result<Bubble, Error> {
     let needs = || Error::at(inst.span, "a '|bubble|' needs 'at:' (x y) and 'value:'");
-    let MarkAt::Point(x, y) = read_at(inst).map_err(|_| needs())? else {
+    // Bubbles are numeric-only: a dated chart rejects them outright
+    // ([`build_x_axis`]), so both ends of `at:` read as numbers.
+    let MarkAt::Point(x, y) = read_at(inst, Domain::Number, Domain::Number).map_err(|_| needs())?
+    else {
         return Err(needs());
     };
     let value = inst.attrs.number("value").ok_or_else(needs)?;
@@ -215,6 +218,18 @@ fn points_from(xs: &[f64], ys: Vec<ExprValue>, span: Span) -> Result<Vec<(f64, f
     Ok(pts)
 }
 
+/// One `data:` value — the only property these read, so the message names it
+/// [SPEC 21]. A value on an *axis* goes through [`Domain::value`] instead,
+/// which knows whether that axis is dated.
+fn data_number(v: &ResolvedValue, span: Span) -> Result<f64, Error> {
+    v.as_number()
+        .ok_or_else(|| Error::at(span, "'data' values must be numbers"))
+}
+
+fn data_numbers(items: &[ResolvedValue], span: Span) -> Result<Vec<f64>, Error> {
+    items.iter().map(|it| data_number(it, span)).collect()
+}
+
 /// `data:` reads across comma-groups [SPEC 2/14.3]: values (`data: 9, 15, 24`)
 /// → categorical, `x y` pairs (`data: 10 20, 30 40`) → points — so a lone
 /// `data: 10 20` is one point, never two values. A point's x may be a quoted
@@ -225,7 +240,7 @@ fn read_data(inst: &ResolvedInst, kind: &SeriesKind) -> Result<(Data, bool), Err
         return Err(Error::at(inst.span, "'data' must be a list of numbers").code(Code::CHART_DATA));
     };
     if items.iter().all(|it| it.as_number().is_some()) {
-        return Ok((Data::Categorical(numbers(items, inst.span)?), false));
+        return Ok((Data::Categorical(data_numbers(items, inst.span)?), false));
     }
     let mut pts = Vec::with_capacity(items.len());
     let mut dates = 0usize;
@@ -245,9 +260,9 @@ fn read_data(inst: &ResolvedInst, kind: &SeriesKind) -> Result<(Data, bool), Err
                             )
                         })?
                     }
-                    v => number(v, inst.span)?,
+                    v => data_number(v, inst.span)?,
                 };
-                pts.push((x, number(&pair[1], inst.span)?));
+                pts.push((x, data_number(&pair[1], inst.span)?));
             }
             // A longer space run is the pre-0.21 value list.
             ResolvedValue::Tuple(_) => {

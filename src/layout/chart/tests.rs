@@ -278,6 +278,42 @@ fn a_mark_point_draws_a_dot_and_a_label() {
     assert!(s.contains(">pt</text>"), "the point's label: {s}");
 }
 
+/// A dated domain is a domain like any other [SPEC 14.4/14.5]: a `|band|`'s
+/// span and a `|mark|`'s `at:` read the axis's own literals, folded through the
+/// axis's own scale. Moving both annotations by the same fortnight must move the
+/// band's far edge and the reference line by the same pixels — one scale, no
+/// plot arithmetic in the test.
+#[test]
+fn a_dated_domain_takes_bands_and_marks_in_dates() {
+    let chart = |day: &str| {
+        svg(&format!(
+            "|chart| {{ width: 400; height: 200 }} [\n  |axis#t| {{ side: bottom; range: \"2026-01-01\" \"2026-03-01\" }}\n  |axis#v| {{ side: left; range: 0 100 }}\n  |band| \"beta\" {{ range: \"2026-01-16\" \"{day}\"; fill: --amber }}\n  |mark| \"ga\" {{ at: \"{day}\"; axis: t; stroke-style: dashed }}\n  |mark| \"pt\" {{ at: \"{day}\" 50; axis: v }}\n  |line| {{ data: \"2026-01-01\" 10, \"2026-03-01\" 90 }}\n]\n"
+        ))
+    };
+    let attr = |s: &str, el: &str, k: &str| -> f64 {
+        let after = &s[s.find(el).unwrap_or_else(|| panic!("{el} in {s}"))..];
+        let el = &after[..after.find("/>").unwrap()];
+        let i = el.find(k).unwrap() + k.len() + 2;
+        el[i..i + el[i..].find('"').unwrap()].parse().unwrap()
+    };
+    let (early, late) = (chart("2026-02-01"), chart("2026-02-16"));
+    for s in [&early, &late] {
+        for want in [">beta</text>", ">ga</text>", ">pt</text>", "<ellipse"] {
+            assert!(s.contains(want), "{want} draws: {s}");
+        }
+    }
+    // The band's own rect is centred by its group transform, so its width is the
+    // transform-free reading; the reference line carries absolute plot x's.
+    let grew = attr(&late, "opacity: 0.15", "width") - attr(&early, "opacity: 0.15", "width");
+    let moved = attr(&late, "stroke-dasharray: 6,4.75", "x1")
+        - attr(&early, "stroke-dasharray: 6,4.75", "x1");
+    assert!(grew > 1.0, "a fortnight is drawn width: {grew}");
+    assert!(
+        (grew - moved).abs() < 1e-6,
+        "band and mark share one scale: the span grew {grew}, the line moved {moved}"
+    );
+}
+
 #[test]
 fn marker_none_suppresses_the_point_dot() {
     let s = svg(
@@ -701,7 +737,7 @@ fn chart_errors_speak_spec() {
         ),
         (
             "|chart| [\n|line| { data: \"2026-01-01\" 1, \"2026-06-01\" 2 }\n|dots| { data: 3 4, 5 6 }\n]\n",
-            &["mixes dates and numbers"],
+            &["dates or numbers, never both"],
         ),
         (
             "|chart| [\n|line| { data: \"2026-13-01\" 1, \"2026-06-01\" 2 }\n]\n",
@@ -710,6 +746,30 @@ fn chart_errors_speak_spec() {
         (
             "|chart| [\n|axis| { side: left; scale: time }\n|bars| { data: 1, 2 }\n]\n",
             &["a value axis is numeric"],
+        ),
+        // One domain, one kind, wherever the value is authored: an annotation
+        // reads the kind of the axis it binds [SPEC 14.4/14.5].
+        (
+            "|chart| [\n|axis#t| { side: bottom }\n|band| \"b\" { range: 1 2; axis: t }\n|line| { data: \"2026-01-01\" 1, \"2026-06-01\" 2 }\n]\n",
+            &["dates or numbers, never both"],
+        ),
+        (
+            "|chart| [\n|axis#t| { side: bottom }\n|mark| \"m\" { at: 5; axis: t }\n|line| { data: \"2026-01-01\" 1, \"2026-06-01\" 2 }\n]\n",
+            &["dates or numbers, never both"],
+        ),
+        (
+            "|chart| [\n|axis#t| { side: bottom }\n|band| \"b\" { range: \"2026-01-01\" \"2026-06-01\"; axis: t }\n|line| { data: 1 1, 2 2 }\n]\n",
+            &["dates or numbers, never both"],
+        ),
+        // A value axis is numeric even on a dated chart.
+        (
+            "|chart| [\n|axis#t| { side: bottom }\n|axis#v| { side: left }\n|mark| \"m\" { at: \"2026-02-01\"; axis: v }\n|line| { data: \"2026-01-01\" 1, \"2026-06-01\" 2 }\n]\n",
+            &["dates or numbers, never both"],
+        ),
+        // …and a value that is neither kind names its own property.
+        (
+            "|chart| [\n|axis#t| { side: bottom }\n|band| \"b\" { range: red blue; axis: t }\n|line| { data: 1 1, 2 2 }\n]\n",
+            &["a band's 'range' ends are numbers"],
         ),
     ] {
         let e = layout_err(src);

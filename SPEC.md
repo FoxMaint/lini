@@ -2124,7 +2124,10 @@ formatted tick value + `unit:` (a value axis) — `format:` sets the value's pre
 `labels:` is the **series'** per-datum text ([14.3](#143-data--formulas)).
 
 **`scale: time`** — a numeric domain in epoch seconds, set by date literals in `data:`
-([14.3](#143-data--formulas)); `range:` and `ticks:` read the same literals. Ticks are
+([14.3](#143-data--formulas)). **Everything measured on a dated domain is written in the
+same literals** — `range:`, `ticks:`, a `|band|`'s `range:`, a `|mark|`'s `at:`
+([14.5](#145-bands--annotations)) — and the other kind is an error, either way round:
+one domain, one kind. Ticks are
 **calendar-aware**: auto picks the boundary unit from the span (years → months → weeks →
 days → hours → minutes) and lands on calendar boundaries; **`step:`** takes a calendar
 interval — a unit ident with an optional count (`step: month`, `step: 2 week`) — and a
@@ -4651,7 +4654,7 @@ error.
 | `scale: log` over a non-positive domain | `a 'scale: log' axis needs a domain above 0` |
 | Paint list count ≠ data count | `'fill' lists N paints but the series has M data points` |
 | Paint list on `\|line\|` / `\|area\|` | `a '\|line\|' is one shape with one paint — per-datum lists read on '\|bars\|' / '\|dots\|'` |
-| Mixed date / numeric domain | `the x axis mixes dates and numbers — one domain, one kind` |
+| Mixed date / numeric domain | `an axis reads dates or numbers, never both — one domain, one kind` |
 | Invalid date literal | `'2026-13-01' is not a date — ISO-8601: '2026-01-31', optionally 'T09:30' and 'Z'` |
 | Numeric `step:` on a time axis | `a time axis steps by calendar — 'step: month', 'step: 2 week'` |
 | Bad `format:` value | `'format' takes auto, decimal N, significant N, scientific N, engineering N, percent N, fraction D, or a date preset` |

@@ -31,6 +31,9 @@ pub(crate) use paint::{fill_color, fill_outline, label_of};
 // Model-internal helpers shared across the submodules (each reaches them via
 // `use super::*`).
 use annot::{read_at, read_band, read_mark};
-use axes::{axis_id, axis_spec, bind_axis, build_value_axes, build_x_axis, lookup_axis, read_side};
-use paint::{clone_grid, number, numbers, outline, paint_lists, real_color};
+use axes::{
+    Domain, XSpec, axis_id, axis_spec, bind_axis, build_value_axes, build_x_axis, lookup_axis,
+    read_side,
+};
+use paint::{clone_grid, outline, paint_lists, real_color};
 use series::{chart_marker, collect_strings, read_bubble, read_series, sample_formula};

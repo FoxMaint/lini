@@ -108,13 +108,16 @@ pub fn build(inst: &ResolvedInst, funcs: &FuncTable) -> Result<Chart, Error> {
         ));
     }
     let x_id = x_inst.and_then(|a| a.id.as_deref());
+    // The domain axis, read once now the series are — everything that places a
+    // value on it needs its kind [SPEC 14.3/14.4].
+    let x_spec = XSpec::read(x_inst, &series)?;
     let bands: Vec<Band> = band_insts
         .iter()
-        .map(|b| read_band(b, x_id, &value_specs))
+        .map(|b| read_band(b, x_id, &value_specs, x_spec.domain))
         .collect::<Result<_, _>>()?;
     let marks: Vec<Mark> = mark_insts
         .iter()
-        .map(|m| read_mark(m, x_id, &value_specs, chart_tip))
+        .map(|m| read_mark(m, x_id, &value_specs, chart_tip, x_spec.domain))
         .collect::<Result<_, _>>()?;
     let bubbles: Vec<Bubble> = bubble_insts
         .iter()
@@ -131,7 +134,7 @@ pub fn build(inst: &ResolvedInst, funcs: &FuncTable) -> Result<Chart, Error> {
     // The x scale: a band for categorical data (categories or indices), or a numeric
     // domain when the data is points / a formula / a bottom axis range / bands / bubbles.
     let x = build_x_axis(
-        x_inst,
+        x_spec,
         &categories,
         &series,
         &segments,
