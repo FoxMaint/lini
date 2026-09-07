@@ -3,32 +3,31 @@ source: tests/conformance.rs
 expression: svg
 input_file: samples/mindmap.lini
 ---
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-574.42 -305 1236.887 610" width="1236.887" height="610" class="lini lini-scope-17c5c9de">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-574.42 -305 1148.84 610" width="1148.84" height="610" class="lini lini-scope-dfed4910">
   <style>
-    .lini-scope-17c5c9de { font-family: "Google Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-size: 15px; font-weight: 500; color: black; }
-    .lini-scope-17c5c9de .lini-canvas { fill: white; }
-    .lini-scope-17c5c9de .lini-block { fill: none; stroke: none; stroke-width: 2; stroke-dasharray: none; }
-    .lini-scope-17c5c9de .lini-text { fill: currentColor; stroke: none; text-anchor: middle; }
-    .lini-scope-17c5c9de .lini-icon { fill: rgba(0, 0, 0, 0.16); stroke: #444; stroke-width: 2; stroke-dasharray: none; }
-    .lini-scope-17c5c9de .lini-topic { fill: white; stroke: #444; stroke-width: 2; }
-    .lini-scope-17c5c9de .lini-mindmap { font-size: 17px; font-weight: 600; }
-    .lini-scope-17c5c9de .lini-link { fill: none; stroke: #444; stroke-width: 2; stroke-dasharray: none; }
-    .lini-scope-17c5c9de .lini-link-dotted { stroke-dasharray: 2,3; }
-    .lini-scope-17c5c9de .lini-mindmap .lini-topic { font-weight: 500; }
-    .lini-scope-17c5c9de .lini-mindmap .lini-level-1 { font-size: 15px; }
-    .lini-scope-17c5c9de .lini-mindmap .lini-level-2 { font-size: 14px; }
-    .lini-scope-17c5c9de .lini-mindmap .lini-hue-rose { fill: #ffe3ec; stroke: #b8476e; color: #811442; }
-    .lini-scope-17c5c9de .lini-links .lini-hue-rose { stroke: #b8476e; }
-    .lini-scope-17c5c9de .lini-mindmap .lini-hue-orange { fill: #ffe8d2; stroke: #b45700; color: #7e2800; }
-    .lini-scope-17c5c9de .lini-links .lini-hue-orange { stroke: #b45700; }
-    .lini-scope-17c5c9de .lini-mindmap .lini-hue-amber { fill: #feedca; stroke: #9f6900; color: #6d3b00; }
-    .lini-scope-17c5c9de .lini-links .lini-hue-amber { stroke: #9f6900; }
-    .lini-scope-17c5c9de .lini-mindmap .lini-hue-lime { fill: #e8f4d3; stroke: #628200; color: #385300; }
-    .lini-scope-17c5c9de .lini-links .lini-hue-lime { stroke: #628200; }
-    .lini-scope-17c5c9de .lini-mindmap .lini-hue-green { fill: #d6f8e3; stroke: #008d51; color: #005d26; }
-    .lini-scope-17c5c9de .lini-links .lini-hue-green { stroke: #008d51; }
-    .lini-scope-17c5c9de .lini-mindmap .lini-hue-teal { fill: #cdf9f4; stroke: #008e85; color: #005d56; }
-    .lini-scope-17c5c9de .lini-links .lini-hue-teal { stroke: #008e85; }
+    .lini-scope-dfed4910 { font-family: "Google Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-size: 15px; font-weight: 500; color: black; }
+    .lini-scope-dfed4910 .lini-canvas { fill: white; }
+    .lini-scope-dfed4910 .lini-block { fill: none; stroke: none; stroke-width: 2; stroke-dasharray: none; }
+    .lini-scope-dfed4910 .lini-text { fill: currentColor; stroke: none; text-anchor: middle; }
+    .lini-scope-dfed4910 .lini-icon { fill: rgba(0, 0, 0, 0.16); stroke: #444; stroke-width: 2; stroke-dasharray: none; }
+    .lini-scope-dfed4910 .lini-topic { fill: white; stroke: #444; stroke-width: 2; }
+    .lini-scope-dfed4910 .lini-mindmap { font-size: 17px; font-weight: 600; }
+    .lini-scope-dfed4910 .lini-link { fill: none; stroke: #444; stroke-width: 2; stroke-dasharray: none; }
+    .lini-scope-dfed4910 .lini-mindmap .lini-topic { font-weight: 500; }
+    .lini-scope-dfed4910 .lini-mindmap .lini-level-1 { font-size: 15px; }
+    .lini-scope-dfed4910 .lini-mindmap .lini-level-2 { font-size: 14px; }
+    .lini-scope-dfed4910 .lini-mindmap .lini-hue-rose { fill: #ffe3ec; stroke: #b8476e; color: #811442; }
+    .lini-scope-dfed4910 .lini-links .lini-hue-rose { stroke: #b8476e; }
+    .lini-scope-dfed4910 .lini-mindmap .lini-hue-orange { fill: #ffe8d2; stroke: #b45700; color: #7e2800; }
+    .lini-scope-dfed4910 .lini-links .lini-hue-orange { stroke: #b45700; }
+    .lini-scope-dfed4910 .lini-mindmap .lini-hue-amber { fill: #feedca; stroke: #9f6900; color: #6d3b00; }
+    .lini-scope-dfed4910 .lini-links .lini-hue-amber { stroke: #9f6900; }
+    .lini-scope-dfed4910 .lini-mindmap .lini-hue-lime { fill: #e8f4d3; stroke: #628200; color: #385300; }
+    .lini-scope-dfed4910 .lini-links .lini-hue-lime { stroke: #628200; }
+    .lini-scope-dfed4910 .lini-mindmap .lini-hue-green { fill: #d6f8e3; stroke: #008d51; color: #005d26; }
+    .lini-scope-dfed4910 .lini-links .lini-hue-green { stroke: #008d51; }
+    .lini-scope-dfed4910 .lini-mindmap .lini-hue-teal { fill: #cdf9f4; stroke: #008e85; color: #005d56; }
+    .lini-scope-dfed4910 .lini-links .lini-hue-teal { stroke: #008e85; }
   </style>
   <defs>
     <path id="lini-g1500-0" d="…"/>
@@ -83,7 +82,7 @@ input_file: samples/mindmap.lini
     <path id="lini-g1600-310" d="…"/>
     <path id="lini-g1600-315" d="…"/>
   </defs>
-  <rect class="lini-canvas" x="-574.42" y="-305" width="1236.887" height="610"/>
+  <rect class="lini-canvas" x="-574.42" y="-305" width="1148.84" height="610"/>
   <g class="lini-scene">
     <g class="lini-node lini-mindmap lini-topic lini-level-0 lini-block" data-id="lini-topic-1" transform="translate(-0.7525,0)">
       <rect x="-74.4035" y="-24.5" width="148.807" height="49" rx="8" ry="8"/>
@@ -157,7 +156,7 @@ input_file: samples/mindmap.lini
             <use href="#lini-g1500-265" transform="translate(6.888 13.412) scale(0.014 -0.014)"/>
           </g>
         </g>
-        <g class="lini-node lini-topic lini-level-2 lini-hue-rose lini-block" data-id="flags" transform="translate(229.8845,49.8)">
+        <g class="lini-node lini-topic lini-level-2 lini-hue-rose lini-block" data-id="lini-topic-2" transform="translate(229.8845,49.8)">
           <rect x="-73.017" y="-24.8" width="146.034" height="49.6" rx="8" ry="8"/>
           <g class="lini-text">
             <use href="#lini-g1500-56" transform="translate(-59.017 -3.388) scale(0.014 -0.014)"/>
@@ -305,7 +304,7 @@ input_file: samples/mindmap.lini
             <use href="#lini-g1500-341" transform="translate(7.602 13.412) scale(0.014 -0.014)"/>
           </g>
         </g>
-        <g class="lini-node lini-topic lini-level-2 lini-hue-amber lini-block" data-id="interviews" transform="translate(229.8845,49.8)">
+        <g class="lini-node lini-topic lini-level-2 lini-hue-amber lini-block" data-id="lini-topic-2" transform="translate(229.8845,49.8)">
           <rect x="-64.204" y="-24.8" width="128.408" height="49.6" rx="8" ry="8"/>
           <g class="lini-text">
             <use href="#lini-g1500-137" transform="translate(-50.204 -3.388) scale(0.014 -0.014)"/>
@@ -563,7 +562,7 @@ input_file: samples/mindmap.lini
     <g class="lini-link lini-hue-rose" data-from="lini-topic-1.ship" data-to="lini-topic-1.ship.lini-topic-1">
       <path d="M 322.386 -189.4 L 324.386 -189.4 C 367.298 -189.4 351.372 -239.2 394.284 -239.2 L 396.284 -239.2"/>
     </g>
-    <g class="lini-link lini-hue-rose" data-from="lini-topic-1.ship" data-to="lini-topic-1.ship.flags">
+    <g class="lini-link lini-hue-rose" data-from="lini-topic-1.ship" data-to="lini-topic-1.ship.lini-topic-2">
       <path d="M 322.386 -189.4 L 324.386 -189.4 C 363.3733 -189.4 345.3987 -139.6 384.386 -139.6 L 386.386 -139.6"/>
     </g>
     <g class="lini-link lini-hue-orange" data-from="lini-topic-1.build" data-to="lini-topic-1.build.lini-topic-1">
@@ -575,7 +574,7 @@ input_file: samples/mindmap.lini
     <g class="lini-link lini-hue-amber" data-from="lini-topic-1.learn" data-to="lini-topic-1.learn.lini-topic-1">
       <path d="M 292.926 189.4 L 294.926 189.4 C 347.5599 189.4 335.0351 139.6 387.669 139.6 L 389.669 139.6"/>
     </g>
-    <g class="lini-link lini-hue-amber" data-from="lini-topic-1.learn" data-to="lini-topic-1.learn.interviews">
+    <g class="lini-link lini-hue-amber" data-from="lini-topic-1.learn" data-to="lini-topic-1.learn.lini-topic-2">
       <path d="M 292.926 189.4 L 294.926 189.4 C 350.0114 189.4 338.1136 239.2 393.199 239.2 L 395.199 239.2"/>
     </g>
     <g class="lini-link lini-hue-lime" data-from="lini-topic-1.plan" data-to="lini-topic-1.plan.lini-topic-1">
@@ -595,9 +594,6 @@ input_file: samples/mindmap.lini
     </g>
     <g class="lini-link lini-hue-teal" data-from="lini-topic-1.care" data-to="lini-topic-1.care.lini-topic-2">
       <path d="M -314.1635 189.4 L -316.1635 189.4 C -362.1587 189.4 -353.0068 229.4 -399.002 229.4 L -401.002 229.4"/>
-    </g>
-    <g class="lini-link lini-link-dotted" data-from="lini-topic-1.ship.flags" data-to="lini-topic-1.learn.interviews">
-      <path d="M 534.42 -139.6 L 536.42 -139.6 C 725.8713 -139.6 622.3326 239.2 527.607 239.2 L 525.607 239.2"/>
     </g>
   </g>
 </svg>
