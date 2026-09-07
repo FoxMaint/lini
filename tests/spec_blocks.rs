@@ -30,10 +30,8 @@
 //!
 //! `SKILL.md` is the agent skill and `README.md` the front door — the two
 //! documents most read and least tested, so they take the same guard. Their
-//! only standing excuses are shell transcripts, a CSS snippet, the CLI
-//! synopsis, and the pipeline arrow; every Lini example in both compiles as
-//! written, bar the icons block, which is `Wrapped` in the colour classes its
-//! prose describes.
+//! only standing excuses are shell transcripts; every Lini example in both
+//! compiles as written.
 
 use std::path::Path;
 
@@ -344,54 +342,23 @@ const SKILL_LEDGER: &[Row] = &[(
     Kind::NotLini("a shell transcript — the CLI's one-liners"),
 )];
 
-/// The `README.md` ledger — the shell transcripts, the page-side CSS, the CLI
-/// synopsis, the pipeline arrow, and one example wrapped in the classes its
-/// prose hands the reader.
+/// The `README.md` ledger — three shell transcripts. The one Lini example the
+/// front door carries is a whole file, so it compiles as written.
 const README_LEDGER: &[Row] = &[
     (
-        1,
-        "cargo install lini            # or, from a clone: cargo install --path .",
+        0,
+        "cargo install lini",
         Kind::NotLini("a shell transcript — installing"),
     ),
     (
-        2,
-        "lini diagram.lini -o diagram.svg     # compile to SVG",
+        1,
+        "lini diagram.lini -o diagram.svg   # compile to SVG",
         Kind::NotLini("a shell transcript — the CLI's one-liners"),
     ),
     (
-        6,
-        "|icon| .teal { symbol: user }                            // two-tone",
-        Kind::Wrapped(
-            "{\n  .teal { fill: --teal-wash; stroke: --teal-ink; }\n  \
-             .amber { fill: --amber-wash; stroke: --amber-ink; }\n  \
-             .purple { fill: --purple-wash; stroke: --purple-ink; }\n}\n",
-            "",
-        ),
-    ),
-    (
-        13,
-        ".lini { --lini-accent: #ff6600; }   /* recolour every diagram on the page */",
-        Kind::NotLini("page-side CSS — the host stylesheet, not the language"),
-    ),
-    (
-        14,
-        "lini [options] <input.lini>",
-        Kind::NotLini("the CLI synopsis [SPEC 20]"),
-    ),
-    (
-        15,
-        "lini serve samples/        # browse, edit, and render the bundled examples",
-        Kind::NotLini("a shell transcript — the preview server"),
-    ),
-    (
-        16,
-        "cargo test                          # full suite: unit, snapshot, routing laws",
+        3,
+        "cargo test                    # unit, snapshot, and routing-law suites",
         Kind::NotLini("a shell transcript — the contributor's gates"),
-    ),
-    (
-        17,
-        "lex → parse → desugar → resolve → layout → route → render",
-        Kind::NotLini("the compile pipeline, as one arrow [SPEC 19]"),
     ),
 ];
 
