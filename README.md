@@ -120,7 +120,7 @@ auth -> db "write"
 ## Use it in your project
 
 - **[mdbook-lini](https://github.com/monfa-red/mdbook-lini)** — ` ```lini ` fences in an mdBook, compiled to inline SVG at build time. On [crates.io](https://crates.io/crates/mdbook-lini).
-- **An Astro integration** — next up, not yet built.
+- **[astro-lini](https://github.com/monfa-red/astro-lini)** — the same fences in an Astro site's Markdown and MDX, with a toggle that reveals the source that drew each figure. The compiler rides along as wasm, so there is no second toolchain.
 - **Editors** — a VS Code TextMate bundle and a Zed tree-sitter extension under [`editors/`](https://github.com/monfa-red/lini/tree/main/editors), installable from the repo. Their word lists are generated from the compiler's own tables, so a new property highlights the day it lands.
 - **As a library** — `lini` is a crate as well as a binary: [docs.rs/lini](https://docs.rs/lini).
 
