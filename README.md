@@ -16,7 +16,7 @@
 <h3 align="center"><a href="https://lini.rs">lini.rs</a> — the tour, the reference, the gallery, and the compiler in your browser</h3>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/monfa-red/lini/main/assets/hero.svg" alt="A colourful service map rendered by Lini" width="440">
+  <a href="https://lini.rs"><img src="https://raw.githubusercontent.com/monfa-red/lini/main/assets/hero.svg" alt="A colourful service map rendered by Lini" width="440"></a>
 </p>
 
 <p align="center"><em>Thirty-odd lines of Lini — <a href="https://github.com/monfa-red/lini/blob/main/samples/hero.lini"><code>samples/hero.lini</code></a>.</em></p>
