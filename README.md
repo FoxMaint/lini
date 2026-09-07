@@ -40,42 +40,42 @@ A compiler: plain text in, clean themeable SVG out. You say where things go, and
 <table>
   <tr>
     <td width="50%" align="center" valign="top">
-      <img width="100%" src="https://raw.githubusercontent.com/monfa-red/lini/main/assets/floorplan.svg" alt="A one-bedroom condo floor plan: poché walls, doors with swing arcs, windows, true-size furniture, room labels, and clear-span dimensions"><br>
-      <sub><b>Floor plans</b> — walls, swings, fixtures at true size, clear spans</sub>
+      <sub><b>Charts</b></sub><br>
+      <img width="100%" src="https://raw.githubusercontent.com/monfa-red/lini/main/assets/charts.svg" alt="Six charts: stacked bars, grouped bars, a step-and-line plot, a banded area, a radar, and a donut">
     </td>
     <td width="50%" align="center" valign="top">
-      <img width="100%" src="https://raw.githubusercontent.com/monfa-red/lini/main/assets/charts.svg" alt="Six charts: stacked bars, grouped bars, a step-and-line plot, a banded area, a radar, and a donut"><br>
-      <sub><b>Charts</b> — bar, line, area, radar, pie, plotted from data</sub>
-    </td>
-  </tr>
-  <tr>
-    <td width="50%" align="center" valign="top">
-      <img width="100%" src="https://raw.githubusercontent.com/monfa-red/lini/main/assets/drawing_sheet.svg" alt="An engineering drawing of a DIN 912 socket cap screw on an ISO sheet: two views sharing an axis, a thread callout, hidden lines, dimensions, and a title block"><br>
-      <sub><b>Engineering drawings</b> — every dimension measured from the geometry</sub>
-    </td>
-    <td width="50%" align="center" valign="top">
-      <img width="100%" src="https://raw.githubusercontent.com/monfa-red/lini/main/assets/mindmap.svg" alt="A mindmap: a centred root with six colour-tinted branches on smooth curves"><br>
-      <sub><b>Mindmaps &amp; trees</b> — nesting is the hierarchy, branches drawn for you</sub>
+      <sub><b>ER schemas</b></sub><br>
+      <img width="100%" src="https://raw.githubusercontent.com/monfa-red/lini/main/assets/entity_hero.svg" alt="An e-commerce ER schema: six entity cards wired with crow's-foot cardinality">
     </td>
   </tr>
   <tr>
     <td width="50%" align="center" valign="top">
-      <img width="100%" src="https://raw.githubusercontent.com/monfa-red/lini/main/assets/schematic_hero.svg" alt="A circuit schematic on an ISO A4 sheet: six captioned regions, an STM32 and an RS-485 transceiver with numbered pins, discretes, net labels, connectors, and a title block"><br>
-      <sub><b>Circuit schematics</b> — parts placed, wires routed, junctions dotted</sub>
+      <sub><b>Sequence diagrams</b></sub><br>
+      <img width="100%" src="https://raw.githubusercontent.com/monfa-red/lini/main/assets/sequence.svg" alt="A sequence diagram of a checkout flow with activation bars, a loop frame, a self-message, and an async message">
     </td>
     <td width="50%" align="center" valign="top">
-      <img width="100%" src="https://raw.githubusercontent.com/monfa-red/lini/main/assets/sequence.svg" alt="A sequence diagram of a checkout flow with activation bars, a loop frame, a self-message, and an async message"><br>
-      <sub><b>Sequence diagrams</b> — messages in the order you write them</sub>
+      <sub><b>Mindmaps &amp; trees</b></sub><br>
+      <img width="100%" src="https://raw.githubusercontent.com/monfa-red/lini/main/assets/mindmap.svg" alt="A mindmap: a centred root with six colour-tinted branches on smooth curves">
     </td>
   </tr>
   <tr>
     <td width="50%" align="center" valign="top">
-      <img width="100%" src="https://raw.githubusercontent.com/monfa-red/lini/main/assets/entity_hero.svg" alt="An e-commerce ER schema: six entity cards wired with crow's-foot cardinality"><br>
-      <sub><b>ER schemas</b> — entity cards and crow's-foot cardinality</sub>
+      <sub><b>Circuit schematics</b></sub><br>
+      <img width="100%" src="https://raw.githubusercontent.com/monfa-red/lini/main/assets/schematic_hero.svg" alt="A circuit schematic on an ISO A4 sheet: six captioned regions, an STM32 and an RS-485 transceiver with numbered pins, discretes, net labels, connectors, and a title block">
     </td>
     <td width="50%" align="center" valign="top">
-      <img width="100%" src="https://raw.githubusercontent.com/monfa-red/lini/main/assets/icons.svg" alt="Built-in Phosphor icons in several treatments, and labelled signs wired into a flow"><br>
-      <sub><b>Icons &amp; signs</b> — Phosphor inline, no icon font, no fetches</sub>
+      <sub><b>Engineering drawings</b></sub><br>
+      <img width="100%" src="https://raw.githubusercontent.com/monfa-red/lini/main/assets/drawing_sheet.svg" alt="An engineering drawing of a DIN 912 socket cap screw on an ISO sheet: two views sharing an axis, a thread callout, hidden lines, dimensions, and a title block">
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top">
+      <sub><b>Floor plans</b></sub><br>
+      <img width="100%" src="https://raw.githubusercontent.com/monfa-red/lini/main/assets/floorplan.svg" alt="A one-bedroom condo floor plan: poché walls, doors with swing arcs, windows, true-size furniture, room labels, and clear-span dimensions">
+    </td>
+    <td width="50%" align="center" valign="top">
+      <sub><b>Icons &amp; signs</b></sub><br>
+      <img width="100%" src="https://raw.githubusercontent.com/monfa-red/lini/main/assets/icons.svg" alt="Built-in Phosphor icons in several treatments, and labelled signs wired into a flow">
     </td>
   </tr>
 </table>
