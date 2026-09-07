@@ -67,12 +67,22 @@ pub fn format(src: &str) -> Result<String, JsError> {
 /// prints, from the same scanner the VS Code and Zed grammars take their words
 /// from [SPEC 22]. Never throws: highlighting is lexical, so a file
 /// mid-keystroke still colours, which is exactly what a live editor wants.
-///
-/// The palette those spans wear is static, so it has no export here — a page
-/// ships `lini highlight --css` at build time [SPEC 20].
 #[wasm_bindgen]
 pub fn highlight(src: &str) -> String {
     lini::highlight_html(src)
+}
+
+/// The stylesheet [`highlight`]'s markup wears — what `lini highlight --css`
+/// prints [SPEC 18/20].
+///
+/// A host with no `lini` binary beside it — a bundler plugin, an Astro or
+/// Docusaurus integration — has no other way to reach the palette, and a copy
+/// kept in its own tree goes monochrome the day the scanner names a class this
+/// sheet does not paint. Shipping it from the module ties the two to one
+/// engine, exactly as [`highlight`] and the grammars already are.
+#[wasm_bindgen]
+pub fn highlight_css() -> String {
+    lini::highlight_css()
 }
 
 /// The compiler's version, so a page can show which engine it is running.

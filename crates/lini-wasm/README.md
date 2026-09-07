@@ -59,9 +59,10 @@ await init("https://esm.sh/lini-wasm/lini_wasm_bg.wasm");
 | `desugar(src)` | the source with all sugar lowered to primitives |
 | `format(src)` | canonical formatting, what `lini fmt` writes |
 | `highlight(src)` | the source as `<span class="lini-tok-…">` HTML |
+| `highlight_css()` | the palette those spans wear, ready to ship beside them |
 | `version()` | the engine's version |
 
-Everything but `diagnostics` and `highlight` throws on an error-level
+Everything but `diagnostics`, `highlight` and `highlight_css` throws on an error-level
 diagnostic, with the compiler's own `play.lini:3:5: error: …` message as the
 thrown value. TypeScript declarations ship with both builds.
 
