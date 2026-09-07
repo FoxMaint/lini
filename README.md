@@ -52,8 +52,8 @@ A compiler: plain text in, clean themeable SVG out. You say where things go, and
       <img width="100%" src="https://raw.githubusercontent.com/monfa-red/lini/main/assets/sequence.svg" alt="A sequence diagram of a checkout flow with activation bars, a loop frame, a self-message, and an async message">
     </td>
     <td width="50%" align="center" valign="top">
-      <sub><b>Mindmaps &amp; trees</b></sub><br>
-      <img width="100%" src="https://raw.githubusercontent.com/monfa-red/lini/main/assets/mindmap.svg" alt="A mindmap: a centred root with six colour-tinted branches on smooth curves">
+      <sub><b>Icons &amp; signs</b></sub><br>
+      <img width="100%" src="https://raw.githubusercontent.com/monfa-red/lini/main/assets/icons.svg" alt="Built-in Phosphor icons in several treatments, and labelled signs wired into a flow">
     </td>
   </tr>
   <tr>
@@ -72,8 +72,8 @@ A compiler: plain text in, clean themeable SVG out. You say where things go, and
       <img width="100%" src="https://raw.githubusercontent.com/monfa-red/lini/main/assets/floorplan.svg" alt="A one-bedroom condo floor plan: poché walls, doors with swing arcs, windows, true-size furniture, room labels, and clear-span dimensions">
     </td>
     <td width="50%" align="center" valign="top">
-      <sub><b>Icons &amp; signs</b></sub><br>
-      <img width="100%" src="https://raw.githubusercontent.com/monfa-red/lini/main/assets/icons.svg" alt="Built-in Phosphor icons in several treatments, and labelled signs wired into a flow">
+      <sub><b>Mindmaps &amp; trees</b></sub><br>
+      <img width="100%" src="https://raw.githubusercontent.com/monfa-red/lini/main/assets/mindmap.svg" alt="A mindmap: a centred root with six colour-tinted branches on smooth curves">
     </td>
   </tr>
 </table>
