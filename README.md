@@ -13,9 +13,7 @@
   <a href="https://github.com/monfa-red/lini/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="license: MIT"></a>
 </p>
 
-<h3 align="center"><a href="https://lini.rs">lini.rs</a></h3>
-
-<p align="center">The tour, the full reference, the gallery, and the compiler running in your browser.</p>
+<h3 align="center"><a href="https://lini.rs">lini.rs</a> — the tour, the reference, the gallery, and the compiler in your browser</h3>
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/monfa-red/lini/main/assets/hero.svg" alt="A colourful service map rendered by Lini" width="440">
