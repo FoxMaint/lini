@@ -82,6 +82,17 @@ A compiler: plain text in, clean themeable SVG out. You say where things go, and
 
 More, with their source, at [lini.rs/gallery](https://lini.rs/gallery/).
 
+## Colour
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/monfa-red/lini/main/assets/palette.png" alt="Lini's eleven hues in five tiers — wash, soft, base, deep, ink — in light mode" width="340">
+  <img src="https://raw.githubusercontent.com/monfa-red/lini/main/assets/palette-dark.png" alt="The same palette in dark mode: the tiers flip, but ink stays the high-contrast tone" width="340">
+</p>
+
+<p align="center"><em>One file, both modes — <a href="https://github.com/monfa-red/lini/blob/main/samples/palette.lini"><code>samples/palette.lini</code></a>.</em></p>
+
+Eleven named hues — `red rose orange amber lime green teal sky blue purple gray` — each in five **job-named** tiers: `wash` for backgrounds, `soft`, the bare name, `deep` for strokes, `ink` for text. The names hold across the flip — `--teal-ink` is the high-contrast tone in *both* modes, where a `light`/`dark` name would invert — which is what lets one export serve both. OKLCH underneath, so every ramp is perceptually even, and `gradient(--rose, --sky)` blends any two at a flattering angle.
+
 ## Install
 
 ```bash
