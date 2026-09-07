@@ -388,7 +388,7 @@ A CI drift test regenerates all three grammars and asserts byte-equality, and ho
 
 Every layout lowers to the same primitives, so theming, baking, and diffing work everywhere. The formatter, dev server, schema, and structured diagnostics ship in the one binary.
 
-Around it: [lini.rs](https://lini.rs) is the site — a fourteen-page tour, the reference split from `SPEC.md`, and the compiler running in the browser at [lini.rs/play](https://lini.rs/play/). [mdbook-lini](https://github.com/monfa-red/mdbook-lini) puts ` ```lini ` fences in an mdbook, and [mdbook-ramjet](https://github.com/monfa-red/mdbook-ramjet) is the theme those books, and lini.rs's own, are set in.
+Around it: [lini.rs](https://lini.rs) is the site — a fourteen-page tour, the reference split from `SPEC.md`, and the compiler running in the browser at [lini.rs/play](https://lini.rs/play/). [mdbook-lini](https://github.com/monfa-red/mdbook-lini) puts ` ```lini ` fences in an mdbook.
 
 ---
 

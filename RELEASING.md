@@ -1,13 +1,14 @@
 # Releasing
 
-Four repositories ship as one product, and they are not independent:
+Several repositories ship as one product, and they are not independent:
 
 ```
 lini              the compiler and the language        crates.io
   ├─ mdbook-lini  links lini as a library              crates.io
-  ├─ mdbook-ramjet  the book theme                     git only
-  └─ lini-website   lini.rs — builds against all three git only, deployed
+  └─ lini-website   lini.rs — builds against the rest  deployed
 ```
+
+The site also builds against a book theme checked out beside these.
 
 `lini-website` builds the book with **the sibling checkouts**, never with what
 crates.io last published, so a fix landed this morning is on the site this
