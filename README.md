@@ -120,7 +120,8 @@ auth -> db "write"
 ## Use it in your project
 
 - **[mdbook-lini](https://github.com/monfa-red/mdbook-lini)** — ` ```lini ` fences in an mdBook, compiled to inline SVG at build time. On [crates.io](https://crates.io/crates/mdbook-lini).
-- **[astro-lini](https://github.com/monfa-red/astro-lini)** — the same fences in an Astro site's Markdown and MDX, with a toggle that reveals the source that drew each figure. The compiler rides along as wasm, so there is no second toolchain.
+- **[astro-lini](https://github.com/monfa-red/astro-lini)** — the same fences in an Astro site's Markdown and MDX, with a toggle that reveals the source that drew each figure. On [npm](https://www.npmjs.com/package/astro-lini): `npm install astro-lini`.
+- **[lini-wasm](https://www.npmjs.com/package/lini-wasm)** — the compiler itself, for JavaScript. One package, two builds, so it runs in Node, Bun, Deno, a bundler or a browser. This is what `astro-lini` rides on, and what to reach for to build an integration of your own.
 - **Editors** — a VS Code TextMate bundle and a Zed tree-sitter extension under [`editors/`](https://github.com/monfa-red/lini/tree/main/editors), installable from the repo. Their word lists are generated from the compiler's own tables, so a new property highlights the day it lands.
 - **As a library** — `lini` is a crate as well as a binary: [docs.rs/lini](https://docs.rs/lini).
 
