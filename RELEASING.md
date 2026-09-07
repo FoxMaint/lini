@@ -4,6 +4,7 @@ Several repositories ship as one product, and they are not independent:
 
 ```
 lini              the compiler and the language        crates.io
+  ├─ lini-wasm    the same compiler, for JavaScript    npm
   ├─ mdbook-lini  links lini as a library              crates.io
   └─ lini-website   lini.rs — builds against the rest  deployed
 ```
@@ -17,10 +18,15 @@ the one trap worth knowing.
 
 ## The order
 
-1. **lini** — bump, tag, publish, write the release note.
-2. **mdbook-lini** — bump, publish. Its `lini = "1.x"` picks up the new
+1. **lini** — bump, tag, publish, write the release note. The bump lands in
+   `Cargo.toml` *and* `crates/lini-wasm/Cargo.toml`; `cargo xtask wasm` refuses
+   to build if the two disagree.
+2. **lini-wasm** — `cargo xtask wasm`, then `npm publish` from
+   `crates/lini-wasm/pkg`. Its version is read out of the workspace manifest,
+   so there is nothing to bump here.
+3. **mdbook-lini** — bump, publish. Its `lini = "1.x"` picks up the new
    compiler on the way past.
-3. **lini.rs** — `./deploy.sh --prod`.
+4. **lini.rs** — `./deploy.sh --prod`.
 
 `mdbook-lini` before `lini` also works, since a caret dependency resolves to
 the newest patch at install time. Doing it after means nobody installs the

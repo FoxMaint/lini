@@ -13,10 +13,12 @@ import { pathToFileURL } from "node:url";
 
 const [pkgDir, outDir, ...samples] = process.argv.slice(2);
 
+// The `web` build of the two the package ships — the one a browser and a
+// bundler resolve to, and so the one whose bytes the playground serves.
 const { default: init, compile, highlight } = await import(
-  pathToFileURL(`${pkgDir}/lini_wasm.js`).href
+  pathToFileURL(`${pkgDir}/web/lini_wasm.js`).href
 );
-await init({ module_or_path: readFileSync(`${pkgDir}/lini_wasm_bg.wasm`) });
+await init({ module_or_path: readFileSync(`${pkgDir}/web/lini_wasm_bg.wasm`) });
 
 let failed = 0;
 for (const [i, path] of samples.entries()) {

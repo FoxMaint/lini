@@ -46,7 +46,7 @@ fn wasm_matches_the_binary_on_every_sample() {
     let root = repo_root();
     let pkg = root.join("crates/lini-wasm/pkg");
 
-    if !pkg.join("lini_wasm_bg.wasm").is_file() {
+    if !pkg.join("web/lini_wasm_bg.wasm").is_file() {
         return unavailable("crates/lini-wasm/pkg is not built");
     }
     if !have("node") {
