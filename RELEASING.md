@@ -67,6 +67,17 @@ one hands people the wrong compiler too.
 
 ## Before publishing anything
 
+**Bumping the version breaks `cargo test` until you regenerate the schema.**
+`schema/lini.schema.json` and `schema/reference.md` are built from the ledger
+and carry the version, and two tests compare them byte for byte:
+
+```sh
+cargo xtask gen-schema      # after every version bump, before the commit
+```
+
+Both `Cargo.toml` and `crates/lini-wasm/Cargo.toml` carry the version, and the
+wasm xtask refuses to build if they disagree.
+
 ```sh
 cargo fmt --all -- --check
 cargo clippy --all-targets
