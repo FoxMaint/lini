@@ -20,7 +20,7 @@
     } [
       |hidden#socket| {
         // the hex socket, dashed
-        draw: move(0, 3) right(3) line(1.5, -3);
+        draw: move(0, 3.5) right(3) line(1.5, -3.5);
         mirror: x-axis;
       }
     ]
@@ -37,22 +37,17 @@
   ]
 
   |drawing#end| { scale: 2; } [
-    |oval#od| { width: 13; height: 13; }
+    |oval| { width: 13; height: 13; }
     |oval| { width: 11.4; height: 11.4; }
     // the head, end-on
-    |hex#socket| { width: 7; height: 6; }
-
-    // the socket, visible here
-    socket:left (-) socket:right
+    |hex#socket| { width: 7; height: 6; rotate: 90; }
+    // the socket, visible here — turned point-up, so the key size lies across
+    // the flats horizontally; the anchors turn with it, so the across-flats
+    // span is the rotated :top/:bottom pair
+    socket:top (-) socket:bottom
+    // → 6 — the hex key, across flats
 
   ]
-
-  // projection construction lines [SPEC 15.8]: the one legalized cross-view
-  // form — an unmarked '-' between anchors dot-pathing into different views,
-  // lowered to straight |projection| chrome after align: origin lines the
-  // datums up. They carry the head ⌀13 from the side view to the end view.
-  side.screw:head - end.od:top
-  side.screw:bottom - end.od:bottom
 
   |title-block| {
     title: "Socket cap screw"; drawing-number: "DIN 912 — M8 × 40"; revision: "A"; sheet-number: "1/1"; date: "2026-07-08"; author: "AM";

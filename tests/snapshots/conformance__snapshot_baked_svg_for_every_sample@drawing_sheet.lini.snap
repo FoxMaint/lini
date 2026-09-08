@@ -1,43 +1,43 @@
 ---
 source: tests/conformance.rs
+assertion_line: 60
 expression: svg
 input_file: samples/drawing_sheet.lini
 ---
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-420 -296 840 592" width="210mm" height="148mm" class="lini lini-scope-9a332ecd">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-420 -296 840 592" width="210mm" height="148mm" class="lini lini-scope-63666ed1">
   <style>
-    .lini-scope-9a332ecd { font-family: "Google Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-size: 15px; font-weight: 500; color: black; }
-    .lini-scope-9a332ecd .lini-canvas { fill: white; }
-    .lini-scope-9a332ecd .lini-block { fill: none; stroke: none; stroke-width: 2; stroke-dasharray: none; }
-    .lini-scope-9a332ecd .lini-oval { fill: white; stroke: #444; stroke-width: 2; stroke-dasharray: none; }
-    .lini-scope-9a332ecd .lini-hex { fill: white; stroke: #444; stroke-width: 2; stroke-dasharray: none; }
-    .lini-scope-9a332ecd .lini-poly { stroke-dasharray: none; }
-    .lini-scope-9a332ecd .lini-sketch { fill: white; stroke: black; stroke-width: 2; stroke-dasharray: none; }
-    .lini-scope-9a332ecd .lini-line { fill: none; stroke: #444; stroke-width: 2; stroke-dasharray: none; }
-    .lini-scope-9a332ecd .lini-dim-line { fill: none; stroke: black; stroke-width: 1; }
-    .lini-scope-9a332ecd .lini-ext-line { fill: none; stroke: rgba(0, 0, 0, 0.545); stroke-width: 1; }
-    .lini-scope-9a332ecd .lini-dim-text { font-size: 12px; font-weight: 400; }
-    .lini-scope-9a332ecd .lini-text { fill: currentColor; stroke: none; text-anchor: middle; }
-    .lini-scope-9a332ecd .lini-gutter { stroke: none; }
-    .lini-scope-9a332ecd .lini-cut-bg { fill: white; stroke: none; }
-    .lini-scope-9a332ecd .lini-halo { stroke: black; }
-    .lini-scope-9a332ecd .lini-box { fill: white; stroke: #444; stroke-width: 2; }
-    .lini-scope-9a332ecd .lini-group { fill: rgba(0, 0, 0, 0.03); stroke: rgba(0, 0, 0, 0.4); stroke-width: 1; stroke-dasharray: 5,4; }
-    .lini-scope-9a332ecd .lini-caption { color: rgba(0, 0, 0, 0.5); font-size: 12px; font-weight: 400; }
-    .lini-scope-9a332ecd .lini-footnote { color: rgba(0, 0, 0, 0.5); font-size: 12px; }
-    .lini-scope-9a332ecd .lini-table { fill: none; stroke: #444; stroke-width: 2; font-size: 14px; font-weight: normal; stroke-dasharray: none; }
-    .lini-scope-9a332ecd .lini-centerline { fill: none; stroke: rgba(0, 0, 0, 0.545); stroke-width: 1; stroke-dasharray: 10,3,1,3; }
-    .lini-scope-9a332ecd .lini-hidden { fill: none; stroke: black; stroke-width: 1; stroke-dasharray: 5,4; }
-    .lini-scope-9a332ecd .lini-shoulder { stroke: black; }
-    .lini-scope-9a332ecd .lini-threadline { fill: none; stroke: rgba(0, 0, 0, 0.545); stroke-width: 1; }
-    .lini-scope-9a332ecd .lini-page { fill: white; stroke-width: 0; }
-    .lini-scope-9a332ecd .lini-title-block { stroke-width: 1; font-size: 14px; font-weight: 600; }
-    .lini-scope-9a332ecd .lini-field { color: rgba(0, 0, 0, 0.5); font-size: 12px; font-weight: normal; }
-    .lini-scope-9a332ecd .lini-frame { fill: none; stroke: #444; stroke-width: 2; }
-    .lini-scope-9a332ecd .lini-zone { color: rgba(0, 0, 0, 0.545); font-size: 11px; }
-    .lini-scope-9a332ecd .lini-tick { fill: none; stroke: #444; stroke-width: 1; }
-    .lini-scope-9a332ecd .lini-projection { fill: none; stroke: rgba(0, 0, 0, 0.545); stroke-width: 1; }
-    .lini-scope-9a332ecd .lini-marker { fill: #444; stroke: none; }
-    .lini-scope-9a332ecd .lini-marker-dim { fill: black; }
+    .lini-scope-63666ed1 { font-family: "Google Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-size: 15px; font-weight: 500; color: black; }
+    .lini-scope-63666ed1 .lini-canvas { fill: white; }
+    .lini-scope-63666ed1 .lini-block { fill: none; stroke: none; stroke-width: 2; stroke-dasharray: none; }
+    .lini-scope-63666ed1 .lini-oval { fill: white; stroke: #444; stroke-width: 2; stroke-dasharray: none; }
+    .lini-scope-63666ed1 .lini-hex { fill: white; stroke: #444; stroke-width: 2; stroke-dasharray: none; }
+    .lini-scope-63666ed1 .lini-poly { stroke-dasharray: none; }
+    .lini-scope-63666ed1 .lini-sketch { fill: white; stroke: black; stroke-width: 2; stroke-dasharray: none; }
+    .lini-scope-63666ed1 .lini-line { fill: none; stroke: #444; stroke-width: 2; stroke-dasharray: none; }
+    .lini-scope-63666ed1 .lini-dim-line { fill: none; stroke: black; stroke-width: 1; }
+    .lini-scope-63666ed1 .lini-ext-line { fill: none; stroke: rgba(0, 0, 0, 0.545); stroke-width: 1; }
+    .lini-scope-63666ed1 .lini-dim-text { font-size: 12px; font-weight: 400; }
+    .lini-scope-63666ed1 .lini-text { fill: currentColor; stroke: none; text-anchor: middle; }
+    .lini-scope-63666ed1 .lini-gutter { stroke: none; }
+    .lini-scope-63666ed1 .lini-cut-bg { fill: white; stroke: none; }
+    .lini-scope-63666ed1 .lini-halo { stroke: black; }
+    .lini-scope-63666ed1 .lini-box { fill: white; stroke: #444; stroke-width: 2; }
+    .lini-scope-63666ed1 .lini-group { fill: rgba(0, 0, 0, 0.03); stroke: rgba(0, 0, 0, 0.4); stroke-width: 1; stroke-dasharray: 5,4; }
+    .lini-scope-63666ed1 .lini-caption { color: rgba(0, 0, 0, 0.5); font-size: 12px; font-weight: 400; }
+    .lini-scope-63666ed1 .lini-footnote { color: rgba(0, 0, 0, 0.5); font-size: 12px; }
+    .lini-scope-63666ed1 .lini-table { fill: none; stroke: #444; stroke-width: 2; font-size: 14px; font-weight: normal; stroke-dasharray: none; }
+    .lini-scope-63666ed1 .lini-centerline { fill: none; stroke: rgba(0, 0, 0, 0.545); stroke-width: 1; stroke-dasharray: 10,3,1,3; }
+    .lini-scope-63666ed1 .lini-hidden { fill: none; stroke: black; stroke-width: 1; stroke-dasharray: 5,4; }
+    .lini-scope-63666ed1 .lini-shoulder { stroke: black; }
+    .lini-scope-63666ed1 .lini-threadline { fill: none; stroke: rgba(0, 0, 0, 0.545); stroke-width: 1; }
+    .lini-scope-63666ed1 .lini-page { fill: white; stroke-width: 0; }
+    .lini-scope-63666ed1 .lini-title-block { stroke-width: 1; font-size: 14px; font-weight: 600; }
+    .lini-scope-63666ed1 .lini-field { color: rgba(0, 0, 0, 0.5); font-size: 12px; font-weight: normal; }
+    .lini-scope-63666ed1 .lini-frame { fill: none; stroke: #444; stroke-width: 2; }
+    .lini-scope-63666ed1 .lini-zone { color: rgba(0, 0, 0, 0.545); font-size: 11px; }
+    .lini-scope-63666ed1 .lini-tick { fill: none; stroke: #444; stroke-width: 1; }
+    .lini-scope-63666ed1 .lini-marker { fill: #444; stroke: none; }
+    .lini-scope-63666ed1 .lini-marker-dim { fill: black; }
   </style>
   <defs>
     <path id="lini-g1400-0" d="…"/>
@@ -67,7 +67,7 @@ input_file: samples/drawing_sheet.lini
     <path id="lini-g1400-1655" d="…"/>
     <path id="lini-g1400-1656" d="…"/>
     <path id="lini-g1400-1657" d="…"/>
-    <path id="lini-g1400-1659" d="…"/>
+    <path id="lini-g1400-1658" d="…"/>
     <path id="lini-g1400-1660" d="…"/>
     <path id="lini-g1400-1661" d="…"/>
     <path id="lini-g1400-1779" d="…"/>
@@ -119,7 +119,7 @@ input_file: samples/drawing_sheet.lini
         <g class="lini-node lini-sketch" data-id="screw" transform="translate(-175,15.5)">
           <path d="M 0 0 L 0 -45.6 L 6.4 -52 L 64 -52 L 64 -32 L 160 -32 L 376 -32 L 384 -24 L 384 0 L 384 24 L 376 32 L 160 32 L 64 32 L 64 52 L 6.4 52 L 0 45.6 Z" fill-rule="evenodd"/>
           <g class="lini-node lini-hidden lini-sketch" data-id="socket" transform="translate(0,0)">
-            <path d="M 0 24 L 24 24 L 36 0 L 24 -24 L 0 -24 Z" fill-rule="evenodd"/>
+            <path d="M 0 28 L 24 28 L 36 0 L 24 -28 L 0 -28 Z" fill-rule="evenodd"/>
             <g class="lini-node lini-centerline lini-line" transform="translate(0,0)">
               <line x1="-4" y1="0" x2="40" y2="0"/>
             </g>
@@ -257,34 +257,34 @@ input_file: samples/drawing_sheet.lini
       </g>
       <g class="lini-node lini-drawing lini-block" data-id="end" transform="translate(238.5,17.5)">
         <rect x="-53" y="-70.5" width="106" height="141" rx="0" ry="0"/>
-        <g class="lini-node lini-oval" data-id="od" transform="translate(0,-17.5)">
+        <g class="lini-node lini-oval" transform="translate(0,-17.5)">
           <ellipse cx="0" cy="0" rx="52" ry="52"/>
         </g>
         <g class="lini-node lini-oval" transform="translate(0,-17.5)">
           <ellipse cx="0" cy="0" rx="45.6" ry="45.6"/>
         </g>
-        <g class="lini-node lini-hex" data-id="socket" transform="translate(0,-17.5)">
+        <g class="lini-node lini-hex" data-id="socket" transform="translate(0,-17.5) rotate(90)">
           <polygon points="-28,0 -14,-24 14,-24 28,0 14,24 -14,24"/>
         </g>
         <g class="lini-node lini-ext-line lini-line" transform="translate(0,-17.5)">
-          <mask id="lini-halo-end-0" maskUnits="userSpaceOnUse" x="-29.5" y="1.5" width="3" height="88"><rect class="lini-cut-bg" x="-29.5" y="1.5" width="3" height="88"/><polyline class="lini-halo" fill="none" stroke-width="3" points="-28,32.1902 -28,39.792"/><polyline class="lini-halo" fill="none" stroke-width="3" points="-28,40.2576 -28,47.378"/></mask>
-          <line x1="-28" y1="3" x2="-28" y2="88" mask="url(#lini-halo-end-0)"/>
+          <mask id="lini-halo-end-0" maskUnits="userSpaceOnUse" x="22.5" y="1.5" width="3" height="88"><rect class="lini-cut-bg" x="22.5" y="1.5" width="3" height="88"/><polyline class="lini-halo" fill="none" stroke-width="3" points="24,35.245 24,42.3014"/><polyline class="lini-halo" fill="none" stroke-width="3" points="24,42.7485 24,49.512"/></mask>
+          <line x1="24" y1="3" x2="24" y2="88" mask="url(#lini-halo-end-0)"/>
         </g>
         <g class="lini-node lini-ext-line lini-line" transform="translate(0,-17.5)">
-          <mask id="lini-halo-end-1" maskUnits="userSpaceOnUse" x="26.5" y="1.5" width="3" height="88"><rect class="lini-cut-bg" x="26.5" y="1.5" width="3" height="88"/><polyline class="lini-halo" fill="none" stroke-width="3" points="28,32.1902 28,39.792"/><polyline class="lini-halo" fill="none" stroke-width="3" points="28,40.2576 28,47.378"/></mask>
-          <line x1="28" y1="3" x2="28" y2="88" mask="url(#lini-halo-end-1)"/>
+          <mask id="lini-halo-end-1" maskUnits="userSpaceOnUse" x="-25.5" y="1.5" width="3" height="88"><rect class="lini-cut-bg" x="-25.5" y="1.5" width="3" height="88"/><polyline class="lini-halo" fill="none" stroke-width="3" points="-24,35.245 -24,42.3014"/><polyline class="lini-halo" fill="none" stroke-width="3" points="-24,42.7485 -24,49.512"/></mask>
+          <line x1="-24" y1="3" x2="-24" y2="88" mask="url(#lini-halo-end-1)"/>
         </g>
         <g class="lini-node lini-dim-line lini-line" transform="translate(0,-17.5)">
-          <line x1="-26" y1="85" x2="26" y2="85"/>
+          <line x1="-22" y1="85" x2="22" y2="85"/>
         </g>
         <g class="lini-node lini-marker lini-marker-dim lini-poly" transform="translate(0,-17.5)">
-          <polygon points="-28,85 -16,83 -16,87"/>
+          <polygon points="-24,85 -12,83 -12,87"/>
         </g>
         <g class="lini-node lini-marker lini-marker-dim lini-poly" transform="translate(0,-17.5)">
-          <polygon points="28,85 16,87 16,83"/>
+          <polygon points="24,85 12,87 12,83"/>
         </g>
         <g class="lini-text lini-dim-text">
-          <use href="#lini-g1400-1659" transform="translate(-3.162 63.796) scale(0.012 -0.012)"/>
+          <use href="#lini-g1400-1658" transform="translate(-3.33 63.796) scale(0.012 -0.012)"/>
         </g>
       </g>
       <g class="lini-node lini-title-block lini-table lini-group lini-block" transform="translate(215.159,203.5)">
@@ -537,12 +537,6 @@ input_file: samples/drawing_sheet.lini
           <use href="#lini-g1500-27" transform="translate(-3.41 3.938) scale(0.011 -0.011)"/>
         </g>
       </g>
-    </g>
-    <g class="lini-node lini-projection lini-line" transform="translate(0,0)">
-      <line x1="-221" y1="-52" x2="238.5" y2="-52"/>
-    </g>
-    <g class="lini-node lini-projection lini-line" transform="translate(0,0)">
-      <line x1="-61" y1="52" x2="238.5" y2="52"/>
     </g>
   </g>
   <g class="lini-links"/>
