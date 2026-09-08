@@ -2036,8 +2036,9 @@ deferred; areas overlay.)
 
 **A `|bubble|` is one mark per node** — `|bubble| "Name" { at: x y; value: N; fill: … }`
 places a bubble at data point (x, y), sized by `value:`. The chart scales bubbles **by
-area** (area ∝ value); the smart label sits centred in the bubble when it fits, else on
-hover. Reach for `|bubble|` when each is a distinct labelled entity; for many uniform
+area** (area ∝ value); the smart label sits centred in the bubble when it fits
+— inside the disc inset by `clearance`, measured on the chord at the text's own
+half-height, so a name never rides the rim — else beside it, else on hover. Reach for `|bubble|` when each is a distinct labelled entity; for many uniform
 points, `|dots|` is terser.
 
 ### 14.3 Data & formulas
@@ -2109,7 +2110,7 @@ charts declare none — an axis is written only to *say* something.
 |---|---|---|
 | `side` | `bottom` · `left` · `right` · `top` | cartesian only; several on one side stack outward in **source order** |
 | `range` | `a b` (each end a number, a quoted date, or `auto`) | the data window — and crop, and reverse (below) |
-| `scale` | `linear` · `log` · `time` | `log` emits decade ticks labelled 1-2-5; its domain must be above 0. `time` reads date literals (below) |
+| `scale` | `linear` · `log` · `time` | `log` walks the decade ladder — 1-2-5 per decade, thinning to the room (below); its domain must be above 0. `time` reads date literals (below) |
 | `step` / `ticks` | number / list · calendar (time) | tick spacing, or explicit ticks; omitted → nice ticks |
 | `format` | family + args ([SPEC 17](#17-property-ledger--support)) | tick-value presentation; inherits from the chart |
 | `unit` | `"%"` | a quoted suffix appended to tick labels (and tooltips) |
@@ -2129,7 +2130,18 @@ and a second value axis adds none (avoiding moiré). The default tint is the
 (`range: 50 1` runs high→low — both scale and tick order flip). Either end may be `auto`
 (`range: 0 auto`); the two ends must be distinct ([SPEC 21](#21-errors)). Ticks are "nice" by
 default (1-2-5 × 10ⁿ); `step:` sets a spacing, `ticks:` an explicit list, `scale: log`
-decade ticks (domain above 0). Tick labels come from `categories:` (an x axis) or the
+decade ticks (domain above 0).
+
+**A log axis thins to the room it has.** 1-2-5 per decade reads over a decade
+or two and turns to mush over five, so the axis takes the **densest rung of the
+decade ladder whose ticks stand a text row apart** along its own extent: 1-2-5
+per decade, then the decades alone, then every second, third, … decade. It is
+the log twin of a linear axis's nice-step target — there the tick *count* is
+aimed at, here the ladder is fixed by the base, so what gives is which rung is
+drawn. Measured, not guessed: a tall plot keeps the dense rung where a short
+one drops to the decades, and only the drawn ticks change — the domain, the
+projection, and every datum's position are untouched. An explicit `ticks:` is
+yours and is never thinned. Tick labels come from `categories:` (an x axis) or the
 formatted tick value + `unit:` (a value axis) — `format:` sets the value's presentation
 ([SPEC 17](#17-property-ledger--support));
 `labels:` is the **series'** per-datum text ([14.3](#143-data--formulas)).
@@ -2178,7 +2190,10 @@ survives a `direction` flip unchanged:
 | `\|mark\| "safe" { at: 170 4; axis: temp; marker: none }` | a **label** only (no dot) |
 
 `at: V` (one value) is a line, `at: X Y` (two) a point; `marker: none` suppresses a point's
-dot, leaving the label — so there is no separate free-label node. Bands and marks render in
+dot, leaving the label — so there is no separate free-label node. A reference
+line's label stands **`clearance` clear of the line**, never on it
+([14.6](#146-legend-title--colour)) — beside its top end, or below it on a row
+chart's; near the plot's far edge it takes the other flank. Bands and marks render in
 `column` and `row` directions; in `radial` they are a **compile error** until built
 ([SPEC 21](#21-errors), [SPEC 24](#24-deferred)) — never a silent drop.
 

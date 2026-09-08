@@ -181,23 +181,33 @@ fn ref_line(plot: &Plot, chart: &Chart, m: &Mark, v: f64, out: &mut Vec<PlacedNo
     out.push(ln);
     if let Some(text) = &m.label {
         let color = Some(m.color.clone());
-        // The label follows the drawn line, not the axis identity: a vertical
-        // line takes it centred just inside the top — except in a row chart,
-        // where the top lane always holds the first category's bars, so it
-        // seats at the bottom end instead (the last category's, usually the
-        // shortest); a horizontal one takes it at the left end, just above
-        // (clear of the data, which usually grows rightward).
+        // The label follows the drawn line, not the axis identity, and **stands
+        // `clearance` clear of it** — never on it [SPEC 14.6]: a reference line
+        // is a drawn line like any other, and a chart's text keeps its daylight
+        // off what it labels. A vertical line takes its name beside the top end
+        // — except in a row chart, where the top lane always holds the first
+        // category's bars, so it seats at the bottom end instead (the last
+        // category's, usually the shortest); a horizontal one takes it at the
+        // left end, just above (clear of the data, which usually grows
+        // rightward).
+        let cl = chart.clearance;
         let node = if horizontal {
             let y = if plot.dir == Dir::Row {
                 plot.y1 - TEXT_SIZE * 0.9
             } else {
                 plot.y0 + TEXT_SIZE * 0.9
             };
-            text::centered(text, p, y, TEXT, color, chart.font_kind)
+            // Beside the line, on whichever flank holds the whole label; near
+            // the plot's right edge that is the left one.
+            if p + cl + text::width(text, TEXT, chart.font_kind) <= plot.x1 {
+                text::left(text, p + cl, y, TEXT, color, chart.font_kind)
+            } else {
+                text::right(text, p - cl, y, TEXT, color, chart.font_kind)
+            }
         } else {
             text::left(
                 text,
-                plot.x0 + chart.clearance,
+                plot.x0 + cl,
                 p - TEXT_SIZE * 0.6,
                 TEXT,
                 color,

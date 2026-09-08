@@ -44,12 +44,30 @@ pub(super) struct Req {
     pub inside: Option<Inside>,
 }
 
-/// A bubble's first choice [SPEC 14.8]: when the text fits within `fit` (the
-/// bubble's diameter) the label sits centred *inside*, tinted `color` (the on-fill role);
-/// otherwise it falls through to the outside seats with the request's own tint.
+/// A bubble's first choice [SPEC 14.8]: when the text fits *inside* the disc it
+/// sits centred there, tinted `color` (the on-fill role); otherwise it falls
+/// through to the outside seats with the request's own tint. The seat carries
+/// the **radius**, not a width, because the fit is a chord — see [`fits_inside`].
 pub(super) struct Inside {
-    pub fit: f64,
+    pub radius: f64,
     pub color: ResolvedValue,
+}
+
+/// Whether a `w` × `h` label sits inside a disc of `radius` with `clearance`
+/// to spare [SPEC 14.6/14.8].
+///
+/// Keeping `clearance` off the rim means sitting inside the **concentric disc**
+/// of radius `r − clearance` — the distance from a point to a circle is what it
+/// is to the centre. So the usable width is that inset disc's **chord at the
+/// text's own half-height**, never the diameter: a diameter is only available
+/// on the exact centre line, and a label has height, so testing against it
+/// seats text whose corners already cross the rim.
+fn fits_inside(w: f64, h: f64, radius: f64, clearance: f64) -> bool {
+    let (half, inset) = (h / 2.0, radius - clearance);
+    if half >= inset {
+        return false;
+    }
+    w <= 2.0 * (inset * inset - half * half).sqrt()
 }
 
 /// Append the inline-label requests a chart's series raise [SPEC 14.8]: each
@@ -130,7 +148,7 @@ pub(super) fn place(
         // first (when the text fits), then the offsets beside the point.
         let mut seats: Vec<((f64, f64), &ResolvedValue)> = Vec::new();
         if let Some(ins) = &req.inside
-            && w <= ins.fit
+            && fits_inside(w, h, ins.radius, clearance)
         {
             seats.push((req.anchor, &ins.color));
         }

@@ -54,7 +54,7 @@ pub fn lay_out(plot: &Plot, chart: &Chart, out: &mut Vec<PlacedNode>, reqs: &mut
                 color: muted(),
                 forced: b.tooltip.forced(),
                 inside: Some(labels::Inside {
-                    fit: d,
+                    radius: d / 2.0,
                     color: on_fill(),
                 }),
             });

@@ -580,6 +580,92 @@ fn a_scopes_clearance_cascades_into_its_charts() {
     );
 }
 
+/// [SPEC 14.4]: a log axis draws the densest rung of the decade ladder that
+/// fits its own extent — 1-2-5 per decade on a tall plot, the decades alone on
+/// a short one. Only the drawn ticks change; the domain does not.
+#[test]
+fn a_log_axis_thins_its_ladder_to_the_room() {
+    let ticks = |h: u32| -> Vec<String> {
+        let s = svg(&format!(
+            "|chart| {{ width: 350; height: {h}; categories: \"a\", \"b\" }} [\n  |axis| {{ side: left; scale: log }}\n  |bars| {{ data: 5, 45000 }}\n]\n"
+        ));
+        s.split("class=\"lini-text lini-chart-text\"")
+            .skip(1)
+            .filter_map(|t| t.split_once('>').and_then(|(_, r)| r.split('<').next()))
+            .filter(|t| t.chars().all(|c| c.is_ascii_digit()))
+            .map(str::to_string)
+            .collect()
+    };
+    let short = ticks(240);
+    let tall = ticks(600);
+    assert_eq!(
+        short,
+        ["1", "10", "100", "1000", "10000", "100000"],
+        "a short plot drops to the decades"
+    );
+    assert!(
+        tall.len() > short.len() && tall.contains(&"20".to_string()),
+        "a tall one keeps the 1-2-5 rung: {tall:?}"
+    );
+    // The domain is the ladder's, not the drawn ticks' — both plots span the
+    // same decades, so the bars land identically.
+    for s in [&short, &tall] {
+        assert_eq!(s.first().map(String::as_str), Some("1"), "{s:?}");
+        assert_eq!(s.last().map(String::as_str), Some("100000"), "{s:?}");
+    }
+}
+
+/// [SPEC 14.5/14.6]: a reference line's label stands `clearance` clear of the
+/// line it names, on whichever flank holds it — never centred on it, where the
+/// line would run through the glyphs.
+#[test]
+fn a_mark_label_stands_clear_of_its_own_line() {
+    let s = svg(
+        "|chart| { categories: \"a\", \"b\", \"c\" } [\n  |axis#t| { side: bottom }\n  |mark| \"GA\" { at: 1; axis: t }\n  |bars| { data: 5, 8, 6 }\n]\n",
+    );
+    // The mark's own line: the one <line> whose x1 == x2 (vertical) and which
+    // is not a gridline (gridlines take the grid tint).
+    let line_x: f64 = s
+        .match_indices("<line ")
+        .filter_map(|(i, _)| {
+            let el = &s[i..i + s[i..].find("/>")?];
+            let g = |k: &str| -> Option<f64> {
+                el.find(k)
+                    .and_then(|p| el[p + k.len() + 2..].split('"').next()?.parse().ok())
+            };
+            let (x1, x2, y1, y2) = (g(" x1")?, g(" x2")?, g(" y1")?, g(" y2")?);
+            ((x1 - x2).abs() < 0.01 && (y1 - y2).abs() > 1.0).then_some(x1)
+        })
+        .next()
+        .expect("the reference line");
+    let i = s.find(">GA</text>").expect("the mark label");
+    let head = s[..i].rfind("<text").expect("its element");
+    let k = s[head..i].find(" x=\"").expect("its x") + head + 3;
+    let text_x: f64 = s[k..].split('"').nth(1).unwrap().parse().unwrap();
+    assert!(
+        text_x > line_x + 1.0,
+        "the label sits beside the line, not on it: line {line_x}, text {text_x}"
+    );
+}
+
+/// [SPEC 14.2/14.6]: a bubble seats its label inside only when the text clears
+/// the rim — the chord of the disc inset by `clearance`, at the text's own
+/// half-height. A name as wide as the diameter does not fit.
+#[test]
+fn a_bubble_label_goes_outside_before_it_rides_the_rim() {
+    let s = svg(
+        "|chart| [\n  |axis| { side: bottom }\n  |bubble| \"Wide name here\" { at: 5 5; value: 10 }\n]\n",
+    );
+    let i = s.find(">Wide name here</text>").expect("the bubble label");
+    let head = s[..i].rfind("<text").expect("its element");
+    // An inside label wears the on-fill tint; an outside one the muted role.
+    assert!(
+        s[head..i].contains("muted"),
+        "a label wider than its disc seats outside: {}",
+        &s[head..i]
+    );
+}
+
 #[test]
 fn a_lone_space_pair_is_one_point_never_two_values() {
     // `data: 10 20` [SPEC 2]: one `x y` point — it draws a dot, not two bars.

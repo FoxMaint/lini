@@ -9,12 +9,12 @@
 // share through one stylesheet function at 60 `samples:`, and a per-band `fn:`
 // list clocked in local `u` across three |band|s.
 {
-  layout: grid; columns: repeat(2); gap: 24;
+  layout: grid; columns: repeat(2); gap: 36;
   cure(k) = (100 * (1 - exp(-x/k)));
 }
 
 |chart| "Requests by tier (req/s)" {
-  width: 350; height: 240; categories: "free", "pro", "team", "ent";
+  width: 380; height: 270; categories: "free", "pro", "team", "ent";
 } [
   |axis| { side: left; scale: log; }
   |bars| { data: 5, 80, 1200, 45000; }
@@ -24,7 +24,7 @@
 // calendar boundaries rather than on even spacings of the epoch. A dated domain
 // is a domain like any other, so a |band| spans it and a |mark| lands on it in
 // the same literals.
-|chart| "Weekly active users" { width: 350; height: 240; } [
+|chart| "Weekly active users" { width: 380; height: 270; } [
   |axis#t| { side: bottom; step: month; }
   |axis| "users" { side: left; unit: "k"; }
   |band| "beta" { range: "2026-02-15" "2026-04-01"; fill: --sky; }
@@ -38,7 +38,7 @@
 // the axis runs high→low, and the album's opening week at 62 falls outside the
 // window and is cropped to the plot.
 |chart| "Chart position" {
-  width: 350; height: 240; categories: "Jan", "Feb", "Mar", "Apr", "May", "Jun";
+  width: 380; height: 270; categories: "Jan", "Feb", "Mar", "Apr", "May", "Jun";
 } [
   |axis| "position" { side: left; range: 50 1; }
   |line| "single" { data: 44, 31, 18, 9, 12, 4; marker: circle; }
@@ -50,7 +50,7 @@
 // spoke's category. Widened here so the dual-axis titles breathe; the plot
 // gives up the room, never the label.
 |chart| "Throughput vs. error rate" {
-  width: 350; height: 240; clearance: 10;
+  width: 380; height: 270; clearance: 10;
   categories: "Mon", "Tue", "Wed", "Thu", "Fri";
 } [
   |axis#req| "requests" { side: left; unit: "/s"; }
@@ -63,7 +63,7 @@
 
 // One `cure(k)` binding, two adhesives: the same closed form sampled twice at
 // its own time constant, so the pair can never drift apart.
-|chart| "Cure strength" { width: 350; height: 240; samples: 60; } [
+|chart| "Cure strength" { width: 380; height: 270; samples: 60; } [
   |axis| "minutes" { side: bottom; range: 0 90; }
   |axis| { side: left; range: 0 100; unit: "%"; }
   |line| "epoxy" { fn: cure(18); }
@@ -73,7 +73,7 @@
 // Bands cut the domain into three segments and the series answers with a
 // per-band `fn:` list — one expression each, clocked `0 → 1` in local `u`,
 // the risers between them drawn because the jump is real.
-|chart| "Motor draw (A)" { width: 350; height: 240; } [
+|chart| "Motor draw (A)" { width: 380; height: 270; } [
   |axis| "phase" { side: bottom; }
   |axis| { side: left; }
   |band| "Close" { range: 0 1.4; fill: --sky; }

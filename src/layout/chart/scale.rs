@@ -50,6 +50,38 @@ impl Scale {
         }
     }
 
+    /// **Thin a log axis's ticks to the room it has** [SPEC 14.4]. The 1-2-5
+    /// ladder is right over a decade or two and unreadable over five — sixteen
+    /// labels at a 10px pitch on a 170px plot — so the axis takes the densest
+    /// ladder whose ticks stand at least `row` apart along its own `extent`.
+    /// This is the log twin of a linear axis's nice-step target: there, the
+    /// tick *count* is aimed at; here the ladder is fixed by the base, so what
+    /// gives is which rung of it the axis draws.
+    ///
+    /// Measured, not guessed — text is measured at compile time, so a taller
+    /// plot keeps the denser rung and a short one drops to the decades. Only
+    /// the drawn ticks change: the domain, the projection, and every datum's
+    /// position are untouched.
+    pub fn thin_log(&mut self, extent: f64, row: f64) {
+        let Scale::Log {
+            min, max, ticks, ..
+        } = self
+        else {
+            return;
+        };
+        if row <= 0.0 {
+            return;
+        }
+        let slots = (extent / row).floor().max(1.0) as usize;
+        if ticks.len() <= slots {
+            return;
+        }
+        let (min, max) = (*min, *max);
+        if let Some(fit) = ladders(min, max).find(|l| l.len() <= slots && !l.is_empty()) {
+            *ticks = fit;
+        }
+    }
+
     /// A log scale over `[min, max]` (both > 0), with decade ticks at 1-2-5 × 10ⁿ;
     /// `rev` runs it high→low ([SPEC 14.4] — a reversed `range:` flips any scale).
     pub fn log(min: f64, max: f64, rev: bool) -> Scale {
@@ -198,26 +230,50 @@ pub fn ticks_by_step(min: f64, max: f64, step: f64) -> Vec<f64> {
     out
 }
 
-/// Decade ticks for a log axis [SPEC 14.4]: 1-2-5 × 10ⁿ within `[min, max]`.
-fn decade_ticks(min: f64, max: f64) -> Vec<f64> {
-    if min <= 0.0 || max <= min {
-        return vec![min.max(1e-9), max.max(1.0)];
-    }
+/// One rung of a log axis's tick ladder [SPEC 14.4]: the `mantissas` × 10ⁿ
+/// within `[min, max]`, taking every `step`-th decade. `[1, 2, 5]` at step 1 is
+/// the dense default; the thinner rungs drop to the decades alone, then to
+/// every second, third, … decade ([`ladders`]).
+fn log_ladder(min: f64, max: f64, mantissas: &[f64], step: i32) -> Vec<f64> {
     let mut out = Vec::new();
     let lo = math::log10(min).floor() as i32;
     let hi = math::log10(max).ceil() as i32;
-    for e in lo..=hi {
+    // Count the decades from `lo` so the ladder is anchored at the domain's own
+    // floor — the same rungs whatever the window, never a phase that shifts
+    // when the data does.
+    for e in (lo..=hi).filter(|e| (e - lo).rem_euclid(step) == 0) {
         let decade = 10f64.powi(e);
-        for m in [1.0, 2.0, 5.0] {
+        for m in mantissas {
             let t = m * decade;
             if t >= min - 1e-9 && t <= max + 1e-9 {
                 out.push(t);
             }
         }
     }
+    out
+}
+
+/// The ladders a log axis may draw, densest first [SPEC 14.4] — 1-2-5 per
+/// decade, the decades alone, then every second, third, … decade. The axis
+/// takes the **first that fits its own extent** ([`Scale::thin_log`]); a domain
+/// of 20 decades on a short plot walks to the end and lands on the last.
+fn ladders(min: f64, max: f64) -> impl Iterator<Item = Vec<f64>> {
+    let dense = std::iter::once((vec![1.0, 2.0, 5.0], 1));
+    let sparse = (1..=20).map(|step| (vec![1.0], step));
+    dense
+        .chain(sparse)
+        .map(move |(m, step)| log_ladder(min, max, &m, step))
+}
+
+/// Decade ticks for a log axis [SPEC 14.4]: 1-2-5 × 10ⁿ within `[min, max]` —
+/// the densest ladder, which [`Scale::thin_log`] then thins to the room.
+fn decade_ticks(min: f64, max: f64) -> Vec<f64> {
+    if min <= 0.0 || max <= min {
+        return vec![min.max(1e-9), max.max(1.0)];
+    }
+    let out = log_ladder(min, max, &[1.0, 2.0, 5.0], 1);
     if out.is_empty() {
-        out.push(min);
-        out.push(max);
+        return vec![min, max];
     }
     out
 }

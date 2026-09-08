@@ -7,11 +7,11 @@
 // `tooltip:` forced on and held back to hover, radial |bars|, the donut's
 // `hole:`.
 {
-  layout: grid; columns: repeat(2); gap: 24;
+  layout: grid; columns: repeat(2); gap: 36;
 }
 
 |chart| "Revenue by region ($k)" {
-  width: 350; height: 240; direction: row; bars: stacked; categories: "Q1", "Q2", "Q3", "Q4";
+  width: 380; height: 270; direction: row; bars: stacked; categories: "Q1", "Q2", "Q3", "Q4";
 } [
   |bars| "NA" { data: 40, 45, 50, 60; }
   |bars| "EU" { data: 30, 35, 33, 40; }
@@ -23,7 +23,7 @@
 // the deltas ride `labels:` under `tooltip: hover` — read on the point, not
 // printed over the bars.
 |chart| "Deploy time (s)" {
-  width: 350; height: 240; bars: overlay; tooltip: hover; categories: "build", "test", "ship";
+  width: 380; height: 270; bars: overlay; tooltip: hover; categories: "build", "test", "ship";
 } [
   |bars| "v1" { data: 96, 154, 41; }
   |bars| "v2" {
@@ -33,7 +33,7 @@
 
 // `tooltip: always` forces every account's overpay onto the plot rather than
 // letting the crowded ones fall to hover — the export setting [SPEC 14.8].
-|chart| "Plan price vs. usage ($)" { width: 350; height: 240; tooltip: always; } [
+|chart| "Plan price vs. usage ($)" { width: 380; height: 270; tooltip: always; } [
   |axis| "GB transferred" { side: bottom; range: 0 40; }
   |axis| "monthly bill" { side: left; }
   |line| "list price" { data: 0 5, 10 12, 25 30, 40 30; curve: step; }
@@ -46,7 +46,7 @@
 // `baseline: 40` floats the fill on the target instead of zero, so a wet month
 // reads as area above the line and a dry one as area below it.
 |chart| "Reservoir level (m)" {
-  width: 350; height: 240; categories: "Apr", "May", "Jun", "Jul", "Aug", "Sep";
+  width: 380; height: 270; categories: "Apr", "May", "Jun", "Jul", "Aug", "Sep";
 } [
   |axis#m| { side: left; range: 20 60; }
   |mark| "target" {
@@ -56,13 +56,13 @@
 ]
 
 |chart| "Goal completion (%)" {
-  width: 350; height: 240; direction: radial; categories: "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun";
+  width: 380; height: 270; direction: radial; categories: "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun";
 } [
   |axis| { range: 0 100; step: 50; }
   |bars| "steps" { data: 80, 65, 90, 70, 95, 40, 55; }
 ]
 
-|pie| "Storage by class" { width: 350; height: 240; hole: 0.55; } [
+|pie| "Storage by class" { width: 380; height: 270; hole: 0.55; } [
   |slice| "Hot" { value: 38; }
   |slice| "Warm" { value: 27; }
   |slice| "Cold" { value: 22; }

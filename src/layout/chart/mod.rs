@@ -52,6 +52,17 @@ pub(super) fn is_chart(attrs: &AttrMap) -> bool {
     matches!(attrs.get("layout"), Some(ResolvedValue::Ident(s)) if s == "chart")
 }
 
+/// Thin every log axis's ticks to its own extent in `plot` [SPEC 14.4] — the
+/// value axes along theirs, the domain axis along the other. A tick row is one
+/// line box (`TEXT_SIZE * 1.4`), the same unit the gutters reserve.
+fn thin_log_axes(chart: &mut Chart, plot: Plot) {
+    let row = TEXT_SIZE * 1.4;
+    for axis in &mut chart.values {
+        axis.scale.thin_log(plot.value_extent(), row);
+    }
+    chart.x.scale.thin_log(plot.domain_extent(), row);
+}
+
 /// Lay a chart out into one `PlacedNode`: the chart box, carrying the lowered
 /// gridlines / series / labels / title / legend as its pre-positioned children.
 pub(super) fn layout_chart(
@@ -59,7 +70,7 @@ pub(super) fn layout_chart(
     funcs: &crate::expr::FuncTable,
     clearance: Option<f64>,
 ) -> Result<PlacedNode, Error> {
-    let chart = model::build(inst, funcs, clearance)?;
+    let mut chart = model::build(inst, funcs, clearance)?;
     // A radial (or pie) chart is square; a cartesian one is wide [SPEC 14.1].
     let square = chart.dir == Dir::Radial;
     let w = inst
@@ -70,6 +81,14 @@ pub(super) fn layout_chart(
         .attrs
         .number("height")
         .unwrap_or(if square { 280.0 } else { 220.0 });
+    // A log axis thins its ticks to the room it actually has [SPEC 14.4], so
+    // the rect is struck twice: once with the dense ladder — an upper bound on
+    // the gutters, and exact for the extent, which no value tick can move —
+    // then again once the ladders have settled and the gutter may have
+    // narrowed. Thinning only ever *frees* room, so the second rect is never
+    // tighter than the ticks it holds.
+    let dense = plot_rect(&chart, w, h);
+    thin_log_axes(&mut chart, dense);
     let plot = plot_rect(&chart, w, h);
 
     // Semantic draw order [SPEC 14.9]: gridlines/web behind, then areas, bars,

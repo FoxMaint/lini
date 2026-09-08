@@ -76,6 +76,26 @@ impl Plot {
         ((self.x0 + self.x1) / 2.0, (self.y0 + self.y1) / 2.0)
     }
 
+    /// The plot's length **along a value axis** [SPEC 14.7] — its height in a
+    /// column chart, its width in a row one, the rim radius in a radial. The
+    /// room a value axis has for its ticks ([`Scale::thin_log`]).
+    pub fn value_extent(&self) -> f64 {
+        match self.dir {
+            Dir::Row => self.w(),
+            Dir::Column => self.h(),
+            Dir::Radial => self.radius(),
+        }
+    }
+
+    /// …and along the **domain** axis — the other one.
+    pub fn domain_extent(&self) -> f64 {
+        match self.dir {
+            Dir::Row => self.h(),
+            Dir::Column => self.w(),
+            Dir::Radial => self.radius(),
+        }
+    }
+
     /// The rim radius of a radial chart (its square rect's half-side).
     pub fn radius(&self) -> f64 {
         self.w().min(self.h()) / 2.0
