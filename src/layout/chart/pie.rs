@@ -3,8 +3,8 @@
 //! Like a chart, a pie owns its subtree and lowers to primitives (`prim::wedge`), reusing
 //! the chart's box, palette, legend, and `<title>` machinery — the renderer learns nothing.
 
-use super::metrics::{LABEL_SIZE, TITLE_SIZE};
-use super::model::{Pie, Slice, fill_color, fill_outline, label_of, read_gap, tag};
+use super::metrics::{TEXT_SIZE, TITLE_SIZE};
+use super::model::{Pie, Slice, fill_color, fill_outline, label_of, read_clearance, read_gap, tag};
 use super::palette;
 use super::{chart_box, lay_out_legend, legend_reserve, title_reserve};
 use crate::error::Error;
@@ -22,8 +22,8 @@ pub fn is_pie(attrs: &AttrMap) -> bool {
 
 /// Lay a pie out into one `PlacedNode`: the chart box carrying the slice wedges, title,
 /// and legend.
-pub fn layout_pie(inst: &ResolvedInst) -> Result<PlacedNode, Error> {
-    let pie = build_pie(inst)?;
+pub fn layout_pie(inst: &ResolvedInst, clearance: Option<f64>) -> Result<PlacedNode, Error> {
+    let pie = build_pie(inst, clearance)?;
     // A pie is square [SPEC 14.1].
     let w = inst.attrs.number("width").unwrap_or(280.0);
     let h = inst.attrs.number("height").unwrap_or(280.0);
@@ -32,7 +32,7 @@ pub fn layout_pie(inst: &ResolvedInst) -> Result<PlacedNode, Error> {
     let title_h = title_reserve(pie.title.is_some(), pie.gap);
     let entries = legend_entries(&pie.slices);
     let legend_h = legend_reserve(entries.len(), pie.gap);
-    let (side, cy) = super::frame::square_inset(w, h, title_h, legend_h, 8.0);
+    let (side, cy) = super::frame::square_inset(w, h, title_h, legend_h, pie.clearance);
     let r = side / 2.0;
     let inner = pie.hole * r;
     let total: f64 = pie.slices.iter().map(|s| s.value).sum();
@@ -65,7 +65,7 @@ pub fn layout_pie(inst: &ResolvedInst) -> Result<PlacedNode, Error> {
     if entries.len() >= 2 {
         lay_out_legend(
             &entries,
-            h / 2.0 - LABEL_SIZE * 0.9,
+            h / 2.0 - TEXT_SIZE * 0.9,
             pie.font_kind,
             &mut kids,
         );
@@ -105,7 +105,7 @@ fn slice_title(s: &Slice, total: f64, fmt: format::Format) -> String {
 /// lives here; the wedge geometry is the renderer's job. Reuses the chart's `tag`,
 /// `label_of`, the `fill:` / `outline:` paint readers, and the palette walk (per
 /// slice — [SPEC 14.6]).
-pub fn build_pie(inst: &ResolvedInst) -> Result<Pie, Error> {
+pub fn build_pie(inst: &ResolvedInst, inherited_clearance: Option<f64>) -> Result<Pie, Error> {
     let span = inst.span;
     let hole = read_hole(&inst.attrs)?;
     let mut title = None;
@@ -167,6 +167,7 @@ pub fn build_pie(inst: &ResolvedInst) -> Result<Pie, Error> {
         title,
         hole,
         gap: read_gap(&inst.attrs),
+        clearance: read_clearance(&inst.attrs, inherited_clearance),
         font_kind: inst.font.kind,
         fmt,
     })

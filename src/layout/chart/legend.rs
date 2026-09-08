@@ -8,7 +8,7 @@ use super::*;
 /// ([`title_reserve`]).
 pub(super) fn legend_reserve(entries: usize, gap: f64) -> f64 {
     if entries >= 2 {
-        LABEL_SIZE * 0.7 + gap
+        TEXT_SIZE * 0.7 + gap
     } else {
         0.0
     }
@@ -66,10 +66,10 @@ pub(super) fn lay_out_legend(
     const ITEM_GAP: f64 = 16.0; // entry → entry
     let widths: Vec<f64> = entries
         .iter()
-        // Measured at the weight `prim::text(bold)` actually renders — semibold, the
-        // chart's chrome [SPEC 14.6]; measuring at bold drifts the swatches on a
-        // proportional family.
-        .map(|(l, _, _)| prim::text_width(l, LABEL_SIZE, crate::font::Font::semibold(kind)))
+        // Measured at the weight the `.lini-chart-legend` rule renders —
+        // semibold, the chart's chrome [SPEC 14.6]; `text::width` reads the
+        // role, so the measurement and the rule can never disagree.
+        .map(|(l, _, _)| text::width(l, text::LEGEND, kind))
         .collect();
     let per: f64 = widths.iter().map(|w| SW + GAP + w).sum();
     let total = per + ITEM_GAP * widths.len().saturating_sub(1) as f64;
@@ -81,14 +81,14 @@ pub(super) fn lay_out_legend(
             prim::outline(&mut swatch, edge.clone(), 1.0); // mirror the series' edge
         }
         out.push(swatch);
-        // The legend stays bold (the chart's chrome), like the title [SPEC 14.6].
-        out.push(prim::text(
+        // The legend stays semibold (the chart's chrome), like the title
+        // [SPEC 14.6] — stated by its own rule, never inline [SPEC 18].
+        out.push(text::centered(
             label,
             x + SW + GAP + tw / 2.0,
             cy,
-            LABEL_SIZE,
+            text::LEGEND,
             None,
-            true,
             kind,
         ));
         x += SW + GAP + tw + ITEM_GAP;

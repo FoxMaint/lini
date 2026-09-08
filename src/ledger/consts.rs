@@ -78,6 +78,14 @@ pub(crate) const DRAWING_LINK_FONT_SIZE: f64 = 12.0;
 /// The baked `clearance` — cascaded onto every link by the link bundle, so
 /// per-site fallbacks are unreachable; they still agree here.
 pub(crate) const DEFAULT_CLEARANCE: f64 = 16.0;
+/// The chart scope's `clearance` default [SPEC 10.5/14.6] — the daylight a
+/// chart's chrome text keeps off the thing it labels: a tick off the plot
+/// edge, an axis title off its tick row, a spoke's category off the web rim, a
+/// per-datum label off its mark. Tighter than the routing 16, because these
+/// stand off a gridline, not a body: 6 is the daylight the five hand-tuned
+/// numbers it replaces (3, 4, 6, 7, and the radial rim's font-derived offset)
+/// already averaged, now one knob a scene can widen.
+pub(crate) const CHART_CLEARANCE: f64 = 6.0;
 /// The baked root `font-size` (body text).
 pub(crate) const ROOT_FONT_SIZE: f64 = 15.0;
 /// Chrome text scales with the inherited body size [SPEC 6]: a link label

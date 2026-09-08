@@ -28,6 +28,7 @@ use super::prim;
 mod project;
 mod radial;
 mod scale;
+mod text;
 mod tint;
 mod tooltip;
 
@@ -37,7 +38,7 @@ pub(super) use pie::{is_pie, layout_pie};
 use crate::error::Error;
 use crate::layout::{Bbox, PlacedNode};
 use crate::resolve::{AttrMap, ResolvedInst, ResolvedValue};
-use metrics::{AXIS_TITLE_SIZE, LABEL_SIZE, TITLE_SIZE};
+use metrics::{TEXT_SIZE, TITLE_SIZE};
 use model::{Chart, SeriesKind, Side};
 use project::{Dir, Plot};
 
@@ -56,8 +57,9 @@ pub(super) fn is_chart(attrs: &AttrMap) -> bool {
 pub(super) fn layout_chart(
     inst: &ResolvedInst,
     funcs: &crate::expr::FuncTable,
+    clearance: Option<f64>,
 ) -> Result<PlacedNode, Error> {
-    let chart = model::build(inst, funcs)?;
+    let chart = model::build(inst, funcs, clearance)?;
     // A radial (or pie) chart is square; a cartesian one is wide [SPEC 14.1].
     let square = chart.dir == Dir::Radial;
     let w = inst
@@ -115,7 +117,7 @@ pub(super) fn layout_chart(
     if legend.len() >= 2 {
         lay_out_legend(
             &legend,
-            h / 2.0 - LABEL_SIZE * 0.9,
+            h / 2.0 - TEXT_SIZE * 0.9,
             chart.font_kind,
             &mut kids,
         );
@@ -126,7 +128,13 @@ pub(super) fn layout_chart(
     // so they sit above them and below the hover cards.
     labels::collect_series(&plot, &chart, &mut reqs);
     let lines = labels::series_lines(&plot, &chart);
-    kids.extend(labels::place(&reqs, &plot, &lines, chart.font_kind));
+    kids.extend(labels::place(
+        &reqs,
+        &plot,
+        &lines,
+        chart.clearance,
+        chart.font_kind,
+    ));
 
     let kids = tooltip::apply(kids, chart.tooltip, w, h, chart.font_kind);
     Ok(chart_box(inst, w, h, kids))

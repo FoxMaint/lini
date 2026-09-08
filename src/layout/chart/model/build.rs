@@ -13,7 +13,11 @@ type Split<'a> = (
     Option<String>,
 );
 
-pub fn build(inst: &ResolvedInst, funcs: &FuncTable) -> Result<Chart, Error> {
+pub fn build(
+    inst: &ResolvedInst,
+    funcs: &FuncTable,
+    inherited_clearance: Option<f64>,
+) -> Result<Chart, Error> {
     let span = inst.span;
     let dir = read_direction(&inst.attrs)?;
     let samples = sample_count(&inst.attrs);
@@ -182,6 +186,7 @@ pub fn build(inst: &ResolvedInst, funcs: &FuncTable) -> Result<Chart, Error> {
         bars,
         dir,
         gap: read_gap(&inst.attrs),
+        clearance: read_clearance(&inst.attrs, inherited_clearance),
         tooltip: chart_tip,
         font_kind: inst.font.kind,
         fmt: format::numeric(chart_fmt),
@@ -189,9 +194,23 @@ pub fn build(inst: &ResolvedInst, funcs: &FuncTable) -> Result<Chart, Error> {
 }
 
 /// The chart's title / legend gutter [SPEC 14.6], from the resolved `gap:` (the
-/// `.lini-chart` / `.lini-pie` class defaults it to 10, overriding the `|block|` 20).
+/// `.lini-chart` / `.lini-pie` class defaults it, overriding the `|block|` 36).
 pub(crate) fn read_gap(attrs: &AttrMap) -> f64 {
-    attrs.number("gap").unwrap_or(10.0)
+    attrs
+        .number("gap")
+        .unwrap_or(crate::ledger::defaults::CHART_GAP)
+}
+
+/// The chart's **`clearance`** [SPEC 14.6] — the daylight its chrome text keeps
+/// off what it labels. Scene config, so it cascades: the chart's own resolved
+/// value wins, else the nearest enclosing scope's (`inherited`, walked down by
+/// the layout context), else the baked chart default. A chart has no links, so
+/// this is the whole of `clearance`'s reading here.
+pub(crate) fn read_clearance(attrs: &AttrMap, inherited: Option<f64>) -> f64 {
+    attrs
+        .number("clearance")
+        .or(inherited)
+        .unwrap_or(crate::ledger::consts::CHART_CLEARANCE)
 }
 
 /// The chart's `direction` [SPEC 14.7] — its orientation / projection.

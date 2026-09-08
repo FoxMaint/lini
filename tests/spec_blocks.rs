@@ -210,43 +210,48 @@ const SPEC_LEDGER: &[Row] = &[
     ),
     (
         23,
+        "chart title 15    chart text 12 (every other string a chart draws)",
+        Kind::NotLini("the chart type scale + stand-off [SPEC 10.5]"),
+    ),
+    (
+        24,
         "dim clearance 18 (the drawing scope's link default)",
         Kind::NotLini("the drawing chrome constants [SPEC 10.5]"),
     ),
     (
-        24,
+        25,
         "schematic gap 100 (the coarse lattice — the part pitch, five fine ones; SPEC 16.1)",
         Kind::NotLini("the schematic chrome constants [SPEC 10.5]"),
     ),
     (
-        25,
+        26,
         "gap: 8;                     // a literal — bare",
         Kind::Fragment(
             "declarations shown out of their '{ }', to contrast bare values with groups",
         ),
     ),
     (
-        26,
+        27,
         "(r = 40; n = 6; 2 * pi * r / n)   // r, n are locals; the last line is the value",
         Kind::Fragment("one expression group — a value, not a statement"),
     ),
     (
-        28,
+        29,
         "|line| { points: (u*300, 20*sin(2*pi*3*u)); samples: 60 }   // a sine wave",
         Kind::Wrapped("{ wave(a, f) = (u*300, a*sin(2*pi*f*u)); }\n", ""),
     ),
     (
-        31,
+        32,
         r#"api -> db "query""#,
         Kind::Wrapped("{ layout: sequence }\n", ""),
     ),
     (
-        32,
+        33,
         r#"|line| "GLM-5.2" { data: 35 63, 42 72, 84 75; labels: "Non-Thinking", "High", "Max"; marker: circle }"#,
         Kind::Wrapped("|chart| [\n", "]\n"),
     ),
     (
-        34,
+        35,
         r#"|band| "Inject" { range: 1.4 3.1; axis: time; fill: --rose }"#,
         Kind::Wrapped(
             "|chart| [\n|axis#time| { range: 0 5 }\n|line| { data: 1, 2, 3 }\n",
@@ -254,27 +259,27 @@ const SPEC_LEDGER: &[Row] = &[
         ),
     ),
     (
-        35,
+        36,
         "--rose  --teal  --orange  --sky  --amber  --purple  --green  --blue  --lime  --gray",
         Kind::NotLini("the series palette walk, in order [SPEC 14.6]"),
     ),
     (
-        37,
+        38,
         r#"anchor = id { "." id } [ "." index ] [ ":" point ]"#,
         Kind::NotLini("the drawing anchor grammar [SPEC 15.2]"),
     ),
     (
-        38,
+        39,
         "|rect#plate| { width: 120; height: 70 } [",
         Kind::Wrapped("{ layout: drawing }\n", ""),
     ),
     (
-        40,
+        41,
         "nozzle:left || barrel:right              // abut those faces, flush",
         Kind::Fragment("four alternative mates on one pair — together they over-constrain"),
     ),
     (
-        42,
+        43,
         r#"bolt <- "THRU"                              // arrow lands on the hole's rim"#,
         Kind::Wrapped(
             "{ layout: drawing }\n\
@@ -285,47 +290,47 @@ const SPEC_LEDGER: &[Row] = &[
         ),
     ),
     (
-        43,
+        44,
         "|page| { sheet: a4 } [",
         Kind::Fragment("the two views' bodies are elided — '[ … ]'"),
     ),
     (
-        44,
+        45,
         "{ layout: drawing }",
         Kind::Fragment("the profile is elided — 'draw: …'"),
     ),
     (
-        45,
+        46,
         r#"|component#U7| "TMC2300-LA-T" ["#,
         Kind::Wrapped("{ layout: schematic }\n|C#c24|\n", ""),
     ),
     (
-        46,
+        47,
         r#"{ layout: schematic; |vm::label| { symbol: power } [ "VM" ] }"#,
         Kind::Wrapped("", "|C#c24|\n|component#U7| [ |pin#VS| ]\n"),
     ),
     (
-        47,
+        48,
         r#"<svg xmlns="http://www.w3.org/2000/svg""#,
         Kind::NotLini("the emitted SVG document [SPEC 18]"),
     ),
     (
-        48,
+        49,
         r#"<g class="lini-node lini-{type} lini-{base} lini-style-{class}""#,
         Kind::NotLini("the emitted SVG for a box [SPEC 18]"),
     ),
     (
-        49,
+        50,
         r#"<g class="lini-link lini-style-{class}" data-from="A" data-to="B">"#,
         Kind::NotLini("the emitted SVG for a link [SPEC 18]"),
     ),
     (
-        50,
+        51,
         "lini [options] <input.lini>",
         Kind::NotLini("the CLI synopsis [SPEC 20]"),
     ),
     (
-        51,
+        52,
         "file        = [ stylesheet ] { drawn }              # setup block, then drawn statements in source order",
         Kind::NotLini("the language grammar [SPEC 22]"),
     ),

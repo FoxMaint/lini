@@ -246,6 +246,11 @@ fn format_is_a_dual_channel_row() {
             .any(|o| matches!(o, Owner::Role("series") | Owner::Role("dimension")))
     );
     // has_node_owner distinguishes format (node owners) from pure config.
+    // `clearance` stays pure config even though a chart reads it as its own
+    // text stand-off [SPEC 14.6]: scene config is valid on **any** container,
+    // so the chart leg needs no owner — and adding one would flip that blanket
+    // acceptance off for every other scope that sets its own (a schematic's
+    // bundle writes `clearance: 10` on the scope node itself).
     assert!(format.has_node_owner());
     assert!(!get("clearance").unwrap().has_node_owner());
     assert!(!get("routing").unwrap().has_node_owner());

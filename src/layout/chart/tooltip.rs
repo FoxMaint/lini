@@ -47,7 +47,10 @@ pub fn hint(node: &mut PlacedNode, mode: Tooltip, text: impl FnOnce() -> String)
     }
 }
 
-const SIZE: f64 = 11.0;
+/// The card reads at the chart's one text size [SPEC 14.6] — its font stated
+/// by `.lini-chart-text` like every other chart string, so the tip inlines
+/// only its own `fill` (the card's foreground).
+use super::metrics::TEXT_SIZE as SIZE;
 const PAD: f64 = 5.0;
 const GAP: f64 = 7.0;
 
@@ -145,19 +148,18 @@ fn make_card(
     h: f64,
     kind: crate::font::Kind,
 ) -> PlacedNode {
-    let cw = prim::text_width(text, SIZE, crate::font::Font::regular(kind)) + PAD * 2.0;
+    let cw = super::text::width(text, super::text::TEXT, kind) + PAD * 2.0;
     let ch = SIZE + PAD * 2.0;
     let cx = (ax + GAP + cw / 2.0).clamp(-w / 2.0 + cw / 2.0, w / 2.0 - cw / 2.0);
     let cy = (ay - GAP - ch / 2.0).clamp(-h / 2.0 + ch / 2.0, h / 2.0 - ch / 2.0);
     let mut bg = prim::rect(cx, cy, cw, ch, ResolvedValue::live("tip-bg"), 1.0);
     prim::round(&mut bg, 3.0);
-    let txt = prim::text(
+    let txt = super::text::centered(
         text,
         cx,
         cy,
-        SIZE,
+        super::text::TEXT,
         Some(ResolvedValue::live("tip-fg")),
-        false,
         kind,
     );
     let bbox = Bbox {

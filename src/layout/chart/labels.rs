@@ -19,11 +19,14 @@ use crate::resolve::{MarkerKind, ResolvedValue};
 /// A drawn line segment (pixel space) a label should not sit on.
 type Seg = ((f64, f64), (f64, f64));
 
-/// Inline-label font size — small, in the register of a link label [SPEC 14.8].
-const SIZE: f64 = 10.0;
-/// Clearance from a point to its label box (clearing the marker), and the margin folded
-/// into a box for label-vs-label / label-vs-edge spacing.
-const GAP: f64 = 7.0;
+/// Inline labels read at the chart's one text size [SPEC 14.6/14.8], stated by
+/// the `.lini-chart-label` rule — muted, never smaller than the ticks beside
+/// them.
+use super::metrics::TEXT_SIZE as SIZE;
+use super::text::{self, LABEL};
+/// The margin folded into a label's box for label-vs-label / label-vs-edge
+/// spacing. (A label's daylight from the *mark* it names is the chart's
+/// `clearance` [SPEC 14.6], threaded in per chart.)
 const PAD: f64 = 2.0;
 
 /// One label to place [SPEC 14.8]: the point it annotates (pixels), the `radius` of
@@ -115,12 +118,13 @@ pub(super) fn place(
     reqs: &[Req],
     plot: &Plot,
     lines: &[Seg],
+    clearance: f64,
     kind: crate::font::Kind,
 ) -> Vec<PlacedNode> {
     let mut placed: Vec<Rect> = Vec::new();
     let mut out = Vec::new();
     for req in reqs {
-        let w = prim::text_width(&req.text, SIZE, crate::font::Font::regular(kind));
+        let w = text::width(&req.text, LABEL, kind);
         let h = prim::text_height(&req.text, SIZE);
         // Seats to try, in order, each with the tint it would wear: a bubble's inside seat
         // first (when the text fits), then the offsets beside the point.
@@ -130,7 +134,7 @@ pub(super) fn place(
         {
             seats.push((req.anchor, &ins.color));
         }
-        seats.extend(candidates(req.anchor, w, h, req.radius).map(|c| (c, &req.color)));
+        seats.extend(candidates(req.anchor, w, h, req.radius, clearance).map(|c| (c, &req.color)));
 
         // Pick a seat (the borrow of `placed` is confined to this block, freed before the
         // push below). Greedy: the first seat that is in-plot, clear of the placed labels,
@@ -162,17 +166,14 @@ pub(super) fn place(
             continue;
         };
         placed.push(Rect::around(center, w, h));
-        let mut t = prim::text(
+        out.push(text::centered(
             &req.text,
             center.0,
             center.1,
-            SIZE,
+            LABEL,
             Some(color),
-            false,
             kind,
-        );
-        t.type_chain.push("chart-label".to_string());
-        out.push(t);
+        ));
     }
     out
 }
@@ -180,11 +181,17 @@ pub(super) fn place(
 /// Candidate label-box centres around a point, in priority order: above first (the
 /// conventional data-label seat), then below, the sides, then the diagonals — enough
 /// freedom for the greedy pass to fan a cluster out without a solver. Each seat clears the
-/// mark's `radius` plus [`GAP`], so the label sits a constant gap off the mark's *edge*
-/// (a fat bubble pushes it far, a small dot barely).
-fn candidates((ax, ay): (f64, f64), w: f64, h: f64, radius: f64) -> [(f64, f64); 8] {
-    let dx = w / 2.0 + GAP + radius;
-    let dy = h / 2.0 + GAP + radius;
+/// mark's `radius` plus the chart's `clearance`, so the label sits that daylight off the
+/// mark's *edge* (a fat bubble pushes it far, a small dot barely) [SPEC 14.6].
+fn candidates(
+    (ax, ay): (f64, f64),
+    w: f64,
+    h: f64,
+    radius: f64,
+    clearance: f64,
+) -> [(f64, f64); 8] {
+    let dx = w / 2.0 + clearance + radius;
+    let dy = h / 2.0 + clearance + radius;
     [
         (ax, ay - dy),      // above
         (ax, ay + dy),      // below

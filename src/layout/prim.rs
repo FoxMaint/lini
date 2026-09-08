@@ -272,46 +272,6 @@ pub fn container(inst: &ResolvedInst, bbox: Bbox, children: Vec<PlacedNode>) -> 
     }
 }
 
-/// Centred text at (cx, cy) — anchor middle, the `.lini-text` default. `size` (and
-/// `bold` / `color`) ride `own_style`, so they appear in the output, overriding the
-/// chart `<g>`'s inherited root font.
-pub fn text(
-    content: &str,
-    cx: f64,
-    cy: f64,
-    size: f64,
-    color: Option<ResolvedValue>,
-    bold: bool,
-    kind: Kind,
-) -> PlacedNode {
-    let font = if bold {
-        Font::semibold(kind)
-    } else {
-        Font::regular(kind)
-    };
-    let bbox = Bbox::centered(
-        approx_width(content, font, size, 0.0),
-        approx_height(content, size, 0.0),
-    );
-    let mut n = node(NodeKind::Text, bbox);
-    n.cx = cx;
-    n.cy = cy;
-    n.label = Some(content.to_string());
-    set(&mut n, "font-size", ResolvedValue::Number(size));
-    // The diagram-wide default weight is bold (`--lini-font-weight`); a chart keeps that
-    // for the title and legend (`bold`) but states `normal` for its data text — axis
-    // ticks, tags, annotations — so the numbers and labels don't shout [SPEC 14.6].
-    set(
-        &mut n,
-        "font-weight",
-        ident(if bold { "semibold" } else { "normal" }),
-    );
-    if let Some(c) = color {
-        set(&mut n, "color", c);
-    }
-    n
-}
-
 /// Text whose size / weight come from a `.lini-{class}` **stylesheet rule** rather than
 /// inline `style=` — for a sequence message label and the like, mirroring how a link label
 /// rides `.lini-link-label`. `size` only bounds the bbox (so the engine measures the label);
@@ -368,33 +328,6 @@ pub fn text_plain(content: &str, cx: f64, cy: f64, size: f64, kind: Kind) -> Pla
     n
 }
 
-/// Text whose **right edge** sits at `right_x` (for value-axis labels): the node is
-/// anchored middle, so shift its centre left by half the measured width.
-pub fn text_right(
-    content: &str,
-    right_x: f64,
-    cy: f64,
-    size: f64,
-    color: Option<ResolvedValue>,
-    kind: Kind,
-) -> PlacedNode {
-    let cx = right_x - text_width(content, size, Font::regular(kind)) / 2.0;
-    text(content, cx, cy, size, color, false, kind)
-}
-
-/// Text whose **left edge** sits at `left_x` (for a right-side value axis).
-pub fn text_left(
-    content: &str,
-    left_x: f64,
-    cy: f64,
-    size: f64,
-    color: Option<ResolvedValue>,
-    kind: Kind,
-) -> PlacedNode {
-    let cx = left_x + text_width(content, size, Font::regular(kind)) / 2.0;
-    text(content, cx, cy, size, color, false, kind)
-}
-
 /// The drawn width of a centred label, for laying out legends and right-aligned
 /// ticks (compile-time text measurement, [SPEC 5]).
 pub fn text_width(content: &str, size: f64, font: Font) -> f64 {
@@ -432,6 +365,14 @@ pub fn round(n: &mut PlacedNode, radius: f64) {
 
 /// Set a text prop on both `attrs` (so layout measures with it) and `own_style` (so
 /// render emits it, beating the inherited `.lini` value).
+/// A classed leaf's **own** colour [SPEC 18] — the one property a chart text
+/// still states for itself (a band tick tinted its fill, a mark its stroke),
+/// its font riding the class rule. Sets the emitted `style=` too, which a bare
+/// `attrs` insert does not.
+pub fn set_color(n: &mut PlacedNode, color: ResolvedValue) {
+    set(n, "color", color);
+}
+
 fn set(n: &mut PlacedNode, name: &str, v: ResolvedValue) {
     n.attrs.insert(name, v.clone());
     n.own_style.insert(name, v);

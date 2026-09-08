@@ -234,6 +234,14 @@ pub(crate) struct Ctx {
     /// drafts, so this always implies `datum`; a plain `stack` places without
     /// it, which is what lets artwork use the pen without a sheet's apparatus.
     pub drawing: bool,
+    /// The nearest **authored** `clearance:` on the way down [SPEC 9/14.6] —
+    /// scene config reaching a layout-owning engine, the way `ratio` reaches a
+    /// view. `None` means nobody stated one, so the engine takes its own baked
+    /// default (a chart's is [`crate::ledger::consts::CHART_CLEARANCE`]).
+    /// Links read the same number through resolve's scope-link channel; this
+    /// is the layout-side leg, for the engines that consume their own links
+    /// and so never ask resolve.
+    pub clearance: Option<f64>,
 }
 
 impl Ctx {
@@ -244,6 +252,7 @@ impl Ctx {
             ratio: 1.0,
             datum: false,
             drawing: false,
+            clearance: None,
         }
     }
 }
@@ -320,6 +329,9 @@ pub(crate) fn effective_scale(
         scale: base * ratio,
         base,
         ratio,
+        // `clearance:` inherits nearest-wins, like the ratio above it: a scope
+        // that states one hands it to everything under it [SPEC 9].
+        clearance: attrs.number("clearance").or(ctx.clearance),
         ..ctx
     })
 }
@@ -518,9 +530,9 @@ fn layout_inst(
     // `points:`) and before the flow/grid path. `pattern:` still applies to
     // the finished box — it is a node property, any node [SPEC 15.4].
     let engine = if chart::is_chart(&inst.attrs) {
-        Some(chart::layout_chart(inst, funcs)?)
+        Some(chart::layout_chart(inst, funcs, ctx.clearance)?)
     } else if chart::is_pie(&inst.attrs) {
-        Some(chart::layout_pie(inst)?)
+        Some(chart::layout_pie(inst, ctx.clearance)?)
     } else if sequence::is_sequence(&inst.attrs) {
         Some(sequence::layout_node(inst, path, program)?)
     } else if tree::is_tree(&inst.attrs) {

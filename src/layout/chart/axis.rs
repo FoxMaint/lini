@@ -7,10 +7,11 @@
 //! ticks, gridlines, and titles as a column one with the two screen axes swapped
 //! [SPEC 14.7] — never a second, thinner renderer.
 
-use super::metrics::{AXIS_TITLE_SIZE, LABEL_SIZE};
+use super::metrics::TEXT_SIZE;
 use super::model::{Chart, Grid, Side, ValueAxis};
 use super::project::{Dir, Plot};
 use super::scale::{self, Scale};
+use super::text::{self, TEXT};
 use super::tint::muted;
 use crate::layout::PlacedNode;
 use crate::layout::prim;
@@ -59,57 +60,56 @@ pub fn labels(plot: &Plot, chart: &Chart, out: &mut Vec<PlacedNode>) {
 /// which pair a direction can reach.
 fn value_labels(plot: &Plot, axis: &ValueAxis, chart: &Chart, out: &mut Vec<PlacedNode>) {
     let kind = chart.font_kind;
+    let cl = chart.clearance;
     let top = matches!(axis.side, Side::Top);
     for &t in axis.scale.ticks() {
         let p = plot.value_at(&axis.scale, t);
         let label = scale::label(&axis.scale, t, axis.fmt, &axis.unit);
         out.push(match (plot.dir, &axis.side) {
-            (Dir::Row, _) => prim::text(
+            (Dir::Row, _) => text::centered(
                 &label,
                 p,
-                edge_row(plot, top, 4.0 + LABEL_SIZE * 0.7),
-                LABEL_SIZE,
+                edge_row(plot, top, tick_row(cl)),
+                TEXT,
                 Some(muted()),
-                false,
                 kind,
             ),
-            (_, Side::Right) => {
-                prim::text_left(&label, plot.x1 + 6.0, p, LABEL_SIZE, Some(muted()), kind)
-            }
-            _ => prim::text_right(&label, plot.x0 - 6.0, p, LABEL_SIZE, Some(muted()), kind),
+            (_, Side::Right) => text::left(&label, plot.x1 + cl, p, TEXT, Some(muted()), kind),
+            _ => text::right(&label, plot.x0 - cl, p, TEXT, Some(muted()), kind),
         });
     }
     // The title sits past the ticks: outside the axis edge in a row, above the plot
-    // (aligned to its side) in a column.
+    // (aligned to its side) in a column. Either way it stands `clearance` off
+    // the ink before it — the plot edge, or the tick row [SPEC 14.6].
     if let Some(title) = &axis.title {
         out.push(match (plot.dir, &axis.side) {
-            (Dir::Row, _) => prim::text(
+            (Dir::Row, _) => text::centered(
                 title,
                 plot.center().0,
-                edge_row(plot, top, LABEL_SIZE * 1.4 + AXIS_TITLE_SIZE),
-                AXIS_TITLE_SIZE,
-                Some(muted()),
-                false,
-                kind,
-            ),
-            (_, Side::Right) => prim::text_right(
-                title,
-                plot.x1,
-                plot.y0 - 6.0,
-                AXIS_TITLE_SIZE,
+                edge_row(plot, top, tick_band(cl) + tick_row(cl)),
+                TEXT,
                 Some(muted()),
                 kind,
             ),
-            _ => prim::text_left(
-                title,
-                plot.x0,
-                plot.y0 - 6.0,
-                AXIS_TITLE_SIZE,
-                Some(muted()),
-                kind,
-            ),
+            (_, Side::Right) => {
+                text::right(title, plot.x1, plot.y0 - cl, TEXT, Some(muted()), kind)
+            }
+            _ => text::left(title, plot.x0, plot.y0 - cl, TEXT, Some(muted()), kind),
         });
     }
+}
+
+/// A tick row's **centre**, measured out from the plot edge it labels: the
+/// `clearance` daylight, then half a cap height [SPEC 14.6].
+pub(super) fn tick_row(clearance: f64) -> f64 {
+    clearance + TEXT_SIZE * 0.7
+}
+
+/// …and the whole band one occupies — the daylight plus the row's line box.
+/// The one number the placement and the plot-rect reserve ([`super::frame`])
+/// both read, so a text always lands in what was set aside for it.
+pub(super) fn tick_band(clearance: f64) -> f64 {
+    clearance + TEXT_SIZE * 1.4
 }
 
 /// The y of a text row `d` outside the plot's top or bottom edge.
@@ -121,21 +121,14 @@ fn edge_row(plot: &Plot, top: bool, d: f64) -> f64 {
 /// down its left in a row — the same texts either way ([`domain_ticks`]).
 fn domain_labels(plot: &Plot, chart: &Chart, out: &mut Vec<PlacedNode>) {
     let kind = chart.font_kind;
+    let cl = chart.clearance;
     let row = plot.dir == Dir::Row;
     for (v, label) in domain_ticks(chart) {
         let p = plot.domain_at(&chart.x.scale, v);
         out.push(if row {
-            prim::text_right(&label, plot.x0 - 6.0, p, LABEL_SIZE, Some(muted()), kind)
+            text::right(&label, plot.x0 - cl, p, TEXT, Some(muted()), kind)
         } else {
-            prim::text(
-                &label,
-                p,
-                plot.y1 + 4.0 + LABEL_SIZE * 0.7,
-                LABEL_SIZE,
-                Some(muted()),
-                false,
-                kind,
-            )
+            text::centered(&label, p, plot.y1 + tick_row(cl), TEXT, Some(muted()), kind)
         });
     }
     if let Some(t) = &chart.x.title {
@@ -143,22 +136,21 @@ fn domain_labels(plot: &Plot, chart: &Chart, out: &mut Vec<PlacedNode>) {
         // it over the plot's top-left, past whatever value band sits there — the
         // transpose of a column chart's value-axis title.
         out.push(if row {
-            prim::text_left(
+            text::left(
                 t,
                 plot.x0,
-                plot.y0 - 6.0 - super::frame::value_band(chart, true),
-                AXIS_TITLE_SIZE,
+                plot.y0 - cl - super::frame::value_band(chart, true),
+                TEXT,
                 Some(muted()),
                 kind,
             )
         } else {
-            prim::text(
+            text::centered(
                 t,
                 plot.center().0,
-                plot.y1 + LABEL_SIZE * 1.4 + super::annot::x_band_row(chart) + AXIS_TITLE_SIZE,
-                AXIS_TITLE_SIZE,
+                plot.y1 + tick_band(cl) + super::annot::x_band_row(chart) + tick_row(cl),
+                TEXT,
                 Some(muted()),
-                false,
                 kind,
             )
         });

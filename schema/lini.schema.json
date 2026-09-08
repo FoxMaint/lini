@@ -424,7 +424,7 @@
       ],
       "defaults": {
         "layout": "chart",
-        "gap": "10"
+        "gap": "15"
       }
     },
     {
@@ -436,7 +436,7 @@
       ],
       "defaults": {
         "layout": "pie",
-        "gap": "10"
+        "gap": "15"
       }
     },
     {

@@ -234,8 +234,13 @@ pub struct Chart {
     pub bars: BarMode,
     pub dir: Dir,
     /// The clear space between the plot and the title / legend outside it
-    /// [SPEC 14.6], from the resolved `gap:` (default 10 via the `.lini-chart` class).
+    /// [SPEC 14.6], from the resolved `gap:` (the `.lini-chart` class's default).
     pub gap: f64,
+    /// The daylight every chrome text keeps off the thing it labels [SPEC 14.6]
+    /// — ticks off the plot edge, an axis title off its tick row, a spoke's
+    /// category off the web rim, a per-datum label off its mark. From the
+    /// cascading `clearance:`, the chart's reading of scene config.
+    pub clearance: f64,
     /// The chart-level label presentation [SPEC 14.8], default `auto` — the hover
     /// card driver and each series' `tooltip:` fallback.
     pub tooltip: Tooltip,
@@ -265,8 +270,11 @@ pub struct Pie {
     pub title: Option<String>,
     pub hole: f64,
     /// The clear space between the pie and its title / legend [SPEC 14.6], from the
-    /// resolved `gap:` (default 10 via the `.lini-pie` class).
+    /// resolved `gap:` (the `.lini-pie` class's default).
     pub gap: f64,
+    /// The daylight its chrome text keeps off the disc [SPEC 14.6] — a pie's
+    /// leg of [`Chart::clearance`].
+    pub clearance: f64,
     /// The scope's measurement kind [SPEC 5], as on [`Chart`].
     pub font_kind: crate::font::Kind,
     /// The pie's `format:` [SPEC 17] — slice-value presentation.

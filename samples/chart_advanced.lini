@@ -4,7 +4,8 @@
 // literals, a |band| spanning dates and a |mark| landing on one — a `range:` that both crops
 // and runs high→low, two value axes sharing one plot (each with its own
 // `unit:`, the second declining gridlines so the grid stays single), `format:`
-// setting a tick's presentation, a whole-domain `fn:` in `x` that two series
+// setting a tick's presentation, a widened `clearance:` standing a chart's text
+// off what it labels, a whole-domain `fn:` in `x` that two series
 // share through one stylesheet function at 60 `samples:`, and a per-band `fn:`
 // list clocked in local `u` across three |band|s.
 {
@@ -44,8 +45,13 @@
   |line| "album" { data: 62, 48, 35, 22, 16, 11; marker: circle; }
 ]
 
+// `clearance:` is the daylight every chrome text keeps off what it labels
+// [SPEC 14.6] — the one knob behind the tick rows, the two axis titles, and a
+// spoke's category. Widened here so the dual-axis titles breathe; the plot
+// gives up the room, never the label.
 |chart| "Throughput vs. error rate" {
-  width: 350; height: 240; categories: "Mon", "Tue", "Wed", "Thu", "Fri";
+  width: 350; height: 240; clearance: 10;
+  categories: "Mon", "Tue", "Wed", "Thu", "Fri";
 } [
   |axis#req| "requests" { side: left; unit: "/s"; }
   |axis#err| "errors" {

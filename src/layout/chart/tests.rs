@@ -308,8 +308,11 @@ fn a_dated_domain_takes_bands_and_marks_in_dates() {
     let moved = attr(&late, "stroke-dasharray: 6,4.75", "x1")
         - attr(&early, "stroke-dasharray: 6,4.75", "x1");
     assert!(grew > 1.0, "a fortnight is drawn width: {grew}");
+    // Both readings come off the **emitted** SVG, whose coordinates round to 4
+    // decimals — so two differences of rounded values agree to that precision,
+    // not to the f64 the scale actually computed.
     assert!(
-        (grew - moved).abs() < 1e-6,
+        (grew - moved).abs() < 1e-3,
         "band and mark share one scale: the span grew {grew}, the line moved {moved}"
     );
 }
@@ -476,30 +479,104 @@ fn a_diamond_marker_draws_a_rhombus() {
 }
 
 #[test]
-fn data_text_is_normal_weight_chrome_is_semibold() {
-    // Chrome reads semibold [SPEC 14.6]: the title through its own
-    // `.lini-chart-title` rule (14px/600, nothing inlined), the legend inline
-    // (semibold emits as CSS 600); data text — axis ticks, labels — states
-    // `normal` so the numbers never shout.
+fn chart_text_rides_its_rules_and_never_inlines_a_font() {
+    // [SPEC 14.6/18]: a chart states its type scale in **three rules** — the
+    // title, the semibold chrome (legend), the normal data text — and no chart
+    // leaf carries a `font-size` or `font-weight` of its own, however many
+    // ticks it draws. Weight still separates chrome from data: the numbers
+    // never shout.
     let s = svg(
         "|chart| \"Cost\" { categories: \"a\", \"b\" } [\n  |bars| \"A\" { data: 5, 8 }\n  |bars| \"B\" { data: 3, 4 }\n]\n",
     );
+    for rule in [
+        " .lini-chart-title { font-size: 15px; font-weight: 600; }",
+        " .lini-chart-text { font-size: 12px; font-weight: normal; }",
+        " .lini-chart-legend { font-size: 12px; font-weight: 600; }",
+    ] {
+        assert!(s.contains(rule), "missing rule `{rule}`: {s}");
+    }
+    for (class, text) in [
+        ("lini-chart-title", ">Cost</text>"),
+        ("lini-chart-legend", ">A</text>"),
+        ("lini-chart-text", ">a</text>"),
+    ] {
+        assert!(
+            s.contains(&format!("class=\"lini-text {class}\"")) && s.contains(text),
+            "{class} wears its class: {s}"
+        );
+    }
+    // The scene's own `.lini-scope-*` rule states the body size; every other
+    // `font-size` in the document is one of the three rules above, never a
+    // `style=` on a leaf.
+    let body = &s[s.find("<g class=\"lini-scene\"").expect("the scene")..];
+    let inlined: Vec<&str> = body
+        .split("style=\"")
+        .skip(1)
+        .filter_map(|v| v.split('"').next())
+        .filter(|v| v.contains("font-"))
+        .collect();
     assert!(
-        s.contains(" .lini-chart-title { font-size: 14px; font-weight: 600; }"),
-        "title rule: {s}"
+        inlined.is_empty(),
+        "a chart leaf inlined a font: {inlined:?}"
     );
+}
+
+/// [SPEC 14.6]: `clearance` is the daylight a chart's chrome text keeps off
+/// what it labels — one knob for the whole family of stand-offs. The chart box
+/// is a fixed size, so the **plot** gives up the room: the text keeps its seat
+/// at the edge and the marks pull away from it.
+#[test]
+fn clearance_stands_a_charts_text_off_what_it_labels() {
+    // The daylight between the plot floor (its lowest gridline) and the
+    // category tick under it.
+    let standoff = |src: &str| -> f64 {
+        let s = svg(src);
+        let i = s.find(">a</text>").expect("the category tick");
+        let head = s[..i].rfind("<text").expect("its element");
+        let k = s[head..i].find(" y=\"").expect("its y") + head + 4;
+        let tick: f64 = s[k..].split('"').next().unwrap().parse().unwrap();
+        let floor = s
+            .match_indices("<line ")
+            .filter_map(|(i, _)| {
+                let el = &s[i..i + s[i..].find("/>")?];
+                let k = el.find(" y1=\"")? + 5;
+                el[k..].split('"').next()?.parse::<f64>().ok()
+            })
+            .fold(f64::MIN, f64::max);
+        tick - floor
+    };
+    let chart = |cl: u32| {
+        format!(
+            "|chart| {{ categories: \"a\", \"b\"; clearance: {cl} }} [\n  |bars| {{ data: 5, 8 }}\n]\n"
+        )
+    };
+    let (tight, airy) = (standoff(&chart(4)), standoff(&chart(24)));
     assert!(
-        s.contains("<text class=\"lini-text lini-chart-title\" x=\"0\"")
-            && s.contains(">Cost</text>"),
-        "title classed, no inline font: {s}"
+        (airy - tight - 20.0).abs() < 1.0,
+        "20 more clearance is 20 more daylight: {tight} then {airy}"
     );
+}
+
+/// `clearance` is scene config [SPEC 9], so a scope's own reaches the charts
+/// inside it — the same number its links would route at.
+#[test]
+fn a_scopes_clearance_cascades_into_its_charts() {
+    // The left gutter holds the value ticks off the plot, so it widens with the
+    // clearance whatever tier set it.
+    let tick_x = |decl: &str| -> f64 {
+        let s = svg(&format!(
+            "{{ {decl} }}\n|block| [\n  |chart| {{ categories: \"a\", \"b\" }} [ |bars| {{ data: 5, 8 }} ]\n]\n"
+        ));
+        let i = s.find(">a</text>").expect("the category tick");
+        let head = s[..i].rfind("<text").expect("its element");
+        let k = s[head..i].find(" x=\"").expect("its x") + head + 4;
+        s[k..].split('"').next().unwrap().parse().unwrap()
+    };
     assert!(
-        s.contains("font-size: 11px; font-weight: 600\">A</text>"),
-        "legend semibold: {s}"
-    );
-    assert!(
-        s.contains("font-size: 11px; font-weight: normal\">a</text>"),
-        "axis tick normal: {s}"
+        tick_x("clearance: 24;") > tick_x("") + 10.0,
+        "a root clearance reaches a nested chart: {} then {}",
+        tick_x(""),
+        tick_x("clearance: 24;")
     );
 }
 

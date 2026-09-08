@@ -96,15 +96,15 @@ fn link_targets(svg: &str) -> (Vec<&str>, Vec<&str>) {
 /// text nodes, minus the value-axis ticks (small numbers — the test data keeps
 /// its values < 1900 so year ticks stay).
 fn x_tick_texts(svg: &str) -> Vec<String> {
-    scrape_to(
-        svg,
-        "var(--lini-muted); font-size: 11px; font-weight: normal\">",
-        '<',
-    )
-    .into_iter()
-    .map(str::to_string)
-    .filter(|t| t.parse::<f64>().map(|n| n >= 1900.0).unwrap_or(true))
-    .collect()
+    // A chart's data text wears `.lini-chart-text` and inlines only its own
+    // muted fill — its font rides the rule [SPEC 14.6/18].
+    scrape_to(svg, "class=\"lini-text lini-chart-text\" x=\"", '<')
+        .into_iter()
+        // …the scrape starts at the tag's attributes, so take what follows the
+        // element's own `>`.
+        .filter_map(|t| t.rsplit_once('>').map(|(_, text)| text.to_string()))
+        .filter(|t| t.parse::<f64>().map(|n| n >= 1900.0).unwrap_or(true))
+        .collect()
 }
 
 /// Compile with local `src:` paths anchored at `samples/` (the committed

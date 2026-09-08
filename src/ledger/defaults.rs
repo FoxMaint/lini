@@ -41,6 +41,15 @@ pub(crate) const TREE_GAP_SIB: f64 = 48.0;
 /// a part column or a pin row, not a corridor between two columns.
 pub(crate) const SCH_GAP: f64 = 100.0;
 
+/// A chart's / pie's default `gap` [SPEC 14.1/14.6] — the clear space between
+/// the plot and the title / legend that sit outside it, overriding the
+/// `|block|` base `gap: 36` (a chart arranges no children, so the flow gutter
+/// means nothing here). Wider than the 10 it started at: a title reads as a
+/// caption over its plot, not a line pinned to it. The user tunes it
+/// (`gap: 0` ≈ touching); the daylight *inside* the plot — text off what it
+/// labels — is `clearance` ([`consts::CHART_CLEARANCE`]).
+pub(crate) const CHART_GAP: f64 = 15.0;
+
 /// The `|mindmap|` depth ramp + wrap cap [SPEC 8] — one obvious table, retuned
 /// by eye. The root tier rides the `.lini-mindmap` bundle (the node *is* the
 /// root topic); levels 1 and 2+ ride the generated `.lini-mindmap .lini-level-N`
@@ -299,8 +308,8 @@ pub fn template_bundle(name: &str) -> Vec<Decl> {
         // `gap` is the clear space between the plot and the title / legend that sit
         // outside it [SPEC 14.6], overriding the `|block|` base `gap: 36`; the
         // user tunes it (`gap: 0` ≈ touching).
-        "chart" => vec![id("layout", "chart"), n("gap", 10.0)],
-        "pie" => vec![id("layout", "pie"), n("gap", 10.0)],
+        "chart" => vec![id("layout", "chart"), n("gap", CHART_GAP)],
+        "pie" => vec![id("layout", "pie"), n("gap", CHART_GAP)],
         // Sequences [SPEC 13]: the layout preset + the message pitch / participant spacing
         // (`gap`, a time axis's own rhythm, not the flow gutter), plus the note / frame / separator
         // looks, all reusing scene role variables (no new ones). Participants are ordinary
@@ -1038,8 +1047,8 @@ mod tests {
     fn chart_templates_set_the_gap_and_bars_round() {
         // The chart/pie templates override the |block| base gap with the title/legend
         // gutter default; |bars| carries the default corner radius on its class.
-        assert_eq!(num(&template_bundle("chart"), "gap"), Some(10.0));
-        assert_eq!(num(&template_bundle("pie"), "gap"), Some(10.0));
+        assert_eq!(num(&template_bundle("chart"), "gap"), Some(CHART_GAP));
+        assert_eq!(num(&template_bundle("pie"), "gap"), Some(CHART_GAP));
         assert_eq!(num(&template_bundle("bars"), "radius"), Some(2.0));
     }
 

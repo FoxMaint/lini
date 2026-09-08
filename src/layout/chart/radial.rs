@@ -4,10 +4,11 @@
 //! spoke. The series reuse the cartesian builders through `Plot::project`; only these
 //! gridlines and labels are radial-specific.
 
-use super::metrics::LABEL_SIZE;
+use super::metrics::TEXT_SIZE;
 use super::model::Chart;
 use super::project::Plot;
 use super::scale::{self, Scale};
+use super::text::{self, TEXT};
 use crate::layout::PlacedNode;
 use crate::layout::prim;
 use crate::resolve::ResolvedValue;
@@ -51,7 +52,8 @@ pub fn labels(plot: &Plot, chart: &Chart, out: &mut Vec<PlacedNode>) {
     let vs = &chart.values[0].scale;
     let (cx, cy) = plot.center();
     let muted = ResolvedValue::live("muted");
-    let lr = plot.radius() + LABEL_SIZE * 0.9;
+    let cl = chart.clearance;
+    let radius = plot.radius();
     for i in 0..n {
         let label = chart
             .x
@@ -59,14 +61,26 @@ pub fn labels(plot: &Plot, chart: &Chart, out: &mut Vec<PlacedNode>) {
             .get(i)
             .cloned()
             .unwrap_or_else(|| (i + 1).to_string());
-        let (lx, ly) = crate::layout::geom::polar((cx, cy), lr, plot.spoke_angle(xs, i as f64));
-        out.push(prim::text(
+        // The label stands `clearance` off the **rim**, edge to edge — so a
+        // long name to the side clears by the same daylight as a short one on
+        // top [SPEC 14.6]. Its centre therefore sits one clearance plus its own
+        // reach along the spoke: the box's support in that direction, which for
+        // an axis-aligned rectangle is |dx|·w/2 + |dy|·h/2.
+        let (rx, ry) = crate::layout::geom::polar((cx, cy), radius, plot.spoke_angle(xs, i as f64));
+        let (dx, dy) = if radius > 0.0 {
+            ((rx - cx) / radius, (ry - cy) / radius)
+        } else {
+            (0.0, -1.0)
+        };
+        let w = text::width(&label, TEXT, chart.font_kind);
+        let h = prim::text_height(&label, TEXT_SIZE);
+        let reach = cl + dx.abs() * w / 2.0 + dy.abs() * h / 2.0;
+        out.push(text::centered(
             &label,
-            lx,
-            ly,
-            LABEL_SIZE,
+            rx + dx * reach,
+            ry + dy * reach,
+            TEXT,
             Some(muted.clone()),
-            false,
             chart.font_kind,
         ));
     }
@@ -81,11 +95,11 @@ pub fn labels(plot: &Plot, chart: &Chart, out: &mut Vec<PlacedNode>) {
             chart.values[0].fmt,
             &chart.values[0].unit,
         );
-        out.push(prim::text_left(
+        out.push(text::left(
             &label,
-            cx + 3.0,
+            cx + cl,
             cy - r,
-            LABEL_SIZE,
+            TEXT,
             Some(muted.clone()),
             chart.font_kind,
         ));

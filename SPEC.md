@@ -1406,6 +1406,14 @@ chart-plane sizes ([SPEC 14.1](#141-the-chart-plane)): a chart defaults
 **360 × 220**, a pie / radial chart a **280** square — a chart cannot size to its
 content, so these stand in for `auto`.
 
+The chart type scale and its stand-off ([SPEC 14.6](#146-legend-title--colour)):
+
+```
+chart title 15    chart text 12 (every other string a chart draws)
+chart gap 15 (the plot's gutter to its title / legend)
+chart clearance 6 (the scope's config — text off what it labels)
+```
+
 The drawing chrome ([SPEC 15](#15-drawing)) — sheet-space, never scaled:
 
 ```
@@ -1596,7 +1604,7 @@ The container property set — which engine honours which is
 `gap` is honoured everywhere but **means what the engine needs**: inter-child spacing in
 flow / grid, generation distance × sibling separation in a tree
 ([SPEC 12](#12-flow-grid-stack--tree)), the plot-to-title/legend gutter in a chart / pie
-(default 10), and the message pitch / participant spacing in a sequence (default 32); a
+(default 15), and the message pitch / participant spacing in a sequence (default 32); a
 drawing places by datum and ignores it (its mates read a scoped `gap:` of
 their own — [SPEC 15.5](#155-mates--seating)). `direction`, `align`, `justify`, and
 `gap-fill` are the **flow / grid arranger's** knobs — a `stack`, `sequence`, `chart` /
@@ -1982,7 +1990,8 @@ its frame, and the cascade styles a chart like any box.
 | `hole` | pie | `0` ≤ n < `1` — inner-radius fraction (a donut) | `0` |
 | `legend` | both | `top` · `right` · `bottom` · `none` ⌛ ([SPEC 24](#24-deferred)) — writing it is an **error** until the reader lands | auto (shown when ≥ 2 entries) — built |
 | `tooltip` | both | `none` · `hover` · `auto` · `always` ([14.8](#148-tooltips)) | `auto` |
-| `gap` | both | number — clear space between the plot and the title / legend outside it | `10` |
+| `gap` | both | number — clear space between the plot and the title / legend outside it | `15` |
+| `clearance` | both | number — the daylight every chrome text keeps off what it labels ([14.6](#146-legend-title--colour)) | `6` |
 
 `categories` sets the **x (domain) axis's** tick labels — the one form today;
 explicit per-axis tick text is deferred ([SPEC 24](#24-deferred)).
@@ -2180,10 +2189,28 @@ One smart-label rule, placed by where the label sits: on the `|chart|` / `|pie|`
 swatch **mirroring its paint** (fill and edge); on an `|axis|` → the **axis title**; on a
 `|band|` → a **tick** tinted its `fill`; on a `|mark|` → the annotation's **label**. A
 legend appears automatically at ≥ 2 entries (`legend:` is deferred —
-[SPEC 24](#24-deferred), [14.1](#141-the-chart-plane)). **`gap:`**
-sets the plot-to-title/legend clearance (default 10; `gap: 0` ≈ touching). The chart sets its
-**chrome** — title and legend — in **semibold**, while its **data text** — axis ticks, per-datum labels,
-annotation labels — stays **normal** weight, so the numbers read quietly beneath the captions.
+[SPEC 24](#24-deferred), [14.1](#141-the-chart-plane)).
+
+**Two knobs, split by which side of the plot they hold apart.** **`gap:`** is
+the gutter **outside** the plot — plot to title, plot to legend (default 15;
+`gap: 0` ≈ touching). **`clearance:`** is the daylight **around the marks** —
+every piece of chrome text off the thing it labels: a tick off the plot edge,
+an axis title off its tick row, a band's name off the row above it, a spoke's
+category off the web rim, a `|mark|`'s label off its line, a per-datum label
+off its mark, measured edge to edge on the ink. Default **6**; it is the
+ordinary cascading `clearance` ([SPEC 9](#9-links)) — a chart draws no links,
+so this is the whole of its reading here, and a scope that widens it for its
+wiring widens its charts' text too. Row-to-row stacking (a band's name under
+the ticks) is font-derived and holds; `clearance` moves each row off what it
+stands on, and the plot shrinks to make room, so nothing ever collides.
+
+The **type scale is two steps**: the title, and everything under it (ticks,
+axis titles, legend entries, band / mark labels, per-datum labels, the hover
+card) — one size, set by the chart's own rules, never inline on a leaf
+([SPEC 18](#18-svg-output)). Weight separates the two registers: the chart's
+**chrome** — title and legend — reads **semibold**, its **data text** **normal**,
+so the numbers read quietly beneath the captions. A leaf still carries what is
+its own: a band tick tinted its fill, a mark its stroke.
 
 **Colour.** Explicit `stroke:` / `fill:` wins. Otherwise series **walk the palette**
 ([SPEC 10.2](#102-the-colour-palette)) in declaration order, skipping `red` (reserved for
@@ -3995,6 +4022,7 @@ text, and box-model properties are universal to every node — the tables that f
 | `align` / `justify` | ✓ | ✓ per-column | — | ✓ᵇ | — | — | — | — |
 | `width` / `height` | ✓ (slack) | ✓ (slack) | ✓ a floor | ✓ (surplus distributed) | ✓ box size | ✓ box size | ✓ a floor | ✓ a floor |
 | `columns` / `rows` / `cell` / `span` | — | ✓ | — | — | — | — | — | ✓ `columns` + ordinal `cell` ([SPEC 16.1](#161-placement--the-lattice)) |
+| `clearance` (scene config — cascades, [SPEC 9](#9-links)) | ✓ its links | ✓ its links | ✓ its links | — (messages route `straight`) | ✓ text off what it labels | ✓ | ✓ a dimension's stand-off | ✓ its wires |
 | container paint (`fill` `stroke` `radius` `shadow` `opacity` `href`) | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 
 **✓ᵇ** — honoured on the participant / frame **boxes' own content** (they are ordinary
@@ -4144,7 +4172,7 @@ text props. Its own properties:
 
 | Property | Value | Default | Notes |
 |---|---|---|---|
-| `clearance` | number | 16 — a drawing or schematic scope seats its own ([SPEC 10.5](#105-layout-constants-baked)) | min gap from nodes and links; a dimension's packing stand-off ([SPEC 15.6](#156-dimensions)). **Scene config** — cascades. |
+| `clearance` | number | 16 — a drawing, schematic, or chart scope seats its own ([SPEC 10.5](#105-layout-constants-baked)) | min gap from nodes and links; a dimension's packing stand-off ([SPEC 15.6](#156-dimensions)); a chart's chrome text off what it labels ([SPEC 14.6](#146-legend-title--colour)). One meaning throughout — the minimum daylight a thing keeps off what it must not touch. **Scene config** — cascades. |
 | `routing` | `orthogonal` · `natural` · `straight` | `orthogonal` | wiring strategy; scene config, cascades ([ROUTING.md](ROUTING.md)). |
 | `along` | fraction list | auto | label positions along the route. |
 | `marker` · `marker-start` · `marker-end` | marker | from the operator | endpoint glyphs ([SPEC 7](#7-nodes)). |
@@ -4283,7 +4311,7 @@ families:
 |---|---|
 | core | `lini-node` · `lini-{type}` · `lini-style-{class}` · `lini-text` · `lini-canvas` · `lini-gutter` |
 | link | `lini-link` · `lini-link-label` · `lini-link-dashed` / `-dotted` · `lini-stray` · `lini-marker` + `lini-marker-{kind}` (`arrow`·`dot`·`circle`·`diamond`·`datum`·`dim`·`open`) · `lini-cut` / `lini-cut-bg` (label mask) |
-| chart | `lini-chart-title` · `lini-chart-label` · `lini-chart-tip` · `lini-tip-N` / `lini-hit-N` |
+| chart | `lini-chart-title` · `lini-chart-text` (every other chart string — ticks, axis titles, band / mark labels, the tip's) · `lini-chart-legend` · `lini-chart-label` · `lini-chart-tip` · `lini-tip-N` / `lini-hit-N` |
 | sequence | `lini-sequence-tab` · `lini-sequence-guard` · `lini-sequence-message` |
 | tree | `lini-level-N` · `lini-hue-{name}` (the mindmap walk) |
 | drawing | `lini-dim-line` (dimension / leader linework) · `lini-ext-line` (`--lini-stroke-light`) · `lini-dim-text` (annotation text at the drawing's link size, [SPEC 10.5](#105-layout-constants-baked), and the link-label weight — no annotation leaf inlines either) · `lini-dim` (the restyled `(-)` tier's compound, on dimension-owned chrome only) · `lini-frame-cell` / `lini-frame-plate` (GD&T) · `lini-plane-end` / `-shaft` / `-arrow` · `lini-drafting-glyph` · `lini-datum-frame` · `lini-halo` |

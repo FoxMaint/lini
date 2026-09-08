@@ -924,8 +924,18 @@ pub static PROPERTIES: &[Property] = &[
         No,
     ),
     // ── Links [SPEC 9] — clearance before routing (the scope-config order).
-    //    On a dimension, `clearance` is the packing stand-off minimum
-    //    [SPEC 15.6]. ──
+    //    One meaning everywhere: the **minimum daylight** a thing keeps off
+    //    what it must not touch. On a link that is the wire's gap from every
+    //    body [ROUTING]; on a dimension the packing stand-off [SPEC 15.6]; on
+    //    a chart / pie the gap between a chrome text and what it labels
+    //    [SPEC 14.6].
+    //
+    //    It stays **pure scene config** — no node owners — because it is legal
+    //    on any container: every scope may set the clearance its links route
+    //    at, and the chart's own reading rides that same blanket acceptance
+    //    ([`crate::validate`]'s inheriting channel). Giving it type owners
+    //    would flip that blanket off and reject a schematic scope's own
+    //    `clearance:`, which its bundle writes. ──
     row(
         "clearance",
         &[Link, Root, Role("dimension")],

@@ -4,11 +4,13 @@
 //! named axis through one projector (`axis_px`), so they survive a `direction` flip and
 //! lower to the same `prim::*` primitives the renderer already draws.
 
+use super::axis::tick_band;
 use super::labels;
 use super::marks::marker_diameter;
-use super::metrics::LABEL_SIZE;
+use super::metrics::TEXT_SIZE;
 use super::model::{AxisRef, Chart, Mark, MarkAt};
 use super::project::{Dir, Plot};
+use super::text::{self, TEXT};
 use super::tooltip::Tooltip;
 use crate::layout::PlacedNode;
 use crate::layout::prim;
@@ -125,25 +127,18 @@ pub fn band_ticks(plot: &Plot, chart: &Chart, out: &mut Vec<PlacedNode>) {
         // A horizontal-running axis seats its band names a row under the plot
         // (clear of the tick labels); a vertical one seats them in the left
         // gutter — whichever axis that is in this direction.
+        let cl = chart.clearance;
         let node = if runs_horizontal(plot.dir, &b.axis) {
-            prim::text(
+            text::centered(
                 label,
                 mid,
-                plot.y1 + 4.0 + LABEL_SIZE * 1.7,
-                LABEL_SIZE,
+                plot.y1 + tick_band(cl) + TEXT_SIZE * 0.7,
+                TEXT,
                 color,
-                false,
                 chart.font_kind,
             )
         } else {
-            prim::text_right(
-                label,
-                plot.x0 - 6.0,
-                mid,
-                LABEL_SIZE,
-                color,
-                chart.font_kind,
-            )
+            text::right(label, plot.x0 - cl, mid, TEXT, color, chart.font_kind)
         };
         out.push(node);
     }
@@ -158,7 +153,7 @@ pub fn x_band_row(chart: &Chart) -> f64 {
         .bands
         .iter()
         .any(|b| runs_horizontal(chart.dir, &b.axis) && b.label.is_some());
-    if labelled { LABEL_SIZE } else { 0.0 }
+    if labelled { TEXT_SIZE } else { 0.0 }
 }
 
 /// `|mark|` annotations [SPEC 14.5]: a reference line at a value, or a labelled
@@ -194,17 +189,17 @@ fn ref_line(plot: &Plot, chart: &Chart, m: &Mark, v: f64, out: &mut Vec<PlacedNo
         // (clear of the data, which usually grows rightward).
         let node = if horizontal {
             let y = if plot.dir == Dir::Row {
-                plot.y1 - LABEL_SIZE * 0.9
+                plot.y1 - TEXT_SIZE * 0.9
             } else {
-                plot.y0 + LABEL_SIZE * 0.9
+                plot.y0 + TEXT_SIZE * 0.9
             };
-            prim::text(text, p, y, LABEL_SIZE, color, false, chart.font_kind)
+            text::centered(text, p, y, TEXT, color, chart.font_kind)
         } else {
-            prim::text_left(
+            text::left(
                 text,
-                plot.x0 + 3.0,
-                p - LABEL_SIZE * 0.6,
-                LABEL_SIZE,
+                plot.x0 + chart.clearance,
+                p - TEXT_SIZE * 0.6,
+                TEXT,
                 color,
                 chart.font_kind,
             )

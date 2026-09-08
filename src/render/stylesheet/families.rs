@@ -375,6 +375,30 @@ pub(super) fn build_sequence_text_rules(rules: &mut Vec<Rule>, present: &BTreeSe
             ],
         });
     }
+    // The rest of a chart's text [SPEC 14.6/18] — one size, two weights, three
+    // rules. Every px comes off the one measured constant, so the rendered
+    // glyph and the box the engine laid out can never disagree; a leaf carries
+    // only what is its own (a band tick's tint, a mark's colour). The inline
+    // per-datum label adds `pointer-events` in [`build_marker_rules`], where
+    // the label's hover story lives.
+    for (class, present_key, weight) in [
+        ("lini-chart-text", "chart-text", "normal"),
+        ("lini-chart-label", "chart-label", "normal"),
+        ("lini-chart-legend", "chart-legend", "600"),
+    ] {
+        if present.contains(present_key) {
+            rules.push(Rule {
+                class: class.into(),
+                props: vec![
+                    (
+                        "font-size".into(),
+                        format!("{}px", num(crate::layout::chart::metrics::TEXT_SIZE)),
+                    ),
+                    ("font-weight".into(), weight.into()),
+                ],
+            });
+        }
+    }
     if present.contains("sequence-tab") {
         rules.push(Rule {
             class: "lini-sequence-tab".into(),
