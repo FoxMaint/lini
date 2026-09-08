@@ -2036,9 +2036,9 @@ deferred; areas overlay.)
 
 **A `|bubble|` is one mark per node** — `|bubble| "Name" { at: x y; value: N; fill: … }`
 places a bubble at data point (x, y), sized by `value:`. The chart scales bubbles **by
-area** (area ∝ value); the smart label sits centred in the bubble when it fits
-— inside the disc inset by `clearance`, measured on the chord at the text's own
-half-height, so a name never rides the rim — else beside it, else on hover. Reach for `|bubble|` when each is a distinct labelled entity; for many uniform
+area** (area ∝ value); the smart label sits centred in the bubble when it fits — inside
+the disc inset by `clearance`, on the chord at the text's own half-height —
+else beside it, else on hover. Reach for `|bubble|` when each is a distinct labelled entity; for many uniform
 points, `|dots|` is terser.
 
 ### 14.3 Data & formulas
@@ -2132,16 +2132,12 @@ and a second value axis adds none (avoiding moiré). The default tint is the
 default (1-2-5 × 10ⁿ); `step:` sets a spacing, `ticks:` an explicit list, `scale: log`
 decade ticks (domain above 0).
 
-**A log axis thins to the room it has.** 1-2-5 per decade reads over a decade
-or two and turns to mush over five, so the axis takes the **densest rung of the
-decade ladder whose ticks stand a text row apart** along its own extent: 1-2-5
-per decade, then the decades alone, then every second, third, … decade. It is
-the log twin of a linear axis's nice-step target — there the tick *count* is
-aimed at, here the ladder is fixed by the base, so what gives is which rung is
-drawn. Measured, not guessed: a tall plot keeps the dense rung where a short
-one drops to the decades, and only the drawn ticks change — the domain, the
-projection, and every datum's position are untouched. An explicit `ticks:` is
-yours and is never thinned. Tick labels come from `categories:` (an x axis) or the
+**A log axis thins to its room.** The decade ladder has rungs — 1-2-5 per
+decade, the decades alone, then every second, third, … decade — and the axis
+draws the **densest whose ticks stand a text row apart** along its own extent.
+Only the drawn ticks change: the domain, and so every datum's position, is the
+ladder's and not the rung's. An explicit `ticks:` is never thinned.
+Tick labels come from `categories:` (an x axis) or the
 formatted tick value + `unit:` (a value axis) — `format:` sets the value's presentation
 ([SPEC 17](#17-property-ledger--support));
 `labels:` is the **series'** per-datum text ([14.3](#143-data--formulas)).
@@ -2190,10 +2186,10 @@ survives a `direction` flip unchanged:
 | `\|mark\| "safe" { at: 170 4; axis: temp; marker: none }` | a **label** only (no dot) |
 
 `at: V` (one value) is a line, `at: X Y` (two) a point; `marker: none` suppresses a point's
-dot, leaving the label — so there is no separate free-label node. A reference
-line's label stands **`clearance` clear of the line**, never on it
-([14.6](#146-legend-title--colour)) — beside its top end, or below it on a row
-chart's; near the plot's far edge it takes the other flank. Bands and marks render in
+dot, leaving the label — so there is no separate free-label node. A reference line's
+label stands **`clearance` clear of its line**, never on it — beside the top
+end (a row chart's, the bottom), taking the other flank where the plot's edge
+is nearer ([14.6](#146-legend-title--colour)). Bands and marks render in
 `column` and `row` directions; in `radial` they are a **compile error** until built
 ([SPEC 21](#21-errors), [SPEC 24](#24-deferred)) — never a silent drop.
 
@@ -2206,26 +2202,22 @@ swatch **mirroring its paint** (fill and edge); on an `|axis|` → the **axis ti
 legend appears automatically at ≥ 2 entries (`legend:` is deferred —
 [SPEC 24](#24-deferred), [14.1](#141-the-chart-plane)).
 
-**Two knobs, split by which side of the plot they hold apart.** **`gap:`** is
-the gutter **outside** the plot — plot to title, plot to legend (default 15;
-`gap: 0` ≈ touching). **`clearance:`** is the daylight **around the marks** —
-every piece of chrome text off the thing it labels: a tick off the plot edge,
-an axis title off its tick row, a band's name off the row above it, a spoke's
-category off the web rim, a `|mark|`'s label off its line, a per-datum label
-off its mark, measured edge to edge on the ink. Default **6**; it is the
+**`gap` holds the plot off its chrome; `clearance` holds a text off what it
+labels.** `gap:` is the gutter **outside** the plot — to the title, to the
+legend. `clearance:` is the daylight **inside** it, measured
+edge to edge on the ink: a tick off the plot edge, an axis title off its tick
+row, a band's name off the row above, a spoke's category off the web rim, a
+`|mark|`'s label off its line, a per-datum label off its mark. It is the
 ordinary cascading `clearance` ([SPEC 9](#9-links)) — a chart draws no links,
-so this is the whole of its reading here, and a scope that widens it for its
-wiring widens its charts' text too. Row-to-row stacking (a band's name under
-the ticks) is font-derived and holds; `clearance` moves each row off what it
-stands on, and the plot shrinks to make room, so nothing ever collides.
+so this is its whole reading — and the **plot** yields the room, never the
+label.
 
-The **type scale is two steps**: the title, and everything under it (ticks,
-axis titles, legend entries, band / mark labels, per-datum labels, the hover
-card) — one size, set by the chart's own rules, never inline on a leaf
-([SPEC 18](#18-svg-output)). Weight separates the two registers: the chart's
-**chrome** — title and legend — reads **semibold**, its **data text** **normal**,
-so the numbers read quietly beneath the captions. A leaf still carries what is
-its own: a band tick tinted its fill, a mark its stroke.
+The **type scale is two steps** — the title, and every other string a chart
+draws — each stated by a rule, never inline on a leaf
+([SPEC 18](#18-svg-output)). Weight separates the registers: **chrome** (title,
+legend) semibold, **data text** (ticks, per-datum and annotation labels)
+normal, so the numbers read quietly beneath the captions. A leaf carries only
+its own colour — a band tick tinted its fill, a mark its stroke.
 
 **Colour.** Explicit `stroke:` / `fill:` wins. Otherwise series **walk the palette**
 ([SPEC 10.2](#102-the-colour-palette)) in declaration order, skipping `red` (reserved for
@@ -4187,7 +4179,7 @@ text props. Its own properties:
 
 | Property | Value | Default | Notes |
 |---|---|---|---|
-| `clearance` | number | 16 — a drawing, schematic, or chart scope seats its own ([SPEC 10.5](#105-layout-constants-baked)) | min gap from nodes and links; a dimension's packing stand-off ([SPEC 15.6](#156-dimensions)); a chart's chrome text off what it labels ([SPEC 14.6](#146-legend-title--colour)). One meaning throughout — the minimum daylight a thing keeps off what it must not touch. **Scene config** — cascades. |
+| `clearance` | number | 16 — a drawing, schematic, or chart scope seats its own ([SPEC 10.5](#105-layout-constants-baked)) | min gap from nodes and links; a dimension's packing stand-off ([SPEC 15.6](#156-dimensions)); a chart's chrome text off what it labels ([SPEC 14.6](#146-legend-title--colour)). One meaning: the minimum daylight a thing keeps off what it must not touch. **Scene config** — cascades. |
 | `routing` | `orthogonal` · `natural` · `straight` | `orthogonal` | wiring strategy; scene config, cascades ([ROUTING.md](ROUTING.md)). |
 | `along` | fraction list | auto | label positions along the route. |
 | `marker` · `marker-start` · `marker-end` | marker | from the operator | endpoint glyphs ([SPEC 7](#7-nodes)). |
@@ -4326,7 +4318,7 @@ families:
 |---|---|
 | core | `lini-node` · `lini-{type}` · `lini-style-{class}` · `lini-text` · `lini-canvas` · `lini-gutter` |
 | link | `lini-link` · `lini-link-label` · `lini-link-dashed` / `-dotted` · `lini-stray` · `lini-marker` + `lini-marker-{kind}` (`arrow`·`dot`·`circle`·`diamond`·`datum`·`dim`·`open`) · `lini-cut` / `lini-cut-bg` (label mask) |
-| chart | `lini-chart-title` · `lini-chart-text` (every other chart string — ticks, axis titles, band / mark labels, the tip's) · `lini-chart-legend` · `lini-chart-label` · `lini-chart-tip` · `lini-tip-N` / `lini-hit-N` |
+| chart | `lini-chart-title` · `lini-chart-text` (every other chart string) · `lini-chart-legend` · `lini-chart-label` · `lini-chart-tip` · `lini-tip-N` / `lini-hit-N` |
 | sequence | `lini-sequence-tab` · `lini-sequence-guard` · `lini-sequence-message` |
 | tree | `lini-level-N` · `lini-hue-{name}` (the mindmap walk) |
 | drawing | `lini-dim-line` (dimension / leader linework) · `lini-ext-line` (`--lini-stroke-light`) · `lini-dim-text` (annotation text at the drawing's link size, [SPEC 10.5](#105-layout-constants-baked), and the link-label weight — no annotation leaf inlines either) · `lini-dim` (the restyled `(-)` tier's compound, on dimension-owned chrome only) · `lini-frame-cell` / `lini-frame-plate` (GD&T) · `lini-plane-end` / `-shaft` / `-arrow` · `lini-drafting-glyph` · `lini-datum-frame` · `lini-halo` |
