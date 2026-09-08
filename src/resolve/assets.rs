@@ -23,6 +23,11 @@ use std::path::PathBuf;
 pub struct AssetEnv {
     pub base_dir: Option<PathBuf>,
     pub root: Option<PathBuf>,
+    /// Assets the host hands over, keyed by the `src:` **exactly as written**.
+    /// A host with no filesystem — the browser — cannot be given a path to
+    /// open, so it supplies the bytes instead and this is consulted before any
+    /// read. Empty for the CLI, which has a filesystem and uses it.
+    pub supplied: std::collections::BTreeMap<String, Vec<u8>>,
 }
 
 /// Per-compile asset state — just the environment; an embedded asset's id
@@ -53,33 +58,10 @@ pub fn embed_image(attrs: &mut AttrMap, state: &AssetState, span: Span) -> Resul
     }
     let src = src.clone();
 
-    let full = match &state.env.base_dir {
-        Some(base) => base.join(&src),
-        None => PathBuf::from(&src),
+    let bytes = match state.env.supplied.get(&src) {
+        Some(bytes) => bytes.clone(),
+        None => read_asset(&state.env, &src, span)?,
     };
-    // The serve boundary [SPEC 20]: canonicalize (resolving symlinks) and
-    // require the asset inside the served root. Checked before the read — a
-    // file outside the boundary is never opened. A path that cannot
-    // canonicalize does not exist, which is the read error's domain.
-    if let Some(root) = &state.env.root
-        && let Ok(canon) = full.canonicalize()
-        && !root
-            .canonicalize()
-            .is_ok_and(|canon_root| canon.starts_with(canon_root))
-    {
-        return Err(
-            Error::at(span, format!("'{src}' resolves outside the served root"))
-                .code(Code::ASSET_ESCAPES_ROOT),
-        );
-    }
-    let bytes = std::fs::read(&full).map_err(|e| {
-        let why = match e.kind() {
-            std::io::ErrorKind::NotFound => "no such file".to_string(),
-            std::io::ErrorKind::PermissionDenied => "permission denied".to_string(),
-            _ => e.to_string(),
-        };
-        Error::at(span, format!("cannot read image '{src}' — {why}")).code(Code::ASSET_NOT_FOUND)
-    })?;
 
     if let Some(text) = sniff_svg(&bytes) {
         let prefix = crate::name::asset_prefix(&bytes);
@@ -102,6 +84,39 @@ pub fn embed_image(attrs: &mut AttrMap, state: &AssetState, span: Span) -> Resul
         format!("cannot read image '{src}' — not an SVG or raster (PNG/JPEG/GIF/WebP)"),
     )
     .code(Code::ASSET_NOT_FOUND))
+}
+
+/// Read a local asset from disk — the arm taken when the host supplied
+/// nothing for this `src:`. The path resolves against the source file's
+/// directory [SPEC 7] and the read is confined to the served root [SPEC 20].
+fn read_asset(env: &AssetEnv, src: &str, span: Span) -> Result<Vec<u8>, Error> {
+    let full = match &env.base_dir {
+        Some(base) => base.join(src),
+        None => PathBuf::from(src),
+    };
+    // The serve boundary [SPEC 20]: canonicalize (resolving symlinks) and
+    // require the asset inside the served root. Checked before the read — a
+    // file outside the boundary is never opened. A path that cannot
+    // canonicalize does not exist, which is the read error's domain.
+    if let Some(root) = &env.root
+        && let Ok(canon) = full.canonicalize()
+        && !root
+            .canonicalize()
+            .is_ok_and(|canon_root| canon.starts_with(canon_root))
+    {
+        return Err(
+            Error::at(span, format!("'{src}' resolves outside the served root"))
+                .code(Code::ASSET_ESCAPES_ROOT),
+        );
+    }
+    std::fs::read(&full).map_err(|e| {
+        let why = match e.kind() {
+            std::io::ErrorKind::NotFound => "no such file".to_string(),
+            std::io::ErrorKind::PermissionDenied => "permission denied".to_string(),
+            _ => e.to_string(),
+        };
+        Error::at(span, format!("cannot read image '{src}' — {why}")).code(Code::ASSET_NOT_FOUND)
+    })
 }
 
 /// The authored non-embedded forms [SPEC 7]: HTTP(S) URLs and `data:` URIs

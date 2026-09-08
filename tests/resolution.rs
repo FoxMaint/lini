@@ -580,3 +580,34 @@ fn a_scalar_binding_reads_bare_as_a_property_value() {
         lini::check("{ f(n) = (n * 2); }\n|box#a| { padding: f; }\n").expect_err("not a value");
     assert!(err.message.contains("number"), "{}", err.message);
 }
+
+/// A host with no filesystem supplies the bytes [SPEC 7]: the browser cannot
+/// be handed a path to open, so `Options::assets` carries the asset itself,
+/// keyed by the `src:` exactly as written. Without it the same source is the
+/// R010 a playground used to show instead of a figure.
+#[test]
+fn a_supplied_asset_embeds_without_a_filesystem() {
+    const SRC: &str = "|image#logo| { src: \"assets/logo.svg\"; width: 12; height: 12; }\n";
+    const LOGO: &str =
+        r##"<svg viewBox="0 0 4 4"><defs><circle id="dot" r="1"/></defs><use href="#dot"/></svg>"##;
+
+    let err = lini::check(SRC).expect_err("nothing on disk at that path");
+    assert!(err.message.contains("cannot read image"), "{}", err.message);
+
+    let opts = lini::Options {
+        assets: [("assets/logo.svg".to_string(), LOGO.as_bytes().to_vec())]
+            .into_iter()
+            .collect(),
+        ..lini::Options::default()
+    };
+    let svg = lini::compile_str_with(SRC, &opts).expect("the supplied asset embeds");
+    // Embedded, not linked — and id-isolated like any other asset [SPEC 18],
+    // which is what proves it went down the one shared path and not a second
+    // one written for the browser.
+    assert!(!svg.contains("assets/logo.svg"), "{svg}");
+    assert!(svg.contains("<use"), "{svg}");
+    let prefixed = svg
+        .split("id=\"")
+        .any(|rest| rest.starts_with("lini-") && rest.contains("dot"));
+    assert!(prefixed, "the asset's own id should be prefixed:\n{svg}");
+}

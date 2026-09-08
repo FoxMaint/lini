@@ -784,6 +784,13 @@ authored data URIs pass through untouched, so a URL is the authored non-embedded
 form. Under `lini serve`, assets resolve inside the served root only
 ([SPEC 20](#20-cli)).
 
+A host with **no filesystem** — the WebAssembly build in a browser — cannot be given
+a path to open, so it may **supply the bytes** instead, keyed by the `src:` exactly
+as written. Supplied assets are consulted before any read and take the same embedding
+path, so a browser and the binary produce byte-identical output for the same source
+and the same bytes. Nothing else changes: an asset that is neither supplied nor
+readable is still the error at the `src:` span.
+
 ---
 
 ## 8. Templates

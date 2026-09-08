@@ -53,12 +53,14 @@ fn wasm_matches_the_binary_on_every_sample() {
         return unavailable("node is not installed");
     }
 
-    // Samples that need an `|image| src:` resolve it against `samples/`; the
-    // browser build has no filesystem, so those cannot round-trip here.
-    let samples: Vec<PathBuf> = lini::testing::samples()
-        .into_iter()
-        .filter(|p| !lini::testing::read_sample(p).contains("|image|"))
-        .collect();
+    // Every sample, image-bearing ones included. They used to be filtered out
+    // — the browser has no filesystem, so an `|image| src:` could not be read
+    // — and that is precisely what makes them the best case here now: the
+    // binary resolves the path against `samples/` and reads it off disk, the
+    // driver hands the same bytes over through the asset table, and the two
+    // outputs still have to match byte for byte. One embedding path, reached
+    // two ways.
+    let samples: Vec<PathBuf> = lini::testing::samples();
     assert!(!samples.is_empty(), "no samples to compare");
 
     let out = root.join("target/wasm-parity");
@@ -89,7 +91,14 @@ fn wasm_matches_the_binary_on_every_sample() {
         // it then reported was two different sources, not two engines.
         let name = format!("{i}-{stem}");
         let source = lini::testing::read_sample(path);
-        let native = lini::compile_str(&source)
+        // `base_dir` is the sample's own directory, which is how the CLI
+        // compiles it — an `|image| src:` resolves against the file that
+        // named it [SPEC 7]. Inert for every sample without one.
+        let opts = lini::Options {
+            base_dir: path.parent().map(|d| d.to_path_buf()),
+            ..lini::Options::default()
+        };
+        let native = lini::compile_str_with(&source, &opts)
             .unwrap_or_else(|e| panic!("{stem} does not compile natively: {e}"));
         let browser = std::fs::read_to_string(out.join(format!("{name}.svg")))
             .unwrap_or_else(|_| format!("<the driver wrote no output for {name}>"));
@@ -142,16 +151,26 @@ fn window(s: &str, from: usize, to: usize) -> String {
 }
 
 /// The parity test is worthless if it silently compares nothing, so pin the
-/// corpus it walks: every sample the showroom ships, minus the image-bearing
-/// ones the browser cannot read.
+/// corpus it walks: every sample the showroom ships, image-bearing ones now
+/// included.
 #[test]
 fn the_parity_corpus_is_not_empty() {
-    let covered = lini::testing::samples()
-        .into_iter()
-        .filter(|p| !lini::testing::read_sample(p).contains("|image|"))
+    let all = lini::testing::samples();
+    assert!(
+        all.len() >= 25,
+        "only {} samples feed the wasm parity check — has the corpus moved?",
+        all.len()
+    );
+    // The image-bearing samples are the ones this check most wants present:
+    // they are the reason the asset table exists, and dropping the last of
+    // them would leave the supplied-asset path unexercised end to end while
+    // the suite still went green.
+    let with_images = all
+        .iter()
+        .filter(|p| lini::testing::read_sample(p).contains("|image|"))
         .count();
     assert!(
-        covered >= 25,
-        "only {covered} samples feed the wasm parity check — has the corpus moved?"
+        with_images >= 1,
+        "no sample carries an |image| — the supplied-asset path is untested"
     );
 }

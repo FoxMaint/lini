@@ -18,3 +18,5 @@ crate-type = ["cdylib"]
 [dependencies]
 lini = { path = "../..", default-features = false, features = ["icons"] }
 wasm-bindgen = "0.2"
+# Only to read the host's asset table off a plain JS object — see `assets_from`.
+js-sys = "0.3"

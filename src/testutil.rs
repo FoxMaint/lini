@@ -78,7 +78,7 @@ pub fn layout_err(src: &str) -> String {
 pub fn program_in_samples(src: &str) -> Program {
     let env = AssetEnv {
         base_dir: Some("samples".into()),
-        root: None,
+        ..AssetEnv::default()
     };
     crate::resolve::resolve_with_env(&lowered(src), &[], env).expect("resolve")
 }
