@@ -11,16 +11,28 @@
 |entity#user| "User" {
   pin: center; translate: 0 -14; columns: auto, auto, auto; stroke: --blue-ink; fill: --blue-wash;
 } [
-  "PK" "id"    "int"
-  ""   "name"  "varchar"
-  ""   "email" "varchar"
+  "PK"
+  |cell#pk| "id"
+  "int"
+  ""
+  "name"
+  "varchar"
+  ""
+  "email"
+  "varchar"
 ]
 |entity#order| "Order" {
   pin: center; translate: 200 124; columns: auto, auto, auto; stroke: --teal-ink; fill: --teal-wash;
 } [
-  "PK" "id"      "int"
-  "FK" "user_id" "int"
-  ""   "total"   "decimal"
+  "PK"
+  "id"
+  "int"
+  "FK"
+  |cell#user_fk| "user_id"
+  "int"
+  ""
+  "total"
+  "decimal"
 ]
 |entity#item| "LineItem" {
   pin: center; translate: 19 304; columns: auto, auto, auto; stroke: --amber-ink; fill: --amber-wash;
@@ -59,14 +71,15 @@
   "slug" "varchar"
 ]
 
-user -o< order
-// a user places zero-or-many orders
+user.pk -o< order.user_fk:left
+// a user's key appears in zero-or-many orders — both ends name a |cell#id|, so
+// the wire leaves and lands on those rows; `:left` picks the wall it lands on
 user -o+ cart
 // a user owns zero-or-one cart
 order -+< item:right
 // an order contains one-or-many line items
 product.pk -o< item.product_fk
 // a product's key appears in zero-or-many line items — a wire anchored to one
-// field leaves each card at that field's row [SPEC 8]
+// field leaves each card at that field's row [SPEC 8]; the rest tie card to card
 category -o< product
 // a category groups zero-or-many products

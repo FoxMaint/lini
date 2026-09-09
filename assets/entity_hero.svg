@@ -35,7 +35,7 @@
         <rect x="-16.407" y="-11" width="32.814" height="22" rx="0" ry="0"/>
         <text class="lini-text" x="0" y="0" dy="0.358em">PK</text>
       </g>
-      <g class="lini-node lini-cell lini-align-start lini-block" transform="translate(-15.477,-11.5)">
+      <g class="lini-node lini-cell lini-align-start lini-block" data-id="pk" transform="translate(-15.477,-11.5)">
         <rect x="-25.668" y="-11" width="51.336" height="22" rx="0" ry="0"/>
         <text class="lini-text" x="-12.005" y="0" dy="0.358em">id</text>
       </g>
@@ -93,7 +93,7 @@
         <rect x="-16.407" y="-11" width="32.814" height="22" rx="0" ry="0"/>
         <text class="lini-text" x="-0.315" y="0" dy="0.358em">FK</text>
       </g>
-      <g class="lini-node lini-cell lini-align-start lini-block" transform="translate(-16.254,11.5)">
+      <g class="lini-node lini-cell lini-align-start lini-block" data-id="user_fk" transform="translate(-16.254,11.5)">
         <rect x="-30.722" y="-11" width="61.444" height="22" rx="0" ry="0"/>
         <text class="lini-text" x="0" y="0" dy="0.358em">user_id</text>
       </g>
@@ -152,7 +152,7 @@
         <rect x="-16.407" y="-11" width="32.814" height="22" rx="0" ry="0"/>
         <text class="lini-text" x="-0.315" y="0" dy="0.358em">FK</text>
       </g>
-      <g class="lini-node lini-cell lini-align-start lini-block" transform="translate(0.483,34.5)">
+      <g class="lini-node lini-cell lini-align-start lini-block" data-id="product_fk" transform="translate(0.483,34.5)">
         <rect x="-42.384" y="-11" width="84.768" height="22" rx="0" ry="0"/>
         <text class="lini-text" x="0" y="0" dy="0.358em">product_id</text>
       </g>
@@ -176,7 +176,7 @@
         <rect x="-16.407" y="-11" width="32.814" height="22" rx="0" ry="0"/>
         <text class="lini-text" x="0" y="0" dy="0.358em">PK</text>
       </g>
-      <g class="lini-node lini-cell lini-align-start lini-block" transform="translate(-16.254,-11.5)">
+      <g class="lini-node lini-cell lini-align-start lini-block" data-id="pk" transform="translate(-16.254,-11.5)">
         <rect x="-25.668" y="-11" width="51.336" height="22" rx="0" ry="0"/>
         <text class="lini-text" x="-12.005" y="0" dy="0.358em">id</text>
       </g>
@@ -261,11 +261,11 @@
     </g>
   </g>
   <g class="lini-links">
-    <g class="lini-link" data-from="user" data-to="order">
-      <path d="M 75.959 -14 L 184 -14 A 16 16 0 0 1 200 2 L 200 59.1"/>
-      <path class="lini-marker lini-marker-open" d="M 195.05 78 L 200 69 L 204.95 78 M 200 78 L 200 69"/>
-      <circle class="lini-marker lini-marker-open" cx="200" cy="62.7" r="3.6"/>
-      <path class="lini-marker lini-marker-open" d="M 200 66.3 L 200 69"/>
+    <g class="lini-link" data-from="user.pk" data-to="order.user_fk">
+      <path d="M 75.959 -25.5 L 81.0845 -25.5 A 16 16 0 0 1 97.0845 -9.5 L 97.0845 132.7745 A 2.7255 2.7255 0 0 0 99.81 135.5 L 99.81 135.5"/>
+      <path class="lini-marker lini-marker-open" d="M 118.71 140.45 L 109.71 135.5 L 118.71 130.55 M 118.71 135.5 L 109.71 135.5"/>
+      <circle class="lini-marker lini-marker-open" cx="103.41" cy="135.5" r="3.6"/>
+      <path class="lini-marker lini-marker-open" d="M 107.01 135.5 L 109.71 135.5"/>
     </g>
     <g class="lini-link" data-from="user" data-to="cart">
       <path d="M 0 -60.5 L 0 -155 A 16 16 0 0 1 16 -171 L 81.273 -171"/>
@@ -278,11 +278,11 @@
       <path class="lini-marker lini-marker-open" d="M 95.215 299.05 L 104.215 304 L 95.215 308.95 M 95.215 304 L 104.215 304"/>
       <path class="lini-marker lini-marker-open" d="M 108.715 299.5 L 108.715 308.5"/>
     </g>
-    <g class="lini-link" data-from="product" data-to="item">
-      <path d="M -204 231.5 L -204 288 A 16 16 0 0 0 -188 304 L -76.115 304"/>
-      <path class="lini-marker lini-marker-open" d="M -57.215 308.95 L -66.215 304 L -57.215 299.05 M -57.215 304 L -66.215 304"/>
-      <circle class="lini-marker lini-marker-open" cx="-72.515" cy="304" r="3.6"/>
-      <path class="lini-marker lini-marker-open" d="M -68.915 304 L -66.215 304"/>
+    <g class="lini-link" data-from="product.pk" data-to="item.product_fk">
+      <path d="M -220.254 231.5 L -220.254 315 A 16 16 0 0 0 -204.254 331 L -76.115 331"/>
+      <path class="lini-marker lini-marker-open" d="M -57.215 335.95 L -66.215 331 L -57.215 326.05 M -57.215 331 L -66.215 331"/>
+      <circle class="lini-marker lini-marker-open" cx="-72.515" cy="331" r="3.6"/>
+      <path class="lini-marker lini-marker-open" d="M -68.915 331 L -66.215 331"/>
     </g>
     <g class="lini-link" data-from="category" data-to="product">
       <path d="M -199.5 -108 L -199.5 120.1"/>
