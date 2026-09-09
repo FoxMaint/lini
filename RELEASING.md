@@ -6,6 +6,7 @@ Several repositories ship as one product, and they are not independent:
 lini              the compiler and the language        crates.io
   ├─ lini-wasm    the same compiler, for JavaScript    npm
   │    └─ remark-lini   ```lini fences, for remark     npm
+  │         │    published as `remark-lini-lang`
   │         └─ astro-lini   the Astro integration      npm
   ├─ mdbook-lini  links lini as a library              crates.io
   └─ lini-website   lini.rs — builds against the rest  deployed
@@ -31,8 +32,10 @@ the one trap worth knowing.
    `crates/lini-wasm/pkg`. Its version is read out of the workspace manifest,
    so there is nothing to bump here.
 3. **remark-lini** — bump its `lini-wasm` floor if the JS surface moved, then
-   publish. Its CI installs from the registry, so it stays red until step 2
-   lands.
+   publish. The npm name is **`remark-lini-lang`**: the registry refuses
+   `remark-lini` as one edit from `remark-lint`, so the repo keeps the short
+   name and the package carries the suffix. Its CI installs from the registry,
+   so it stays red until step 2 lands.
 4. **astro-lini** — bump its `remark-lini` floor, publish. It carries no
    compiler of its own: the fence, the figure and the stylesheet all come from
    `remark-lini`, and `astro-lini.css` is copied from it at build time.
