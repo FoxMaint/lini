@@ -5,9 +5,15 @@ Several repositories ship as one product, and they are not independent:
 ```
 lini              the compiler and the language        crates.io
   ├─ lini-wasm    the same compiler, for JavaScript    npm
+  │    └─ remark-lini   ```lini fences, for remark     npm
+  │         └─ astro-lini   the Astro integration      npm
   ├─ mdbook-lini  links lini as a library              crates.io
   └─ lini-website   lini.rs — builds against the rest  deployed
 ```
+
+The indentation is the publish order, and for the npm chain it is a hard one:
+`remark-lini` pins `lini-wasm` and `astro-lini` pins `remark-lini`, so a package
+published before the one above it installs nothing.
 
 The site also builds against a book theme checked out beside these.
 
@@ -24,9 +30,15 @@ the one trap worth knowing.
 2. **lini-wasm** — `cargo xtask wasm`, then `npm publish` from
    `crates/lini-wasm/pkg`. Its version is read out of the workspace manifest,
    so there is nothing to bump here.
-3. **mdbook-lini** — bump, publish. Its `lini = "1.x"` picks up the new
-   compiler on the way past.
-4. **lini.rs** — `./deploy.sh --prod`.
+3. **remark-lini** — bump its `lini-wasm` floor if the JS surface moved, then
+   publish. Its CI installs from the registry, so it stays red until step 2
+   lands.
+4. **astro-lini** — bump its `remark-lini` floor, publish. It carries no
+   compiler of its own: the fence, the figure and the stylesheet all come from
+   `remark-lini`, and `astro-lini.css` is copied from it at build time.
+5. **mdbook-lini** — `cargo update -p lini`, bump, publish. Its `lini = "1.x"`
+   picks up the new compiler on the way past.
+6. **lini.rs** — `./deploy.sh --prod`.
 
 `mdbook-lini` before `lini` also works, since a caret dependency resolves to
 the newest patch at install time. Doing it after means nobody installs the
